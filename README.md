@@ -1,4 +1,4 @@
 danstabulle
 ===========
 
-Dans Ta Bulle
+Dans Ta Bulle est un site communautaire de rédaction de bande dessinée.
