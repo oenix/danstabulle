@@ -1,4 +1,5 @@
 .DS_Store
-cache/*
-log/*
-web/uploads/*
+Symfony\app\cache\*
+Symfony\cache\*
+Symfony\log\*
+Symfny\web\uploads\*
