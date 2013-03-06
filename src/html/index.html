@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>DansTaBulle</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 60px;
+        background-color:#ffffff
+      }
+
+      /* Custom container */
+      .container {
+        margin: 0 auto;
+        max-width: 1000px;
+      }
+      .container > hr {
+        margin: 60px 0;
+      }
+
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 80px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 100px;
+        line-height: 1;
+      }
+      .jumbotron .lead {
+        font-size: 24px;
+        line-height: 1.25;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+
+      /* Supporting marketing content */
+      .marketing {
+        margin: 60px 0;
+      }
+      .marketing p + h4 {
+        margin-top: 28px;
+      }
+
+
+      /* Customize the navbar links to be fill the entire space of the .navbar */
+      .navbar .navbar-inner {
+        padding: 0;
+      }
+      .navbar .nav {
+        margin: 0;
+        display: table;
+        width: 100%;
+      }
+      .navbar .nav li {
+        display: table-cell;
+        width: 1%;
+        float: none;
+      }
+      .navbar .nav li a {
+        font-weight: bold;
+        text-align: center;
+        border-left: 1px solid rgba(255,255,255,.75);
+        border-right: 1px solid rgba(0,0,0,.1);
+      }
+      .navbar .nav li:first-child a {
+        border-left: 0;
+        border-radius: 3px 0 0 3px;
+      }
+      .navbar .nav li:last-child a {
+        border-right: 0;
+        border-radius: 0 3px 3px 0;
+      }
+
+      /* Sticky footer styles
+      -------------------------------------------------- */
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+      }
+      #footer {
+        background-color: #f5f5f5;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+
+        <div class="masthead">
+          <img src="img/logoPlicMini.png">
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="container">
+                <ul class="nav">
+                  <li class="active"><a href="#">Accueil</a></li>
+                  <li><a href="#">BD's</a></li>
+                  <li><a href="#">Top</a></li>
+                  <li><a href="#">News</a></li>
+                  <li><a href="#">Shop</a></li>
+                  <li><a href="#">Recherche</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div><!-- /.navbar -->
+        </div>
+
+        <div>
+          <ul class="breadcrumb">
+            <li><a href="#"><i class="icon-home"></i></a> <span class="divider">/</span></li>
+            <li class="active">Bienvenue sur danstabulle</li>
+            <li class="dropdown pull-right">
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Inscription<strong class="caret"></strong></a>
+            <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+              <!-- Ajouter le formulaire d'insciption -->
+            </div>
+            </li>
+            <li class="dropdown pull-right">
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Connection<strong class="caret"></strong>  <div class="btn-group">
+            </div> </a>
+            <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+              <form class="form-signin">
+                <h2 class="form-signin-heading">Connection</h2>
+                <input type="text" class="input-block-level" placeholder="Email">
+                <input type="password" class="input-block-level" placeholder="Mot de Passe">
+                <label class="checkbox">
+                  <input type="checkbox" value="remember-me"> Remember me
+                </label>
+                <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+              </form>
+            </div>
+            </li>
+
+          </ul>
+        </div>
+        <section id="Contenu" class="jumbotron masthead">
+
+        <h1>Créez votre BD</h1>
+        <p class="lead"> Avec DansTaBulle, choisissez de rejoindre un projet existant, ou bien
+        commencez votre BD à partir de rien<p>
+        <a class="btn btn-large btn-success" id="Start">Commencez</a>
+        </section>
+
+
+        <section id="widget" class="row-fluid">
+        <div id="description" class="span4">
+          <h2>DansTaBulle</h2>
+          <p>Descriprion DansTaBulle</p>
+          <p>En 30 secondes</p>
+        </div>
+        <div id="topBds" class="span4">
+          <h2>Top BD's</h2>
+          <p><img src="img/bds/bd1.jpg" height="100" width="60" alt="TopBD" class="img-polaroid" /></p>
+        </div>
+        <div id="Annonces" class="span4">
+          <h1>Mes amis</h1>
+          <ul>
+            <li>Dessinateur</li>
+            <ul>
+              <li><a href="#">BD1</a></li>
+              <li><a href="#">BD2</a></li>
+            </ul>
+            <li>Relecteur</li>
+            <ul>
+              <li><a href="#">BD2</a></li>
+            </ul>
+          </ul>
+        </div>
+        </section>
+
+        <!--      <div id="footer">
+
+          <nav id="globalfooter">
+          <ul id="ulFooter">
+            <li><a href="#">A Propos</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">MTI</a></li>
+            <li><a href="#">EPITA</a></li>
+          </ul>
+          </nav>
+        </div>-->
+        <div id="footer">
+          <div class="container">
+            <center>
+              <footer>
+              <p class="muted credit"><a href="#">DansTaBulle</a> est un projet de quatrième année réalisé à l'<a href="http://www.epita.fr">EPITA</a>, en <a href"mti.epita.fr">MTI</a></p>
+              <p class="muted credit">N'hésitez pas à nous <a href"#">contacter</a>, ou bien à visiter la <a>FAQ</a><p>
+              </footer>
+            </center>
+          </div>
+        </div>
+      </div>
+      <script src="http://code.jquery.com/jquery.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+    </body>
+  </html>
