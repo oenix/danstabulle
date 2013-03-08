@@ -2,11 +2,13 @@
 .DS_Store
 
 # Bootstrap
-*/app/bootstrap*
+Symfony/app/bootstrap*
 
 # Symfony directories
-*/vendor/*
-*/logs/*
-*/cache/*
-*/web/uploads/*
-*/web/bundles/*
+Symfony/vendor/*
+Symfony/logs/*
+Symfony/cache/*
+Symfony/web/uploads/*
+Symfony/web/bundles/*
+Symfony/app/cache/*
+Symfony/app/logs/*
