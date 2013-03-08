@@ -2,6 +2,13 @@ parameters:
 #    dtb_user.example.class: DTB\UserBundle\Example
 
 services:
-#    dtb_user.example:
-#        class: %dtb_user.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    dtb_user.registration.form.type:
+        class: DTB\UserBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: dtb_user_registration }
+    dtb_user.edit.form.type:
+        class: DTB\UserBundle\Form\Type\EditFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: dtb_edit_profile }
