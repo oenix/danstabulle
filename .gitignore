@@ -1,5 +1,12 @@
+# Mac Files
 .DS_Store
-Symfony\app\cache\*
-Symfony\cache\*
-Symfony\log\*
-Symfny\web\uploads\*
+
+# Bootstrap
+*/app/bootstrap*
+
+# Symfony directories
+*/vendor/*
+*/logs/*
+*/cache/*
+*/web/uploads/*
+*/web/bundles/*
