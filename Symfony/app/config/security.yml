@@ -5,12 +5,15 @@ jms_security_extra:
 security:
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext
+        DTB\UserBundle\Entity\User: sha512
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
+        ROLE_ADMIN:       [ROLE_USER, ROLE_MODERATOR]
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
+        main:
+            id: fos_user.user_provider.username
         in_memory:
             memory:
                 users:
@@ -18,27 +21,25 @@ security:
                     admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
 
     firewalls:
-        dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
-        login:
-            pattern:  ^/demo/secured/login$
-            security: false
-
-        secured_area:
-            pattern:    ^/demo/secured/
+        main:
+            pattern:        ^/
+            anonymous:      true
+            provider:       main
             form_login:
-                check_path: /demo/secured/login_check
-                login_path: /demo/secured/login
+                login_path: fos_user_security_login
+                check_path: fos_user_security_check
             logout:
-                path:   /demo/secured/logout
-                target: /demo/
+                path:       fos_user_security_logout
+                target:     /hello/test
+            remember_me:
+                key:        %secret%
+
             #anonymous: ~
             #http_basic:
             #    realm: "Secured Demo Area"
 
     access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #
         # You must uncomment the two following rules to restrict access to paths

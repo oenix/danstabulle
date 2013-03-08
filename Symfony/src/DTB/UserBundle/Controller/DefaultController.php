@@ -3,33 +3,18 @@
 namespace DTB\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use DTB\UserBundle\Entity\Users;
+use DTB\UserBundle\Entity\User;
 
 class DefaultController extends Controller {
 
     public function indexAction($name) {
 
-        $user = new Users();
+// Pour récupérer le service UserManager du bundle
+        $userManager = $this->get('fos_user.user_manager');
 
-        $formBuilder = $this->createFormBuilder($user);
-        $formBuilder->add('username', 'text')
-                ->add('password', 'password');
-        $form = $formBuilder->getForm();
-        $request = $this->get('request');
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-            }
-        }
-
-        $repository = $this->getDoctrine()->getManager()->getRepository('DTBUserBundle:Users');
-        $users = $repository->findAll();
-
-        return $this->render('DTBUserBundle:Default:index.html.twig', array('name' => $name, 'form' => $form->createView(), 'users' => $users));
+// Pour récupérer la liste de tous les utilisateurs
+        $users = $userManager->findUsers();
+        var_dump($users);
     }
 
 }
