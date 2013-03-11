@@ -12,3 +12,6 @@ Symfony/web/uploads/*
 Symfony/web/bundles/*
 Symfony/app/cache/*
 Symfony/app/logs/*
+
+#Config Files
+Symfony/app/config/parameters.yml
