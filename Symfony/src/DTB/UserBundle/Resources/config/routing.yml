@@ -1,3 +1,7 @@
 dtb_user_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: DTBUserBundle:Default:index }
+    
+dtb_show_user_profile:
+    pattern: /user/{id}
+    defaults: { _controller: DTBUserBundle:User:showUser }
