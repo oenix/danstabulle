@@ -126,10 +126,28 @@
     background-image: none;
 	}
 	.searchButton {
-          position: absolute; 
-          margin: -22px 0 0 -26px;
-     }
-	  
+    position: absolute; 
+    margin: -22px 0 0 -26px;
+   }
+   .annonces {
+     text-align:center;
+     margin: 0 auto;
+    }
+
+    .change .apres, .change:hover .avant {
+      display : none;
+  }
+
+  .change:hover .apres {
+    display : block;
+      }
+
+ .after {
+    height:15px;
+    margin-bottom:0px;
+    width:200px;
+ }
+
       /* Lastly, apply responsive CSS fixes as necessary */
       @media (max-width: 767px) {
         #footer {
@@ -140,4 +158,3 @@
 		  
         }
 	
-
