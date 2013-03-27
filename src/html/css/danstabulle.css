@@ -9,25 +9,22 @@
         max-width: 1050px;
 		width:1050px;
       }
-	  .breadcrumb {
-	   border-radius: 0px 0px 0px 0px;
-	  }
 	  
       .container > hr {
         margin: 60px 0;
       }
 	  
 	  .ombre {
-		box-shadow: 0 0 12px #c1c1c1;
+	/*	box-shadow: 0 0 12px #c1c1c1;
 		-moz-box-shadow: 0 0 10px #c1c1c1;  
-		-webkit-box-shadow: 0 0 12px #c1c1c1; 
+		-webkit-box-shadow: 0 0 12px #c1c1c1; */
 		}
 
 	    .ombre2 {
-		height:300px;
+	/*	height:300px;
 		box-shadow: 0 0 1px #c1c1c1;
 		-moz-box-shadow: 0 0 1px #000;  
-		-webkit-box-shadow: 0 0 1px #000; 
+		-webkit-box-shadow: 0 0 1px #000; */
 	  }
 		
       /* Main marketing message and sign up button */
@@ -63,8 +60,8 @@
       /* Customize the navbar links to be fill the entire space of the .navbar */
 	  
 	  .navbar{
-	  margin-left:5px;
-	  	  margin-right:5px;
+	 // margin-left:5px;
+	  //	  margin-right:5px;
 	  }
       .navbar .navbar-inner {
         padding: 0;
