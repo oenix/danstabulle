@@ -11,6 +11,7 @@
       }
 	  
       .container > hr {
+	  
         margin: 60px 0;
       }
 	  
@@ -97,6 +98,7 @@
 
       html,
       body {
+		padding-top:10px;
         height: 100%;
         /* The html and body elements cannot have any padding or margin. */
       }
