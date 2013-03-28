@@ -1,0 +1,7 @@
+parameters:
+#    dtb_bd.example.class: DTB\BdBundle\Example
+
+services:
+#    dtb_bd.example:
+#        class: %dtb_bd.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

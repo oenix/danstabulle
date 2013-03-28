@@ -1,3 +1,7 @@
+dtb_bd:
+    resource: "@DTBBdBundle/Resources/config/routing.yml"
+    prefix:   /
+
 dtb_offline:
     resource: "@DTBOfflineBundle/Resources/config/routing.yml"
     prefix:   /
