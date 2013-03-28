@@ -13,14 +13,15 @@ class EditFormType extends BaseType {
         //Preventing user from editing its own username
         $builder->remove('username');
 
-        $builder->add('description');
-        $builder->add('firstName');
-        $builder->add('lastName');
-        $builder->add('city');
-        $builder->add('birthDate', 'birthday', array('format' => 'dd - MM - yyyy', 'widget' => 'choice', 'years' => range(date('Y'), date('Y') - 70)));
-        $builder->add('facebook');
-        $builder->add('twitter');
-        $builder->add('skype');
+        $builder->add('description', 'textarea', array("required" => false));
+        $builder->add('firstName', 'text', array("required" => false));
+        $builder->add('lastName', 'text',  array("required" => false));
+        $builder->add('city', 'text',  array("required" => false));
+        $builder->add('birthDate', 'birthday', array("required" => false, 'format' => 'dd - MM - yyyy', 'widget' => 'choice', 'years' => range(date('Y'), date('Y') - 70)));
+        $builder->add('facebook', 'text',  array("required" => false));
+        $builder->add('twitter', 'text',  array("required" => false));
+        $builder->add('skype', 'text',  array("required" => false));
+        $builder->add('profilePicture', new \DTB\UserBundle\Form\ProfilePictureType(), array("required" => false, 'label' => "Profile Picture"));
     }
 
     public function getDefaultOptions(array $options) {

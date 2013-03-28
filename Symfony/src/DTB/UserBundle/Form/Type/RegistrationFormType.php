@@ -9,18 +9,7 @@ class RegistrationFormType extends BaseType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
-
-        // add your custom field
-        $builder->add('description');
-        $builder->add('firstName');
-        $builder->add('lastName');
-        $builder->add('city');
-        $builder->add('birthDate', 'birthday', array('format' => 'dd - MM - yyyy', 'widget' => 'choice', 'years' => range(date('Y'), date('Y')-70)));
-        $builder->add('facebook');
-        $builder->add('twitter');
-        $builder->add('skype');
-        
+        parent::buildForm($builder, $options);        
     }
 
     public function getName()

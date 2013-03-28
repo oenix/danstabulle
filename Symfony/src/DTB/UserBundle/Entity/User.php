@@ -78,6 +78,11 @@ class User extends BaseUser {
      * @ORM\Column(name="skype", type="string", length=255, nullable=true)
      */
     protected $skype;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="DTB\UserBundle\Entity\ProfilePicture", cascade={"persist", "remove"})
+     */
+    private $profilePicture;
 
     /**
      * Get id
@@ -271,5 +276,26 @@ class User extends BaseUser {
     public function getSkype()
     {
         return $this->skype;
+    }
+    
+    /**
+     * Set profilePicture
+     *
+     * @param \DTB\UserBundle\Entity\ProfilePicture $profilePicture
+     * @return User
+     */
+    public function setProfilePicture(\DTB\UserBundle\Entity\ProfilePicture $profilePicture = null) {
+        $this->profilePicture = $profilePicture;
+
+        return $this;
+    }
+
+    /**
+     * Get profilePicture
+     *
+     * @return \DTB\UserBundle\Entity\ProfilePicture 
+     */
+    public function getProfilePicture() {
+        return $this->profilePicture;
     }
 }
