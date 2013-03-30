@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  script(type='text/javascript', src='/javascripts/paper.js')
+  script(type='text/paperscript', src='/javascripts/paperScript.js', canvas="myCanvas")
+  h1= title
+  p Dessiner
+  select(id='color')
+    option(value='#000000') noir
+    option(value='#ff0000') rouge
+    option(value='#2311d0') bleu
+    option(value='#4a970c') vert
+  canvas(id="myCanvas", resize)
