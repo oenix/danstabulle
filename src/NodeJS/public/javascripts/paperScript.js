@@ -1,5 +1,7 @@
 var path;
 var color;
+var size;
+
 
 var bulleStyle = {
     fillColor: new RgbColor(255, 255, 255),
@@ -11,6 +13,7 @@ function onMouseDown(event) {
 	color = getSelectValue('color');
     path = new Path();
     path.strokeColor = color;
+	path.strokeWidth = 1;
     path.add(event.point);
 }
 	
@@ -29,7 +32,6 @@ function onMouseUp(event) {
 		path.closed = true;
 		path.simplify(20);
 	}
-//	alert(path[path.length() - 1)]);
 }
 
 function getSelectValue(selectId)
