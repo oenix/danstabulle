@@ -1,6 +1,12 @@
 var path;
 var color;
 
+var bulleStyle = {
+    fillColor: new RgbColor(255, 255, 255),
+    strokeColor: "black",
+    strokeWidth: 1.5
+};
+
 function onMouseDown(event) {
 	color = getSelectValue('color');
     path = new Path();
@@ -13,8 +19,17 @@ function onMouseDrag(event) {
 }
 
 function onMouseUp(event) {
-    var myCircle = new Path.Circle(event.point, 0.2);
-    myCircle.strokeColor = color;
+	if (path.length < 5) {
+    	var myCircle = new Path.Circle(event.point, 0.2);
+    	myCircle.strokeColor = color;
+	}
+	//Si C'est une bulle :
+	if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
+		path.style = bulleStyle;
+		path.closed = true;
+		path.simplify(20);
+	}
+//	alert(path[path.length() - 1)]);
 }
 
 function getSelectValue(selectId)
