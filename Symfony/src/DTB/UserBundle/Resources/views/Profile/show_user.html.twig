@@ -1,0 +1,68 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+<div class="calendar">
+    <div style="float: left; width:150px;">
+        {% if user.ProfilePicture.webPath is defined  %}
+        <img class="img-polaroid pull-left" src="{{ user.ProfilePicture.webPath | apply_filter('thumb_profile') }}" >
+        {% else %}
+        <img class="img-polaroid pull-left" src="{{ "img/avatar.png" | apply_filter('thumb_profile') }}" >
+        {% endif %}
+
+    </div>
+    <div style="margin-left: 200px;  padding: 20px; margin-top: 20px; background-color: #FFF; border: 1px solid rgba(0,0,0,0.2);">
+        <div class="page-header" style="margin-top: 0px; margin-bottom: 20px;">
+            <h1>{{ user.firstname | capitalize }} {{ user.lastname | capitalize }} <small>{{ user.username | capitalize }}</small></h1>
+
+
+            <div class="pull-right" style="margin-bottom: 20px; margin-top: -40px;">
+                <a href="{{ path('calendar_project_calendar_user', {'user': user.username}) }}" class="btn">Calendar</a> 
+                {% if isFollowed %}
+                <a href="{{ path('calendar_project_user_unfollow', {'user': user.username}) }}" id="unFollow" class="btn btn-primary">Following</a>
+                {% else %}
+                <a href="{{ path('calendar_project_user_follow', {'user': user.username}) }}" class="btn btn-primary">Follow</a>
+                {% endif %} 
+            </div>
+            
+            {% if user.followedBy.count < 2 %}
+            <p class="muted" style="padding-left: 20px; margin-bottom: 0px;">Followed by {{ user.followedBy.count }} user</p>
+            {% else %}
+            <p class="muted" style="padding-left: 20px; margin-bottom: 0px;">Followed by {{ user.followedBy.count }} users</p>
+            {% endif %} 
+        </div>
+        <p class="lead">{{ user.description}}</p>    
+        <h2>Following</h2>
+            {% if user.follows.count > 0 %}
+                {% for follow in user.follows %}
+                     <div style="width: 400px; float: left;">
+                        {% if follow.ProfilePicture.webPath is defined  %}
+                        <img style="float: left;" class="img-polaroid" width="40px" src="{{ follow.ProfilePicture.webPath | apply_filter('thumb_following') }}" />
+                        {% else %}
+                        <img style="float: left;" class="img-polaroid" width="40px" src="{{ "img/avatar.png" | apply_filter('thumb_following') }}" />
+                        {% endif %}
+                        <blockquote style="float: left; margin-left: 5px;">
+                        <p>{{follow.username}}</p> 
+                        <div class="btn-group">
+                            <a href="{{ path('calendar_project_calendar_user', {'user': follow.username}) }}" class="btn">Calendar</a> 
+                            <a href="{{ path('calendar_project_user_profile', {'user': follow.username}) }}" class="btn">Profile</a>
+                        </div>
+                        </blockquote>
+                     </div>
+                {% endfor %}
+            {% else %}
+            None.
+            {% endif %}
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    jQuery('#unFollow').hover(function() {
+       jQuery('#unFollow').text("Unfollow");
+       jQuery('#unFollow').addClass("btn-danger");
+}, function() {
+        jQuery('#unFollow').text("Following");
+        jQuery('#unFollow').removeClass("btn-danger");
+});
+</script>
+{% endblock fos_user_content %}

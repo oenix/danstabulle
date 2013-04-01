@@ -1,0 +1,19 @@
+<section id="Contenu" class="span12">
+    <h1>Mot de passe oublié</h1>
+    <hr>
+    <p class="lead">Saisissez votre nom d'utilisateur pour commencer</p>
+
+
+    <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+        <div>
+        {% if invalid_username is defined %}
+                <p>Nom d'utilisateur invalide.</p>
+        {% endif %}
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" id="username" name="username" required="required" />
+            </div>
+            <div>
+                <input class="btn btn-danger" type="submit" value="Réinitialiser le mot de passe" />
+            </div>
+        </form>
+    </section>

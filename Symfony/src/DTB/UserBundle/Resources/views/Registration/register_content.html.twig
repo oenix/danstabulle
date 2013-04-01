@@ -1,0 +1,11 @@
+<section id="Contenu" class="span12">
+    <h1>Inscription</h1>
+    <hr>
+
+    <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" autocomplete="off" class="fos_user_registration_register">
+        {{ form_widget(form) }}
+        <input type="submit" class="btn btn-primary" value="Inscription" />
+    </form>
+
+    <p><br></p>
+</section>

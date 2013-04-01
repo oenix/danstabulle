@@ -1,0 +1,67 @@
+<div class="calendar">
+    <div style="float: left; width:150px;">
+        {% if user.ProfilePicture.webPath is defined  %}
+        <img class="img-polaroid pull-left" src="{{ asset(user.ProfilePicture.webPath) }}" >
+        {% else %}
+        <img class="img-polaroid pull-left" src="{{ "img/avatar.png" }}" >
+        {% endif %}
+    </div>
+    <div style="margin-left: 200px;  padding: 20px; margin-top: 20px; background-color: #FFF; border: 1px solid rgba(0,0,0,0.2);">
+        <div class="page-header" style="margin-top: 0px; margin-bottom: 20px;">
+            <h1>{{ user.firstname | capitalize }}  <small>{{ user.username | capitalize }}</small></h1>
+
+
+            <div class="pull-right" style="margin-bottom: 20px; margin-top: -40px;">
+                <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
+        <p class="lead">{{ user.description}}</p>
+        <div class="clearfix"></div>
+    </div>
+    <div class="span12">
+        <h2>Informations</h2>
+    </div>
+    <div class="span2">
+
+    </div>
+
+    <div class="span8 pado">
+
+        <table class="table table-striped table-hover table-bordered">
+            <tr>
+                <td class="leader">Email</td>
+                <td class="lead">{{ user.email}}</td>
+            </tr>
+            <tr>
+                <td class="leader">Nom</td>
+                <td class="lead">{{ user.lastname | capitalize }}</td>
+            </tr>
+            <tr>
+                <td class="leader">Prénom</td>
+                <td class="lead">{{ user.firstname | capitalize }}</td>
+            </tr>
+            <tr>
+                <td class="leader">Ville</td>
+                <td class="lead">{{ user.city}}</td>
+            </tr>
+            <tr>
+                <td class="leader">Date de naissance</td>
+                <td class="lead">{{ user.birthdate|date()}}</td>
+            </tr>
+            <tr>
+                <td class="leader">Facebook</td>
+                <td class="lead">{{ user.facebook}}</td>
+            </tr>
+            <tr>
+                <td class="leader">Twitter</td>
+                <td class="lead">{{ user.twitter}}</td>
+            </tr>
+            <tr>
+                <td class="leader">Skype</td>
+                <td class="lead">{{ user.skype}}</td>
+            </tr>
+        </table>
+
+
+    </div>
+</div>
