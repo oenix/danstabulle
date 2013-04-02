@@ -1,5 +1,7 @@
 $(function(){
+	var my_array = ['Tintin', 'Asterix', "Boule et Bill", "Lucky Luke", "Les stroumphs"];
 	$(".pop").popover({placement:'right', trigger:'hover'});
+	$('.recherche').typeahead({source:my_array, items:1});
 });
 
 function cacher(id)
