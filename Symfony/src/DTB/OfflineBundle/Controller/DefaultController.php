@@ -10,8 +10,7 @@ class DefaultController extends Controller
     {
         $userManager = $this->get('fos_user.user_manager');
         $users = $userManager->findUsers();
-        var_dump($users);
         
-        return $this->render('DTBOfflineBundle:Default:index.html.twig', array('name' => $this->getUser()->getUsername()));
+        return $this->render('DTBOfflineBundle:Default:index.html.twig');
     }
 }

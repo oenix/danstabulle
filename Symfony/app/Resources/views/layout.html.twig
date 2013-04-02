@@ -20,7 +20,7 @@
                     <div class="navbar-inner">
                         <div class="container">
                             <ul class="nav">
-                                <li><a href="#">Accueil</a></li>
+                                <li><a href="{{ path('dtb_offline_homepage') }}">Accueil</a></li>
                                 <li><a href="bd.html">Explorer</a></li>
                                 <li><a href="#">Contribuer</a></li>
                                 <li><a href="#">Blog</a></li>
@@ -42,7 +42,7 @@
                     <li class="active">Bienvenue sur danstabulle</li>
                     {% if not(is_granted("IS_AUTHENTICATED_REMEMBERED")) %}
                     <li class="pull-right">
-                        <a href="inscription.html">Inscription</a>
+                        <a href="{{ path('fos_user_registration_register') }}">Inscription</a>
                     </li>
                     <li class="dropdown pull-right">
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown">Connexion<strong class="caret"></strong>  <div class="btn-group">
@@ -50,6 +50,18 @@
                         <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
                             {% render "FOSUserBundle:Security:login" %}
                         </div>
+                    </li>
+                    {% else %}
+                    <li class="dropdown pull-right">
+	
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="icon-user"></i> {{app.user.username}} <strong class="caret"></strong>
+                        <div class="btn-group">
+			</div> </a>
+			<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+			<p><a href="{{ path('fos_user_profile_show') }}">Profile</a></p>
+                        <p><a href="{{ path('fos_user_profile_edit') }}">Edit Profile</a></p>
+			<p><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></p>
+			</div>
                     </li>
                     {% endif %}
                 </ul>

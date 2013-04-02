@@ -4,7 +4,7 @@ namespace DTB\UserBundle\DataFixtures\ORM;
  
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use DTB\UserBundle\Entity\Users;
+use DTB\UserBundle\Entity\DTBUser;
  
 class Users implements FixtureInterface
 {

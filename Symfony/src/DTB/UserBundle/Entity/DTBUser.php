@@ -10,9 +10,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Users
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="DTB\UserBundle\Entity\UsersRepository")
+ * @ORM\Entity(repositoryClass="DTB\UserBundle\Entity\DTBUserRepository")
  */
-class User extends BaseUser {
+class DTBUser extends BaseUser {
 
     /**
      * @var integer

@@ -4,24 +4,6 @@
         <legend>Edit your profile</legend>
         {{ form_widget(form) }}
         </div>
-        <div style="clear: both; margin-bottom: 0px; margin-top: 0px;" class="form-actions">
-            <input type="submit" class="btn btn-large btn-success btn-block" value="{{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}" />
-            <a href="{{ path("fos_user_change_password") }}" class="btn btn-danger btn-block">Change your password</a>
-        </div>
+        <input type="submit" class="btn btn-large btn-success" value="{{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}" />
     </form>
 </div>
-{% block javascripts %}
-<script type="text/javascript">
-jQuery('#fos_user_profile_form_profilePicture').hide();
-function getFile()
-{
-   jQuery("#fos_user_profile_form_profilePicture_file").click();
-}
-</script>
-{% endblock %}
-
-<style>
-.fos_user_profile_edit input, .fos_user_profile_edit textarea {
-    width: 96%;
-}
-</style>

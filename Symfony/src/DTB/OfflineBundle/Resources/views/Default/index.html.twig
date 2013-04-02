@@ -1,1 +1,69 @@
-Hello {{ name }}!
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+<section id="Contenu" class="jumbotron masthead" style="background-image: url('{{ asset('img/head.png') }}'); padding: 60px; margin-top: 30px; margin-bottom: 30px;">
+
+    <h1>Créez votre BD</h1>
+    <p class="lead"> Avec DansTaBulle, choisissez de rejoindre un projet existant, ou bien
+        commencez votre BD à partir de rien<p>
+        <a class="btn btn-large btn-success" id="Start">Commencez</a>
+</section>
+
+
+<section id="widget" class="row-fluid">
+    <div id="description" class="span4">
+        <center><h2>DansTaBulle</h2></center>
+        <center>
+            <img src="{{ asset('img/logoPLIC_small.png') }}" height="200" width="150" alt="TopBD" />
+            <p>DansTaBulle est un site communautaire intéractif de création de bande dessinée.
+                Grâce à <abbr title="DansTaBulle">DTB</abbr>, vous pouvez créer vos projets, les modifier, seul ou à plusieurs.
+            </p>
+        </center>
+    </div>
+
+    <div id="topBds" class="span4">
+        <center><h2>Top BD's</h2></center>
+        <center>
+            <div id="myCarousel" class="carousel slide">
+                <!-- Carousel items -->
+                <div class="carousel-inner">
+                    <div class="active item"><img src="{{ asset('img/bds/bd1.jpg') }}" height="200" width="150" alt="TopBD" class="img-polaroid" /></div>
+                    <div class="item"><img src="{{ asset('img/bds/bd2.jpg') }}" height="200" width="150" alt="TopBD" class="img-polaroid" /></div>
+                    <div class="item"><img src="{{ asset('img/bds/bd3.jpg') }}" height="200" width="150" alt="TopBD" class="img-polaroid" /></div>
+                </div>
+                <!-- Carousel nav -->
+                <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+            </div>
+        </center>
+    </div>
+
+    <div id="Annonces" class="span4">
+        <center><h2>Annonces</h2></center>
+        <div class="annonces">
+            <p>Dessinateur</p>
+            <ul>
+                <li><a class="pop" rel="popover" data-content="Bonjour, nous recherchons un déssinateur pour notre nouvelle BD !"
+                       data-original-title="Dessinateur : BD1">BD1</a></li>
+                <li><a class="pop" rel="popover" data-content="Bonjour, nous recherchons un déssinateur pour notre nouvelle deuxième BD !"
+                       data-original-title="Dessinateur : BD1">BD2</a></li>
+            </ul>
+            <p>Relecteur</p>
+            <ul>
+                <li><a class="pop" rel="popover" data-content="Bonjour, nous recherchons un déssinateur pour notre nouvelle deuxième BD !"
+                       data-original-title="Relecteur: BD2">BD2</a></li>
+            </ul>
+            <p>Scénariste</p>
+            <ul>
+                <li><a class="pop" rel="popover" data-content="Bonjour, nous recherchons un scénariste pour notre nouvelle quatrième BD !"
+                       data-original-title="Relecteur: BD4">BD4</a></li>
+                <li><a class="pop" rel="popover" data-content="Bonjour, nous recherchons un sncénariste pour notre nouvelle troisiemme BD !"
+                       data-original-title="Relecteur: BD3">BD3</a></li>
+            </ul>
+            <p class="pull-right"><a>Plus d'annonces...</a></p>
+
+        </div>
+    </div>
+
+</section>
+{% endblock %}

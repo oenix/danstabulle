@@ -42,7 +42,9 @@
                 </tr>
                 <tr>
                     <td class="leader">Date de naissance</td>
-                    <td class="lead">{{ user.birthdate|date()}}</td>
+                    {% if user.birthdate is defined %}
+                    <td class="lead">{{ user.birthdate|date("m/d/Y")}}</td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td class="leader">Facebook</td>

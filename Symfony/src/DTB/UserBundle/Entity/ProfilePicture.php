@@ -1,7 +1,5 @@
 <?php
-
 namespace DTB\UserBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,7 +34,7 @@ class ProfilePicture
      */
     private $alt;
 	
-	private $file;
+    private $file;
 
 
     /**
@@ -95,18 +93,14 @@ class ProfilePicture
         return $this->alt;
     }
 	
-	private $tempFilename;
+    private $tempFilename;
 
-    // On modifie le setter de File, pour prendre en compte l'upload d'un fichier lorsqu'il en existe déjà un autre
     public function setFile(\Symfony\Component\HttpFoundation\File\UploadedFile $file) {
         $this->file = $file;
 
-        // On vérifie si on avait déjà un fichier pour cette entité
         if (null !== $this->url) {
-            // On sauvegarde l'extension du fichier pour le supprimer plus tard
             $this->tempFilename = $this->url;
 
-            // On réinitialise les valeurs des attributs url et alt
             $this->url = null;
             $this->alt = null;
         }
@@ -121,16 +115,12 @@ class ProfilePicture
      * @ORM\PreUpdate()
      */
     public function preUpload() {
-        // Si jamais il n'y a pas de fichier (champ facultatif)
         if (null === $this->file) {
             return;
         }
 
-        // Le nom du fichier est son id, on doit juste stocker également son extension
-        // Pour faire propre, on devrait renommer cet attribut en "extension", plutôt que "url"
         $this->url = $this->file->guessExtension();
 
-        // Et on génère l'attribut alt de la balise <img>, à la valeur du nom du fichier sur le PC de l'internaute
         $this->alt = $this->file->getClientOriginalName();
     }
 
@@ -139,12 +129,10 @@ class ProfilePicture
      * @ORM\PostUpdate()
      */
     public function upload() {
-        // Si jamais il n'y a pas de fichier (champ facultatif)
         if (null === $this->file) {
             return;
         }
 
-        // Si on avait un ancien fichier, on le supprime
         if (null !== $this->tempFilename) {
             $oldFile = $this->getUploadRootDir() . '/' . $this->id . '.' . $this->tempFilename;
             if (file_exists($oldFile)) {
@@ -152,32 +140,16 @@ class ProfilePicture
             }
         }
 
-        // On déplace le fichier envoyé dans le répertoire de notre choix
         $this->file->move(
-                $this->getUploadRootDir(), // Le répertoire de destination
-                $this->id . '.' . $this->url   // Le nom du fichier à créer, ici "id.extension"
+                $this->getUploadRootDir(),
+                $this->id . '.' . $this->url
         );
-
-        $cacheDir = __DIR__ . '/../../../../web/media/cache/';
-        $thumb = $cacheDir . "my_thumb/profilepic/" . $this->getId() . '.' . $this->getUrl();
-        if (file_exists($thumb)) {
-            unlink($thumb);
-        }
-        $thumb = $cacheDir . "thumb_following/profilepic/" . $this->getId() . '.' . $this->getUrl();
-        if (file_exists($thumb)) {
-            unlink($thumb);
-        }
-        $thumb = $cacheDir . "thumb_profile/profilepic/" . $this->getId() . '.' . $this->getUrl();
-        if (file_exists($thumb)) {
-            unlink($thumb);
-        }
     }
 
     /**
      * @ORM\PreRemove()
      */
     public function preRemoveUpload() {
-        // On sauvegarde temporairement le nom du fichier car il dépend de l'id
         $this->tempFilename = $this->getUploadRootDir() . '/' . $this->id . '.' . $this->url;
     }
 
@@ -185,20 +157,16 @@ class ProfilePicture
      * @ORM\PostRemove()
      */
     public function removeUpload() {
-        // En PostRemove, on n'a pas accès à l'id, on utilise notre nom sauvegardé
         if (file_exists($this->tempFilename)) {
-            // On supprime le fichier
             unlink($this->tempFilename);
         }
     }
 
     public function getUploadDir() {
-        // On retourne le chemin relatif vers l'image pour un navigateur
         return 'profilepic';
     }
 
     protected function getUploadRootDir() {
-        // On retourne le chemin relatif vers l'image pour notre code PHP
         return __DIR__ . '/../../../../web/' . $this->getUploadDir();
     }
 

@@ -3,7 +3,7 @@
 namespace DTB\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use DTB\UserBundle\Entity\User;
+use DTB\UserBundle\Entity\DTBUser;
 
 class DefaultController extends Controller {
 

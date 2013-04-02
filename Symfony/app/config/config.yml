@@ -62,7 +62,7 @@ swiftmailer:
 fos_user:
     db_driver:     orm                        # Le type de BDD à utiliser, nous utilisons l'ORM Doctrine depuis le début
     firewall_name: main                       # Le nom du firewall duquel on utilisera ces utilisateurs
-    user_class:    DTB\UserBundle\Entity\User # La classe de l'entité User que nous utilisons
+    user_class:    DTB\UserBundle\Entity\DTBUser # La classe de l'entité User que nous utilisons
     profile:
         form:
             type: dtb_edit_profile
