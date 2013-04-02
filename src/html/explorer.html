@@ -101,7 +101,8 @@
 		
 		</section>
 		
-		<div class="span12">
+		
+		<div class="span12" id ="top">
 		<h2>Top</h2>
 <hr>
 <div id="lasteventimg">
@@ -115,11 +116,44 @@
 </ul>
 </div>
 <p><br></p>
-<p class="pull-right"><a>Tout afficher...</a></p>
+<p class="pull-right"><a href="javascript:cacher('top')">Tout afficher...</a></p>
 <p><br></p>
 </div>
-<div class="span12">
-		<h2>Beta</h2>
+
+<div class="span12" id="top_complete" style="display:none;">
+<h2>Top</h2>
+			<table class="table table-striped table-hover table-bordered">
+			<tr>
+				<td class="lead"><center><img src="img/planches/planche1.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche2.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche3.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche2.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche4.jpg" /></center></td>
+			</tr>
+			<tr>
+				<td class="lead"><center><img src="img/planches/planche4.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche5.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche1.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche3.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche5.jpg"/></center></td>
+			</tr>
+			<tr>
+				<td class="lead"><center><img src="img/planches/planche2.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche1.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche3.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche6.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche4.jpg"/></center></td>
+			</tr>
+		</table>
+		<p class="pull-right" id="beta_complete"><a href="javascript:afficher('top')">Moins afficher...</a></p>
+	
+</div>
+
+
+
+
+<div class="span12" id ="beba">
+<h2>Beta</h2>
 <hr>
 <div id="lasteventimg">
 <ul class="wrapper"><li class="planche"><img src="img/planches/planche1.jpg" /></li>
@@ -132,11 +166,43 @@
 </ul>
 </div>
 <p><br></p>
-<p class="pull-right"><a>Tout afficher...</a></p>
+<p class="pull-right"><a href="javascript:cacher('beba')">Tout afficher...</a></p>
 <p><br></p>
 </div>
-		
-		<div class="span12">
+
+<div class="span12" id="beba_complete" style="display:none;">
+<h2>Beta</h2>
+
+	<table class="table table-striped table-hover table-bordered">
+			<tr>
+				<td class="lead"><center><img src="img/planches/planche1.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche2.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche3.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche2.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche4.jpg" /></center></td>
+			</tr>
+			<tr>
+				<td class="lead"><center><img src="img/planches/planche4.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche5.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche1.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche3.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche5.jpg"/></center></td>
+			</tr>
+			<tr>
+				<td class="lead"><center><img src="img/planches/planche2.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche1.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche3.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche6.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche4.jpg"/></center></td>
+			</tr>
+		</table>
+		<p class="pull-right"><a href="javascript:afficher('beba')">Moins afficher...</a></p>
+	
+</div>
+
+
+	<div class="span12" id ="cours">
+	
 		<h2>En cours</h2>
 <hr>
 <div id="lasteventimg">
@@ -150,10 +216,37 @@
 </ul>
 </div>
 <p><br></p>
-<p class="pull-right"><a>Tout afficher...</a></p>
+<p class="pull-right"><a href="javascript:cacher('cours')">Tout afficher...</a></p>
 <p><br></p>
 </div>
-				
+		<div class="span12" id="cours_complete" style="display:none;">
+		<h2>En cours</h2>
+			<table class="table table-striped table-hover table-bordered" id ="beta_complete">
+			<tr>
+				<td class="lead"><center><img src="img/planches/planche1.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche2.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche3.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche2.jpg" /></center></td>
+				<td class="lead"><center><img src="img/planches/planche4.jpg" /></center></td>
+			</tr>
+			<tr>
+				<td class="lead"><center><img src="img/planches/planche4.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche5.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche1.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche3.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche5.jpg"/></center></td>
+			</tr>
+			<tr>
+				<td class="lead"><center><img src="img/planches/planche2.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche1.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche3.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche6.jpg"/></center></td>
+				<td class="lead"><center><img src="img/planches/planche4.jpg"/></center></td>
+			</tr>
+		</table>
+		<p class="pull-right"><a href="javascript:afficher('cours')">Moins afficher...</a></p>
+	
+</div>		
 		
 		</div>
 		
