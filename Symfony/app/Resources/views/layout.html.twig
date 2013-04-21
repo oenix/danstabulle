@@ -81,10 +81,12 @@
             </center>
         </div>
 
-        {% block javascripts %}
-        {% endblock %}
+
         <script src="{{ asset('js/jquery.js') }}"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/danstabulle.js') }}"></script>
+        
+        {% block javascripts %}
+        {% endblock %}
     </body>
 </html>

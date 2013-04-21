@@ -151,8 +151,18 @@
             99% { width: 188px; transform: scale(0,0);}
             100% { width: 0px; transform: scale(0,0); }
         }
+        #comment {
+            position: absolute;
+            top: 240px;
+            margin-top: 15px;
+          }
+
+        #comment.fixed {
+            position: fixed;
+            top: 0;
+          }
     </style>
-    <div class="span2">
+    <div class="span2" id="comment">
         <button class="btn btn-block btn-info">
             <label for="select-type-all" class="ff-label-type-all">All</label>
         </button>
@@ -162,6 +172,7 @@
         </button>
         {% endfor %}
     </div>
+    <div class="span2"></div>
     <div class="span10">
         <section class="ff-container">
             <input id="select-type-all" name="radio-set-1" type="radio" class="ff-selector-type-all" checked="checked" />
@@ -188,4 +199,25 @@
         <div class="span12" style="clear: both;"><br/><br/></div>
         <div class="span12" style="clear: both;"><br/><br/></div>
 
+{% endblock %}
+        
+{% block javascripts %}
+<script type="text/javascript">
+$(document).ready(function () {  
+  var top = $('#comment').offset().top - parseFloat($('#comment').css('marginTop').replace(/auto/, 0));
+  $(window).scroll(function (event) {
+    // what the y position of the scroll is
+    var y = $(this).scrollTop();
+  
+    // whether that's below the form
+    if (y >= top) {
+      // if so, ad the fixed class
+      $('#comment').addClass('fixed');
+    } else {
+      // otherwise remove it
+      $('#comment').removeClass('fixed');
+    }
+  });
+});
+</script>
 {% endblock %}
