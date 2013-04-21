@@ -20,6 +20,10 @@ class DefaultController extends Controller
     
     public function addPlancheAction($id)
     {
+        if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedHttpException('You have to be logged in');
+        }
+        
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
         $bandeDessinee = $repository->find($id);
  
@@ -35,6 +39,10 @@ class DefaultController extends Controller
     
     public function createAction()
     {
+        if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedHttpException('You have to be logged in');
+        }
+        
         $bandeDessinee = new BandeDessinee();
         
         $form = $this->createForm(new BandeDessineeType, $bandeDessinee);
@@ -60,6 +68,10 @@ class DefaultController extends Controller
     
     public function updateAction($id)
     {
+        if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedHttpException('You have to be logged in');
+        }
+        
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
         $bandeDessinee = $repository->find($id);
         

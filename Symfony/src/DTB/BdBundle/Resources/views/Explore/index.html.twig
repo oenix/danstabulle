@@ -22,8 +22,12 @@
             display: block;
             position: relative;
             padding: 10px;
-            background: #FFF;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border: 1px solid rgba(0,0,0,0.2);
+            -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             margin: 4px;
             width: 160px;
             *height: 120px;
@@ -54,67 +58,134 @@
             display: block;
         }
         .ff-items li{
-            margin: 0px;
+            margin: 3px;
             float: left;
-            opacity: 0.2;
-            width: 188px;
-            transition: opacity 0.6s ease-in-out;
+            width: 0px;
+            -webkit-transform: scale(0,0);
+            -moz-transform: scale(0,0);
+            -o-transform: scale(0,0);
+            -ms-transform: scale(0,0);
+            transform: scale(0,0);
+            transition: all 0.6s ease-in-out;
         }
         .ff-container input.ff-selector-type-all:checked ~ .ff-items li
         {
-            opacity: 1;
+            width: 188px;
+            -webkit-transform: scale(1,1);
+            -moz-transform: scale(1,1);
+            -o-transform: scale(1,1);
+            -ms-transform: scale(1,1);
+            transform: scale(1,1);
+            -webkit-transition: -webkit-transform 0.3s linear;
+            -o-transition: -o-transform 0.3s linear;
+            -ms-transition: -ms-transform 0.3s linear;
+            transition: transform 0.3s linear;
         }
     {% for category in categories %}
         .ff-container input.ff-selector-type-{{category.id}}:checked ~ .ff-items .ff-item-type-{{category.id}}
         {
-            opacity: 1;
+            -webkit-transition: -webkit-transform 0.3s linear, width 0s linear 0.3s;
+            -moz-transition: -moz-transform 0.3s linear, width 0s linear 0.3s;
+            -o-transition: -o-transform 0.3s linear, width 0s linear 0.3s;
+            -ms-transition: -ms-transform 0.3s linear, width 0s linear 0.3s;
+            transition: transform 0.3s linear, width 0s linear 0.3s;
+            -webkit-animation: scaleUp 0.3s linear 0.4s forwards;
+            -moz-animation: scaleUp 0.3s linear 0.4s forwards;
+            -o-animation: scaleUp 0.3s linear 0.4s forwards;
+            -ms-animation: scaleUp 0.3s linear 0.4s forwards;
+            animation: scaleUp 0.3s linear 0.4s forwards;
         }
         .ff-container input.ff-selector-type-{{category.id}}:checked ~ .ff-items li:not(.ff-item-type-{{category.id}}){
-            opacity: 0.2;
+            -webkit-animation: scaleDown 0.3s linear forwards;
+            -moz-animation: scaleDown 0.3s linear forwards;
+            -o-animation: scaleDown 0.3s linear forwards;
+            -ms-animation: scaleDown 0.3s linear forwards;
+            animation: scaleDown 0.3s linear forwards;
         }
         .ff-container input.ff-selector-type-{{category.id}}:checked ~ .ff-items li:not(.ff-item-type-{{category.id}}) span{
             display: none;
         }
     {% endfor %}
+        @-webkit-keyframes scaleUp {
+            50% { width: 188px; -webkit-transform: scale(0,0); }
+            100% { width: 188px; -webkit-transform: scale(1,1); }
+        }
+        @-webkit-keyframes scaleDown {
+            0% { width: 188px;-webkit-transform: scale(1,1);}
+            99% { width: 188px; -webkit-transform: scale(0,0);}
+            100% { width: 0px; -webkit-transform: scale(0,0); }
+        }
+        @-moz-keyframes scaleUp {
+            50% { width: 188px; -moz-transform: scale(0,0); }
+            100% { width: 188px; -moz-transform: scale(1,1); }
+        }
+        @-moz-keyframes scaleDown {
+            0% { width: 188px;-moz-transform: scale(1,1);}
+            99% { width: 188px; -moz-transform: scale(0,0);}
+            100% { width: 0px; -moz-transform: scale(0,0); }
+        }
+        @-o-keyframes scaleUp {
+            50% { width: 188px; -o-transform: scale(0,0); }
+            100% { width: 188px; -o-transform: scale(1,1); }
+        }
+        @-o-keyframes scaleDown {
+            0% { width: 188px;-o-transform: scale(1,1);}
+            99% { width: 188px; -o-transform: scale(0,0);}
+            100% { width: 0px; -o-transform: scale(0,0); }
+        }
+        @-ms-keyframes scaleUp {
+            50% { width: 188px; -ms-transform: scale(0,0); }
+            100% { width: 188px; -ms-transform: scale(1,1); }
+        }
+        @-ms-keyframes scaleDown {
+            0% { width: 188px;-ms-transform: scale(1,1);}
+            99% { width: 188px; -ms-transform: scale(0,0);}
+            100% { width: 0px; -ms-transform: scale(0,0); }
+        }
+        @keyframes scaleUp {
+            50% { width: 188px; transform: scale(0,0); }
+            100% { width: 188px; transform: scale(1,1); }
+        }
+        @keyframes scaleDown {
+            0% { width: 188px; transform: scale(1,1);}
+            99% { width: 188px; transform: scale(0,0);}
+            100% { width: 0px; transform: scale(0,0); }
+        }
     </style>
     <div class="span2">
         <button class="btn btn-block btn-info">
             <label for="select-type-all" class="ff-label-type-all">All</label>
         </button>
         {% for category in categories %}
-            <button class="btn btn-block">
-                <label for="select-type-{{category.id}}" class="ff-label-type-{{category.id}}">{{category.name}}</label>
-            </button>
+        <button class="btn btn-block">
+            <label for="select-type-{{category.id}}" class="ff-label-type-{{category.id}}">{{category.name}}</label>
+        </button>
         {% endfor %}
     </div>
     <div class="span10">
-    <section class="ff-container">
-        <input id="select-type-all" name="radio-set-1" type="radio" class="ff-selector-type-all" checked="checked" />
+        <section class="ff-container">
+            <input id="select-type-all" name="radio-set-1" type="radio" class="ff-selector-type-all" checked="checked" />
         {% for category in categories %}
             <input id="select-type-{{category.id}}" name="radio-set-1" type="radio" class="ff-selector-type-{{category.id}}" />
         {% endfor %}
 
-        <ul class="ff-items">
+            <ul class="ff-items">
             {% for bd in bds %}
-                <li class="ff-item-type-{{bd.category.id}}">
-                    <a href="{{path('dtb_bd_show', {'id': bd.id})}}">
-                        <span>{{bd.title}}</span>
-                        <img src="{{asset('img/emptyPage.png')}}" />
-                    </a>
-                </li>
+                    <li class="ff-item-type-{{bd.category.id}}">
+                        <a href="{{path('dtb_bd_show', {'id': bd.id})}}">
+                            <span>{{bd.title}}</span>
+                            <img src="{{asset('img/emptyPage.png')}}" />
+                        </a>
+                    </li>
             {% endfor %}
-        </ul>
-    </section>
-    </div>
-    <div class="span12" style="clear: both;"><br/><br/></div>
+                </ul>
+            </section>
+        </div>
         <div class="span12" style="clear: both;"><br/><br/></div>
-
-            <div class="span12" style="clear: both;"><br/><br/></div>
-
-                <div class="span12" style="clear: both;"><br/><br/></div>
-
-                    <div class="span12" style="clear: both;"><br/><br/></div>
-
-                        <div class="span12" style="clear: both;"><br/><br/></div>
+        <div class="span12" style="clear: both;"><br/><br/></div>
+        <div class="span12" style="clear: both;"><br/><br/></div>
+        <div class="span12" style="clear: both;"><br/><br/></div>
+        <div class="span12" style="clear: both;"><br/><br/></div>
+        <div class="span12" style="clear: both;"><br/><br/></div>
 
 {% endblock %}
