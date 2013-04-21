@@ -1,3 +1,19 @@
-dtb_bd_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: DTBBdBundle:Default:index }
+dtb_bd_create:
+    pattern:  /createBD
+    defaults: { _controller: DTBBdBundle:Default:create }
+    
+dtb_bd_explore:
+    pattern:  /explore
+    defaults: { _controller: DTBBdBundle:Explore:index }
+    
+dtb_bd_update:
+    pattern:  /updateBD/{id}
+    defaults: { _controller: DTBBdBundle:Default:update }
+
+dtb_bd_show:
+    pattern:  /showBD/{id}
+    defaults: { _controller: DTBBdBundle:Default:show }
+
+dtb_bd_add_planche:
+    pattern:  /addPlanche/{id}
+    defaults: { _controller: DTBBdBundle:Default:addPlanche }

@@ -1,0 +1,10 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+<div style="text-align: center">
+    <form method="post" action="{{path('dtb_bd_create')}}">
+{{form_widget(form)}}
+            <input type="submit" class="btn btn-primary" />
+        </form>
+    </div>
+{% endblock %}

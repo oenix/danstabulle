@@ -1,0 +1,120 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+<style>
+        ul
+        {
+            list-style: none;
+        }
+        .ff-container input
+        {
+            display: none;
+        }
+        .ff-container label
+        {
+            width: 150px;
+        }
+        .ff-items{
+            position: relative;
+            margin: 0px auto;
+        }
+        .ff-items a{
+            display: block;
+            position: relative;
+            padding: 10px;
+            background: #FFF;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            margin: 4px;
+            width: 160px;
+            *height: 120px;
+        }
+        .ff-items a span{
+            display: block;
+            background: rgba(113, 123, 161, 0.9);
+            font-style: italic;
+            color: #FFF;
+            font-weight: bold;
+            padding: 20px;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 120px;
+            height: 0px;
+            overflow: hidden;
+            opacity: 0.5;
+            text-align: center;
+            text-shadow: 1px 1px 1px #303857;
+            transition: all 0.3s ease-in-out;
+        }
+        .ff-items a:hover span{
+            height: 120px;
+            opacity: 1;
+        }
+        .ff-items li img{
+            display: block;
+        }
+        .ff-items li{
+            margin: 0px;
+            float: left;
+            opacity: 0.2;
+            width: 188px;
+            transition: opacity 0.6s ease-in-out;
+        }
+        .ff-container input.ff-selector-type-all:checked ~ .ff-items li
+        {
+            opacity: 1;
+        }
+    {% for category in categories %}
+        .ff-container input.ff-selector-type-{{category.id}}:checked ~ .ff-items .ff-item-type-{{category.id}}
+        {
+            opacity: 1;
+        }
+        .ff-container input.ff-selector-type-{{category.id}}:checked ~ .ff-items li:not(.ff-item-type-{{category.id}}){
+            opacity: 0.2;
+        }
+        .ff-container input.ff-selector-type-{{category.id}}:checked ~ .ff-items li:not(.ff-item-type-{{category.id}}) span{
+            display: none;
+        }
+    {% endfor %}
+    </style>
+    <div class="span2">
+        <button class="btn btn-block btn-info">
+            <label for="select-type-all" class="ff-label-type-all">All</label>
+        </button>
+        {% for category in categories %}
+            <button class="btn btn-block">
+                <label for="select-type-{{category.id}}" class="ff-label-type-{{category.id}}">{{category.name}}</label>
+            </button>
+        {% endfor %}
+    </div>
+    <div class="span10">
+    <section class="ff-container">
+        <input id="select-type-all" name="radio-set-1" type="radio" class="ff-selector-type-all" checked="checked" />
+        {% for category in categories %}
+            <input id="select-type-{{category.id}}" name="radio-set-1" type="radio" class="ff-selector-type-{{category.id}}" />
+        {% endfor %}
+
+        <ul class="ff-items">
+            {% for bd in bds %}
+                <li class="ff-item-type-{{bd.category.id}}">
+                    <a href="{{path('dtb_bd_show', {'id': bd.id})}}">
+                        <span>{{bd.title}}</span>
+                        <img src="{{asset('img/emptyPage.png')}}" />
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+    </div>
+    <div class="span12" style="clear: both;"><br/><br/></div>
+        <div class="span12" style="clear: both;"><br/><br/></div>
+
+            <div class="span12" style="clear: both;"><br/><br/></div>
+
+                <div class="span12" style="clear: both;"><br/><br/></div>
+
+                    <div class="span12" style="clear: both;"><br/><br/></div>
+
+                        <div class="span12" style="clear: both;"><br/><br/></div>
+
+{% endblock %}

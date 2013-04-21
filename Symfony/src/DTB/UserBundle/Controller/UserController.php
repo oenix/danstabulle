@@ -13,7 +13,7 @@ class UserController extends Controller {
     public function showUserAction($id) {
         $repository = $this->getDoctrine()
                      ->getManager()
-                     ->getRepository('DTBUserBundle:User');
+                     ->getRepository('DTBUserBundle:DTBUser');
         
         $user = $repository->find($id);
         var_dump($user);

@@ -1,21 +1,22 @@
 
-        <section id="Contenu" class="couverture span4">
+        <section id="Contenu" class="span4">
         {% if user.ProfilePicture.webPath is defined  %}
-            <img class="img-polaroid"  width="250" height="200" src="{{ asset(user.ProfilePicture.webPath) }}" >
+            <img class="img-polaroid"  width="250" src="{{ asset(user.ProfilePicture.webPath) }}" >
         {% else %}
             <img class="img-polaroid" src="{{ "img/avatar.png" }}" >
         {% endif %}
         </section>
-        <section id="Contenu" class="jumbotron masthead span8">
+        <section id="Contenu" class="masthead span8">
 
             <h1 style="text-transform : uppercase;">{{ user.username}}</h1>
             <p class="lead">{{ user.description}}</p>
-            <a class="btn btn-large btn-success" id="Start">Projets</a>
-            <a class="btn btn-large btn-warning" id="Start">Contacter</a>
         </section>
 
         <div class="span12">
-            <h2>Informations</h2>
+            <h2>Informations
+            <a class="btn btn-danger" id="Start" href="{{path('fos_user_profile_edit')}}">Editer</a>
+            </h2>
+            <hr>
         </div>
         <div class="span2">
 

@@ -302,44 +302,4 @@ class DTBUser extends BaseUser {
     public function getProfilePicture() {
         return $this->profilePicture;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->bandesDessineesCreated = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add bandesDessineesCreated
-     *
-     * @param \DTB\BdBundle\Entity\BandeDessinee $bandesDessineesCreated
-     * @return DTBUser
-     */
-    public function addBandesDessineesCreated(\DTB\BdBundle\Entity\BandeDessinee $bandesDessineesCreated)
-    {
-        $this->bandesDessineesCreated[] = $bandesDessineesCreated;
-    
-        return $this;
-    }
-
-    /**
-     * Remove bandesDessineesCreated
-     *
-     * @param \DTB\BdBundle\Entity\BandeDessinee $bandesDessineesCreated
-     */
-    public function removeBandesDessineesCreated(\DTB\BdBundle\Entity\BandeDessinee $bandesDessineesCreated)
-    {
-        $this->bandesDessineesCreated->removeElement($bandesDessineesCreated);
-    }
-
-    /**
-     * Get bandesDessineesCreated
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getBandesDessineesCreated()
-    {
-        return $this->bandesDessineesCreated;
-    }
 }
