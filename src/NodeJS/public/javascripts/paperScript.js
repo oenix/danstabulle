@@ -33,7 +33,7 @@ function onMouseDown(event) {
 	color = getSelectValue('color');
     path = new Path();
     path.strokeColor = color;
-	path.strokeWidth = 1;
+	path.strokeWidth = 20;
     path.add(event.point);
 	
 	 path_to_send = {
@@ -49,13 +49,6 @@ function onMouseDown(event) {
 }
 	
 function onMouseDrag(event) {
-    
-    var step = event.delta / 2;
-    step.angle += 90;
-    
-    var top = event.middlePoint + step;
-    var bottom = event.middlePoint - step;
-    
     path.add(event.point);
 
     // On ajoute les data au path
