@@ -1,10 +1,11 @@
 var path;
 var color;
 var size;
-
+var raster;
+var hasRaster = false;
+var image;
 //Rafraichissement en milliseconde;
 var rafraichissement = 1;
-
 // Initialise Socket.io
 var socket = io.connect('http://localhost:3000');
 
@@ -38,7 +39,9 @@ function onMouseDown(event) {
 	 path_to_send = {
         rgba : color,
         start : event.point,
-        path : []
+        path : [], 
+		image : 0,
+		hasRaster : false
     };
 
 
@@ -89,12 +92,21 @@ function onMouseUp(event) {
 		path.closed = true;
 		path.simplify(20);
 	}
-	
+	if (hasRaster){
+		path_to_send.hasRaster = true;
+		path_to_send.image = image.src;
+		hasRaster = false;
+	}
+		
 	path_to_send.end = event.point;
+
     socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
     clearInterval(send_paths_timer);
     path_to_send.path = new Array();
+	path_to_send.hasRaster = false;
     timer_is_active = false;
+	has_raster = false;
+	saveCanvas();
 }
 
 
@@ -103,7 +115,7 @@ socket.on('draw:progress', function( artist, data ) {
     if ( artist !== uid && data ) {
 
        progress_external_path( JSON.parse( data ), artist );
-
+	   
     }
 
 });
@@ -112,6 +124,7 @@ socket.on('draw:end', function( artist, data ) {
 
     if ( artist !== uid && data ) {
        end_external_path( JSON.parse( data ), artist );
+	
     }
 
 });
@@ -152,15 +165,24 @@ var external_paths = {};
 var end_external_path = function( points, artist ) {
 
     var path = external_paths[artist];
-
-    if (path) {
-        if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
-		path.style = bulleStyle;
-		path.closed = true;
-		path.simplify(20);
+	
+	if (points.hasRaster)
+	{
+	    var img = new Image();
+	    img.src = points.image
+		raster = new Raster(img);
+		raster.position = view.center;
+		raster.scale(0.5);
 		view.draw();
 	}
-    path.add(points.end);  
+    if (path) {
+        if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
+			path.style = bulleStyle;
+			path.closed = true;
+			path.simplify(20);
+			view.draw();
+	    }
+    path.add(points.end);
 	external_paths[artist] = false;
     }
 
@@ -178,7 +200,6 @@ progress_external_path = function( points, artist ) {
         path = external_paths[artist];
         var start_point = new Point(points.start.x, points.start.y);
         path.strokeColor  = points.rgba;
-		//alert(path.rgba);
         path.add(start_point);
 
     }
@@ -188,14 +209,15 @@ progress_external_path = function( points, artist ) {
   for (var i = 0; i < length; i++ ) {
         path.add(paths[i].point);
     }
-
 view.draw();
-    
-
-
-
 };
 
+function saveCanvas()
+{
+	var canvas = document.getElementById('myCanvas');
+	var dataURL = canvas.toDataURL();
+	document.getElementById('save').href = dataURL;
+}
 
 function getSelectValue(selectId)
 {
@@ -214,3 +236,98 @@ function getSelectValue(selectId)
 	}	
 	return values;	
 }
+
+
+// DRAG AND DROP
+
+var holder = document.getElementById('holder'),
+    tests = {
+      filereader: typeof FileReader != 'undefined',
+      dnd: 'draggable' in document.createElement('span'),
+      formdata: !!window.FormData,
+    }, 
+    support = {
+      filereader: document.getElementById('filereader'),
+      formdata: document.getElementById('formdata'),
+    },
+    acceptedTypes = {
+      'image/png': true,
+      'image/jpeg': true,
+      'image/gif': true
+    },
+    fileupload = document.getElementById('upload');
+	
+"filereader formdata".split(' ').forEach(function (api) {
+  if (tests[api] === false) {
+    support[api].className = 'fail';
+  } else {
+  }
+});
+
+function readfiles(files) {
+    debugger;
+    var formData = tests.formdata ? new FormData() : null;
+    for (var i = 0; i < files.length; i++) {
+      if (tests.formdata) formData.append('file', files[i]);
+      previewfile(files[i]);
+    }
+    if (tests.formdata) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/devnull.php');
+      xhr.onload = function() {
+      };
+
+      if (tests.progress) {
+        xhr.upload.onprogress = function (event) {
+          if (event.lengthComputable) {
+            var complete = (event.loaded / event.total * 100 | 0);
+          }
+        }
+      }
+
+      xhr.send(formData);
+    }
+}
+
+
+function previewfile(file) {
+  if (tests.filereader === true && acceptedTypes[file.type] === true) {
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      image = new Image();
+      image.src = event.target.result;
+	  raster = new Raster(image);
+	  
+	  
+	  raster.position = view.center;
+	  
+	  
+	  raster.scale(0.5);
+	  view.draw();
+	  hasRaster = true;
+    };
+
+    reader.readAsDataURL(file);
+  }  else {
+    holder.innerHTML += '<p>Uploaded ' + file.name + ' ' + (file.size ? (file.size/1024|0) + 'K' : '');
+    console.log(file);
+  }
+}
+
+if (tests.dnd) { 
+  holder.ondragover = function () { this.className = 'hover'; return false; };
+  holder.ondragend = function () { this.className = ''; return false; };
+  holder.ondrop = function (e) {
+    this.className = '';
+    e.preventDefault();
+    readfiles(e.dataTransfer.files);
+  }
+} else {
+  fileupload.className = 'hidden';
+  fileupload.querySelector('input').onchange = function () {
+    readfiles(this.files);
+  };
+}
+
+
+//IMAGE DROP
