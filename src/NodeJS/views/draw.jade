@@ -3,7 +3,9 @@ extends layout
 block content
   script(type='text/javascript', src='/javascripts/paper.js')
   script(type='text/paperscript', src='/javascripts/paperScript.js', canvas="myCanvas")
+  script(type="text/javascript", src="http://zeptojs.com/zepto.min.js")
   h1= title
+
   p Dessiner
   select(id='color')
     option(value='#000000') noir
