@@ -5,3 +5,34 @@ body {
 a {
   color: #00b7ff;
 }
+#holder {
+  border: 10px dashed #ccc;
+  width: auto;
+  min-height: auto;
+  margin: 20px;
+}
+#holder.hover {
+  border: 10px dashed #0c0;
+}
+#holder img {
+  display: block;
+  margin: 10px auto;
+}
+#holder p {
+  margin: 10px;
+  font-size: 14px;
+}
+progress {
+  width: 100%;
+}
+progress:after {
+  content: '%';
+}
+.fail {
+  background: #c00;
+  padding: 2px;
+  color: #fff;
+}
+.hidden {
+  display: none !important;
+}

@@ -2,14 +2,24 @@ extends layout
 
 block content
   script(type='text/javascript', src='/javascripts/paper.js')
-  script(type='text/paperscript', src='/javascripts/paperScript.js', canvas="myCanvas")
+  
   script(type="text/javascript", src="http://zeptojs.com/zepto.min.js")
   h1= title
 
   p Dessiner
+  p
+    a(id="save") Sauvegarder
   select(id='color')
     option(value='#000000') noir
     option(value='#ff0000') rouge
     option(value='#2311d0') bleu
     option(value='#4a970c') vert
-  canvas(id="myCanvas", resize)
+  div(id="holder")
+    canvas(id="myCanvas", resize)
+  p(id="upload", class="hidden")
+    label Drag and drop not supported.
+  p(id="filereader")
+  p(id="formdata")
+  p(id="progress")
+  script(type="text/paperscript", src="/javascripts/draganddrop.js", canvas="myCanvas")
+  script(type='text/paperscript', src='/javascripts/paperScript.js', canvas="myCanvas")
