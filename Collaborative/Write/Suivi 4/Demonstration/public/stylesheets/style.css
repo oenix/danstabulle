@@ -1,0 +1,32 @@
+body {
+  padding: 10px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#editorDiv {
+    float: left;
+    padding-bottom: 35px;
+    padding-left: 15px;
+    padding-right: 60px;
+    width: 600px;
+}
+
+#isReadOnlySpan {
+	color: red;
+	display: none;
+}
+
+#finishEditingButton {
+	display: none;
+}
+
+#connectedUsersList {
+    float: left;
+    max-height: 250px;
+    overflow: auto;
+    width: 160px;
+}
