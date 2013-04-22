@@ -18,7 +18,7 @@ class ContributeController extends Controller
         
         $bandeDessinees = $this->getDoctrine()
                 ->getRepository('DTBBdBundle:BandeDessinee')
-                ->findBy(array('creator' => $this->getUser()->getID()));
+                ->findBy(array('creator' => $this->getUser()->getID()), array("id" => "asc"));
         
         return $this->render('DTBBdBundle:Contribute:index.html.twig', 
                 array('bds' => $bandeDessinees));
