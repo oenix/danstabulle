@@ -33,7 +33,7 @@ function onMouseDown(event) {
 	color = getSelectValue('color');
     path = new Path();
     path.strokeColor = color;
-	path.strokeWidth = 20;
+	path.strokeWidth = 1;
     path.add(event.point);
 	
 	 path_to_send = {
