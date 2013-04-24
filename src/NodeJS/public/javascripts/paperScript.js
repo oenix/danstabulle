@@ -4,6 +4,11 @@ var size;
 var raster;
 var hasRaster = false;
 var image;
+var usedTool = 0;
+
+
+tool.minDistance = 10;
+tool.maxDistance = 45;
 
 //Rafraichissement en milliseconde;
 var rafraichissement = 1;
@@ -31,9 +36,11 @@ var bulleStyle = {
 };
 
 function onMouseDown(event) {
+
+    path = new Path();
 	color = getSelectValue('color');
 	size = getSelectValue('size');
-    path = new Path();
+	if (usedTool == 0) {
     path.strokeColor = color;
 	path.strokeWidth = size;
     path.add(event.point);
@@ -44,26 +51,64 @@ function onMouseDown(event) {
         path : [], 
 		image : 0,
 		size : size,
-		hasRaster : false
+		hasRaster : false,
+		usedTool : 0
     };
-
-
-
+	}
+	else if (usedTool == 1) {
+		
+		var rgba = new HsbColor(Math.random() * 360, 1, 1);
+		
+		path.fillColor = rgba;
+		path.add(event.point);
+		path_to_send = {
+			rgba : 0,
+			start : event.point,
+			path : [], 
+			image : 0,
+			size : size,
+			hasRaster : false,
+			usedTool : 1
+    };
+	}
 }
 	
 function onMouseDrag(event) {
+
+	if (usedTool == 0){
     path.add(event.point);
 
     // On ajoute les data au path
     path_to_send.path.push({
         point : event.point
     });
+	
+	}
+	else if (usedTool == 1)
+	{
+	    var step = event.delta / 2;
+		step.angle += 90;
+    
+		var top = event.middlePoint + step;
+		var bottom = event.middlePoint - step;
+    
+		path.add(top);
+		path.insert(0, bottom);
+		path.smooth();
+		
+		 path_to_send.path.push({
+			point : event.point,
+			top : top,
+			bottom : bottom
+    });
+	}
 
     //On push le path
     if ( !timer_is_active ) {
 
         send_paths_timer = setInterval( function() {
 
+			
             socket.emit('draw:progress', uid, JSON.stringify(path_to_send) );
             path_to_send.path = new Array();
 
@@ -77,6 +122,8 @@ function onMouseDrag(event) {
 
 function onMouseUp(event) {
 
+	if (usedTool == 0)
+	{
 	if (path.length < 5) {
     	var myCircle = new Path.Circle(event.point, 0.2);
     	myCircle.strokeColor = color;
@@ -88,14 +135,24 @@ function onMouseUp(event) {
 		path.closed = true;
 		path.simplify(20);
 	}
+	}
+	else if (usedTool == 1)
+	{
+		path.add(event.point);
+		path.closed = true;
+		path.smooth();
+	}
+	
+	
+	path_to_send.end = event.point;
 	if (hasRaster){
 		path_to_send.hasRaster = true;
 		path_to_send.image = image.src;
 		hasRaster = false;
 	}
-		
-	path_to_send.end = event.point;
-
+	
+	
+	
     socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
     clearInterval(send_paths_timer);
     path_to_send.path = new Array();
@@ -172,13 +229,20 @@ var end_external_path = function( points, artist ) {
 		view.draw();
 	}
     if (path) {
-        if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
+	
+    path.add(points.end);
+        if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && points.usedTool == 0) {
 			path.style = bulleStyle;
 			path.closed = true;
 			path.simplify(20);
-			view.draw();
+			
 	    }
-    path.add(points.end);
+		if (points.usedTool == 1)
+		{
+			path.closed = true;
+			path.smooth();
+		}
+		view.draw();
 	external_paths[artist] = false;
     }
 
@@ -195,8 +259,18 @@ progress_external_path = function( points, artist ) {
         external_paths[artist] = new Path();
         path = external_paths[artist];
         var start_point = new Point(points.start.x, points.start.y);
-        path.strokeColor  = points.rgba;
-		path.strokeWidth = points.size;
+
+		if (points.usedTool == 1)
+		{
+		var start_point = new Point(points.start.x, points.start.y);
+			path.fillColor = new HsbColor(Math.random() * 360, 1, 1);
+        path.add(start_point);
+		}
+		else if (points.usedTool == 0)
+		{        
+			path.strokeColor  = points.rgba;
+			path.strokeWidth = points.size;
+		}
         path.add(start_point);
 
     }
@@ -204,7 +278,15 @@ progress_external_path = function( points, artist ) {
     var paths = points.path;
     var length = paths.length;
   for (var i = 0; i < length; i++ ) {
-        path.add(paths[i].point);
+		if (path.usedTool == 0)
+		{
+			path.add(paths[i].point);
+			}
+		else if (points.usedTool == 1)
+		{
+			path.add(paths[i].top);
+			path.insert(0, paths[i].bottom);
+		}
     }
 view.draw();
 };
