@@ -4,6 +4,7 @@ var size;
 var raster;
 var hasRaster = false;
 var image;
+
 //Rafraichissement en milliseconde;
 var rafraichissement = 1;
 // Initialise Socket.io
@@ -31,9 +32,10 @@ var bulleStyle = {
 
 function onMouseDown(event) {
 	color = getSelectValue('color');
+	size = getSelectValue('size');
     path = new Path();
     path.strokeColor = color;
-	path.strokeWidth = 1;
+	path.strokeWidth = size;
     path.add(event.point);
 	
 	 path_to_send = {
@@ -41,6 +43,7 @@ function onMouseDown(event) {
         start : event.point,
         path : [], 
 		image : 0,
+		size : size,
 		hasRaster : false
     };
 
@@ -193,6 +196,7 @@ progress_external_path = function( points, artist ) {
         path = external_paths[artist];
         var start_point = new Point(points.start.x, points.start.y);
         path.strokeColor  = points.rgba;
+		path.strokeWidth = points.size;
         path.add(start_point);
 
     }
