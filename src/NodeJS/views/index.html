@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>DansTaBulle</title>
+   <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/stylesheets/danstabulle.css" rel="stylesheet" media="screen">
+	<link href="/stylesheets/style.css" rel="stylesheet" media="screen">
+	
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+      <div class="container ombre blanc">
+
+        <div class="masthead">
+        <div style="text-align: center; margin-bottom: 10px">
+          <img src="img/logoPlicMini.png">
+        </div>
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="container">
+                <ul class="nav">
+                  <li><a href="index.html">Accueil</a></li>
+			      <li class="active"><a href="explorer.html">Explorer</a></li>	
+				  <li><a href="#">Contribuer</a></li>
+				  <li><a href="#">Blog</a></li>
+				  <li><a href="#">Shop</a></li>
+                  <li><div class="input-append searchform">
+																		<input class="span2 recherche" id="appendedInput search-query" type="text" data-provide="typeahead" data-items="1">
+
+									<span class="add-on"><i class="icon-search"></i></span>
+								</div>
+                  </li>
+                </ul>
+			</div>
+		</div>
+	</div><!-- /.navbar -->
+</div>
+
+<div>
+	<ul class="breadcrumb">
+		<li><a href="index.html"><i class="icon-home"></i></a> <span class="divider">/</span></li>
+		<li><a href="explorer.html">Contribuer</a> <span class="divider">/</span></li>
+		<li class="active">Dessiner</li>
+		<li class="pull-right">
+			<a href="inscription.html">Inscription</a>
+		</li>
+		<li class="dropdown pull-right">
+			<a class="dropdown-toggle" href="#" data-toggle="dropdown">Connexion<strong class="caret"></strong>  <div class="btn-group">
+			</div> </a>
+			<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+				<form class="form-signin">
+					<h4 class="form-signin-heading">Connexion</h4>
+					<input type="text" class="input-medium" placeholder="Email">
+					<input type="password" class="input-medium" placeholder="Mot de Passe">
+					<label class="checkbox">
+						<input type="checkbox" value="remember-me"> Rester connecté
+					</label>
+					<label>
+						<inputvalue="passordforget"><a href="password.html">Mot de passe oublié</a>
+					</label>
+					<button class="btn btn-small btn-primary" type="submit">Connexion</button>
+				</form>
+			</div>
+		</li>
+
+	</ul>
+</div>
+<section id="Contenu" class="span12">
+
+  <p> Dessiner</p>
+  <p><a id="save" href="#"> Sauvegarder</a></p>
+  <select id='color'>
+    <option value='#000000'> noir</option>
+    <option value='#ff0000'> rouge</option>
+    <option value='#2311d0'> bleu</option>
+    <option value='#4a970c'> vert</option>
+  </select>
+  
+  <div id="holder">
+  
+    <canvas id="myCanvas" width="920" height="640"></canvas>
+  </div>
+  <p id="upload" class="hidden">
+    <label>Le drag and drop n'est pas supporté par votre navigateur</label>
+	</p>
+  <p id="filereader"></p>
+  <p id="formdata"></p>
+  <p id="progress"></p>
+  
+        </section>
+		</div>
+		
+      <div class="container ombre footer">
+            <center>
+              <footer>
+              <p class="muted credit"><a href="#">DansTaBulle</a> est un projet de quatrième année réalisé à l'<a href="http://www.epita.fr">EPITA</a>, en <a href="http://mti.epita.fr">MTI</a></p>
+              <p class="muted credit">N'hésitez pas à nous <a>contacter</a>, ou bien à visiter la <a href=faq.html>FAQ</a><p>
+              </footer>
+            </center>
+		</div>
+      <script src="http://code.jquery.com/jquery.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+	  <script src="js/danstabulle.js"></script>
+	  <script type='text/javascript' src='/javascripts/paper.js'></script>
+	<script type="text/javascript" src="http://zeptojs.com/zepto.min.js"></script>
+  <script type='text/paperscript' src='/javascripts/paperScript.js' canvas="myCanvas"</script>
+    </body>
+  </html>
