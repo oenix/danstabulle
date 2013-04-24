@@ -15,7 +15,8 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
-  , io = require('socket.io'); ;
+  , io = require('socket.io')
+  , pg = require('pg');
 
   
 var app = express();
@@ -38,6 +39,33 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+
+/* SQL configuration */
+
+var connectionString = "postgres://postgres:admin@localhost:5432/DansTaBulleTest";
+
+var sqlClient = new pg.Client(connectionString);
+
+function executeQuery(query) {
+	sqlClient.connect();
+
+	var query = sqlClient.query(query);
+
+	query.on('row', function(row) {
+		console.log(row);
+	});
+
+	query.on('end', function() { 
+		sqlClient.end();
+	});
+}
+
+function saveScenarioDatabase(text) {
+	newQuery = 'INSERT INTO "ScenarioVersion" (content) VALUES (\'' + text + "');"; 
+	
+	console.log(newQuery);
+	executeQuery(newQuery);
+}
 
 /**/
 
@@ -83,7 +111,8 @@ io.sockets.on('connection', function (socket) {
     });
 	
 	socket.on('saveEditorText', function (text) {
-		console.log('TEXT MUST BE SAVED HERE');
+		console.log("FDSFDSFDSFDS");
+		saveScenarioDatabase(text);
     });
 	
 	socket.on('disconnect', function() {

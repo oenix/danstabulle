@@ -67,7 +67,7 @@ $(document).ready(function() {
 	/* Send the text to the server in order to be saved */
 	
 	function saveEditorText(text){
-		socket.emit('saveEditorText', pseudo);
+		socket.emit('saveEditorText', text);
 	}
 
 	/* Update users' list when someone connects */
