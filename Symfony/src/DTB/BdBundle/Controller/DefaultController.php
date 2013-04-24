@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use DTB\BdBundle\Entity\BandeDessinee;
 use DTB\BdBundle\Form\BandeDessineeType;
 use DTB\BdBundle\Entity\Planche;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class DefaultController extends Controller
 {

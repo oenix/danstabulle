@@ -6,6 +6,10 @@ dtb_bd_explore:
     pattern:  /explore
     defaults: { _controller: DTBBdBundle:Explore:index }
     
+dtb_bd_contribute:
+    pattern:  /contribute
+    defaults: { _controller: DTBBdBundle:Contribute:index }
+    
 dtb_bd_update:
     pattern:  /updateBD/{id}
     defaults: { _controller: DTBBdBundle:Default:update }
