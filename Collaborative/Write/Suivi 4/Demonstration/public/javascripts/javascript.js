@@ -96,7 +96,27 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	/* Scenario chat management */
 
+	function updateChat(message) {
+		$("#chatMessages").append("<li>" + message.user + ":" + message.content + "</li>");
+	}
+	
+	socket.on('updateChatWithMessage', function (message) {
+		updateChat(message);
+	});
+	
+	$("#chatSendMessageButton").bind("click", function () {
+		messageContent = $("#chatSendMessageArea").val();
+	
+		socket.emit('sendChatMessageToServer', pseudo, messageContent);
+		
+		updateChat({user: pseudo, content: messageContent});
+		
+		$("#chatSendMessageArea").val("");
+	});
+	
 	/* */
   
 	socket.on('updateEditorText', function (text) {

@@ -71,7 +71,7 @@ function saveScenarioDatabase(text) {
 
 var currentText = "";
 var textIsEditing = false;
-var connectedClients = [] ; // {socket.id, nickname}
+var connectedClients = [] ; // [{id: socket.id, pseudo: userPseudo}]
 
 server = http.createServer(app);
 
@@ -97,13 +97,16 @@ io.sockets.on('connection', function (socket) {
 		console.log('New user with pseudo : ' + userPseudo + " and ID : " + socketId);
 	});
 	
-    
     socket.on('newTextVersion', function (newText) {
         currentText = newText;
 		
 		console.log('Sending text ' + newText);
 		
         socket.broadcast.emit('updateEditorText', newText);
+    });
+	
+	socket.on('sendChatMessageToServer', function (user, messageContent) {
+        socket.broadcast.emit('updateChatWithMessage', {user: user, content: messageContent});
     });
 	
 	socket.on('isEditing', function (isEditing) {
