@@ -9,7 +9,7 @@ a {
   border: 10px dashed #ccc;
   width: auto;
   min-height: auto;
-  margin: 20px;
+  margin: 2px;
 }
 #holder.hover {
   border: 10px dashed #0c0;
@@ -35,4 +35,7 @@ progress:after {
 }
 .hidden {
   display: none !important;
+}
+#myCanvas {
+  size: auto;
 }

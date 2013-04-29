@@ -67,7 +67,7 @@ $(document).ready(function() {
 	/* Send the text to the server in order to be saved */
 	
 	function saveEditorText(text){
-		socket.emit('saveEditorText', pseudo);
+		socket.emit('saveEditorText', text);
 	}
 
 	/* Update users' list when someone connects */
@@ -96,7 +96,40 @@ $(document).ready(function() {
 			}
 		});
 	});
+	
+	/* Scenario chat management */
 
+	function updateChat(message) {
+		$("#chatMessages").append("<li><strong>" + message.user + "</strong> : " + message.content + "</li>");
+	}
+	
+	function sendChatMessage() {
+		messageContent = $("#chatSendMessageArea").val();
+	
+		if (messageContent != ""){
+			socket.emit('sendChatMessageToServer', pseudo, messageContent);
+		
+			updateChat({user: pseudo, content: messageContent});
+		
+			$("#chatSendMessageArea").val("");
+		}		
+	};
+	
+	socket.on('updateChatWithMessage', function (message) {
+		updateChat(message);
+	});
+	
+	$("#chatSendMessageButton").bind("click", function () {
+		sendChatMessage();
+	});
+	
+	$("#chatSendMessageArea").keypress(function(event) {
+		if ( event.which == 13 ) {
+			event.preventDefault();
+			sendChatMessage();
+		}
+	});
+	
 	/* */
   
 	socket.on('updateEditorText', function (text) {

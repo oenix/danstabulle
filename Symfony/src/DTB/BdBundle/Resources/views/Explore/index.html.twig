@@ -151,6 +151,7 @@
             99% { width: 188px; transform: scale(0,0);}
             100% { width: 0px; transform: scale(0,0); }
         }
+        
         #comment {
             position: absolute;
             top: 240px;
@@ -161,6 +162,32 @@
             position: fixed;
             top: 0;
           }
+          
+        .color2 {
+            background-color: #DA2D3D !important;          
+        }
+        .color3 {
+            background-color: #049EB7 !important;          
+        }
+        .color4 {
+            background-color: #B9C96A !important;          
+        }
+        .color5 {
+            background-color: #E81EEF !important;          
+        }
+        .color6 {
+            background-color: #B06009 !important;          
+        }
+        .color7 {
+            background-color: #4C722C !important;          
+        }
+        .color8 {
+            background-color: #FBEF5A !important;          
+        }
+        .color9 {
+            background-color: #90529B !important;          
+        }
+        
     </style>
     <div class="span2" id="comment">
         <button class="btn btn-block btn-info">
@@ -184,7 +211,7 @@
             {% for bd in bds %}
                     <li class="ff-item-type-{{bd.category.id}}">
                         <a href="{{path('dtb_bd_show', {'id': bd.id})}}">
-                            <span>{{bd.title}}</span>
+                            <span class="color{{bd.category.id}}">{{bd.title}}</span>
                             <img src="{{asset('img/emptyPage.png')}}" />
                         </a>
                     </li>

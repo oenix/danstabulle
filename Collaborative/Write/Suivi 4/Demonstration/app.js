@@ -15,7 +15,8 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
-  , io = require('socket.io'); ;
+  , io = require('socket.io')
+  , pg = require('pg');
 
   
 var app = express();
@@ -39,11 +40,38 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', routes.index);
 app.get('/users', user.list);
 
+/* SQL configuration */
+
+var connectionString = "postgres://postgres:admin@localhost:5432/DansTaBulleTest";
+
+var sqlClient = new pg.Client(connectionString);
+
+function executeQuery(query) {
+	sqlClient.connect();
+
+	var query = sqlClient.query(query);
+
+	query.on('row', function(row) {
+		console.log(row);
+	});
+
+	query.on('end', function() { 
+		sqlClient.end();
+	});
+}
+
+function saveScenarioDatabase(text) {
+	newQuery = 'INSERT INTO "ScenarioVersion" (content) VALUES (\'' + text + "');"; 
+	
+	console.log(newQuery);
+	executeQuery(newQuery);
+}
+
 /**/
 
 var currentText = "";
 var textIsEditing = false;
-var connectedClients = [] ; // {socket.id, nickname}
+var connectedClients = [] ; // [{id: socket.id, pseudo: userPseudo}]
 
 server = http.createServer(app);
 
@@ -69,7 +97,6 @@ io.sockets.on('connection', function (socket) {
 		console.log('New user with pseudo : ' + userPseudo + " and ID : " + socketId);
 	});
 	
-    
     socket.on('newTextVersion', function (newText) {
         currentText = newText;
 		
@@ -78,12 +105,17 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('updateEditorText', newText);
     });
 	
+	socket.on('sendChatMessageToServer', function (user, messageContent) {
+        socket.broadcast.emit('updateChatWithMessage', {user: user, content: messageContent});
+    });
+	
 	socket.on('isEditing', function (isEditing) {
 		console.log('IS NOT EDITING');
     });
 	
 	socket.on('saveEditorText', function (text) {
-		console.log('TEXT MUST BE SAVED HERE');
+		console.log("FDSFDSFDSFDS");
+		//saveScenarioDatabase(text);
     });
 	
 	socket.on('disconnect', function() {

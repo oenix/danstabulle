@@ -78,6 +78,21 @@
 			<div id="editorDiv">
 				<textarea class="ckeditor" name="editor"></textarea>
 			</div>
+			
+			<div id="chatDiv">
+			
+				<ul id="connectedUsersList" class="nav nav-list">
+					<li class="nav-header">Utilisateurs en ligne</li>				
+				</ul>
+			
+				<ul id="chatMessages">
+				</ul>
+				
+				<form id="chatSendMessageForm">
+					<textarea id="chatSendMessageArea" maxlength = '1000'></textarea>
+					<input type="button" id="chatSendMessageButton" value="Envoyer"/>
+				</form>
+			</div>
 		
 			<!--<span id="isReadOnlySpan">Un autre utilisateur edite actuellement le scenario.</span>
 			<button id="finishEditingButton">Enregistrer</button>
@@ -85,10 +100,6 @@
 			<h2>Et la recuperation du texte saisi :</h2>
 			<span id="result">-</div>-->
 			
-			<ul id="connectedUsersList" class="nav nav-list">
-				<li class="nav-header">Utilisateurs en ligne</li>
-				
-			</ul>
 			
 		</section>
 		
