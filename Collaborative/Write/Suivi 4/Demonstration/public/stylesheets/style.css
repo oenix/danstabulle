@@ -36,18 +36,22 @@ a {
 }
 
 #chatDiv #chatMessages {
-	border-style: solid;
-    border-width: 1px;
     float: left;
     height: 200px;
     width: 720px;
+    overflow: auto;
 	list-style-type: none; 
-	overflow: auto;
+	background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 }
 
 #chatDiv #chatMessages li {
 	padding-left: 10px;
 	padding-top: 2px;
+	max-width: 720px;
+	word-wrap:break-word;
 }
 
 #chatDiv #chatSendMessageForm {
@@ -70,4 +74,6 @@ a {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     border-radius: 4px;
 	padding: 6px;
+	margin-left: 8px;
+	margin-bottom: 10px;
 }

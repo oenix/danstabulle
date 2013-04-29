@@ -100,21 +100,34 @@ $(document).ready(function() {
 	/* Scenario chat management */
 
 	function updateChat(message) {
-		$("#chatMessages").append("<li>" + message.user + ":" + message.content + "</li>");
+		$("#chatMessages").append("<li><strong>" + message.user + "</strong> : " + message.content + "</li>");
 	}
+	
+	function sendChatMessage() {
+		messageContent = $("#chatSendMessageArea").val();
+	
+		if (messageContent != ""){
+			socket.emit('sendChatMessageToServer', pseudo, messageContent);
+		
+			updateChat({user: pseudo, content: messageContent});
+		
+			$("#chatSendMessageArea").val("");
+		}		
+	};
 	
 	socket.on('updateChatWithMessage', function (message) {
 		updateChat(message);
 	});
 	
 	$("#chatSendMessageButton").bind("click", function () {
-		messageContent = $("#chatSendMessageArea").val();
+		sendChatMessage();
+	});
 	
-		socket.emit('sendChatMessageToServer', pseudo, messageContent);
-		
-		updateChat({user: pseudo, content: messageContent});
-		
-		$("#chatSendMessageArea").val("");
+	$("#chatSendMessageArea").keypress(function(event) {
+		if ( event.which == 13 ) {
+			event.preventDefault();
+			sendChatMessage();
+		}
 	});
 	
 	/* */
