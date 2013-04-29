@@ -15,6 +15,7 @@ Symfony/app/logs/*
 
 #NodeJS Files
 src/NodeJS/node_modules/*
+NodeJS/node_modules/*
 
 #Config Files
 Symfony/app/config/parameters.yml
