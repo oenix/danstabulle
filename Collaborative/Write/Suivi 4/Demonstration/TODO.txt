@@ -1,0 +1,5 @@
+[ ] - Empêcher de pouvoir envoyer code html dans chat
+[ ] - Afficher en italique les connexions / déconnexions
+[ ] - Faire scroller vers le bas lors d'un nouveau message
+[ ] - Mieux intégrer le bouton Envoyer dans le design
+[ ] - Faire la fusion avec le serveur NodeJS de dessin
