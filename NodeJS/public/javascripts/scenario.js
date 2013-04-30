@@ -1,3 +1,25 @@
+/* Generic and useful functions */
+
+function htmlEscape(str) {
+    return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+}
+
+function htmlUnescape(value){
+    return String(value)
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&');
+}
+
+/* */
+
 $(document).ready(function() {
 
 	var socket = io.connect();
@@ -101,7 +123,7 @@ $(document).ready(function() {
 		updateChatWithEvent(user.pseudo + " s'est deconnecte.");
 	});
 	
-	/* Scenario chat management */
+/* START OF Scenario chat management */
 
 	function updateChatWithMessage(message) {
 		chatMessages = $("#chatMessages");
@@ -120,7 +142,7 @@ $(document).ready(function() {
 	}
 	
 	function sendChatMessage() {
-		messageContent = $("#chatSendMessageArea").val();
+		messageContent = htmlEscape($("#chatSendMessageArea").val());
 	
 		if (messageContent != ""){
 			socket.emit('sendChatMessageToServer', pseudo, messageContent);
@@ -132,6 +154,8 @@ $(document).ready(function() {
 	};
 	
 	socket.on('updateChatWithMessage', function (message) {
+		message.content = htmlUnescape(message.content);
+	
 		updateChatWithMessage(message);
 	});
 	
@@ -147,9 +171,7 @@ $(document).ready(function() {
 			sendChatMessage();
 		}
 	});
-	
-	/* */
-  
+	  
 	socket.on('updateEditorText', function (text) {
 	
 		if (text != "")
@@ -159,4 +181,7 @@ $(document).ready(function() {
 	
 		//setReadOnlyEditor();
 	});
+	
+/* END OF Scenario chat management */
+
 });

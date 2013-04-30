@@ -1,3 +1,23 @@
+/* Generic and useful functions */
+
+function htmlEscape(str) {
+    return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+}
+
+function htmlUnescape(value){
+    return String(value)
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&');
+}
+
 /* Array Remove - By John Resig (MIT Licensed) */
 
 Array.prototype.remove = function(from, to) {
@@ -118,7 +138,7 @@ io.sockets.on('connection', function (socket) {
     });
 	
 	socket.on('sendChatMessageToServer', function (user, messageContent) {
-        socket.broadcast.emit('updateChatWithMessage', {user: user, content: messageContent});
+        socket.broadcast.emit('updateChatWithMessage', {user: user, content: htmlEscape(messageContent)});
     });
 	
 	socket.on('isEditing', function (isEditing) {
