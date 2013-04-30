@@ -7,10 +7,12 @@
 	<link href="/stylesheets/danstabulle.css" rel="stylesheet" media="screen">
 	<link href="/stylesheets/style.css" rel="stylesheet" media="screen">
 	
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-		
 <script type="text/javascript" src="javascripts/jquery.js"></script>
-<script type="text/javascript" src="javascripts/drawScripts.js"></script>
+	<script type='text/javascript' src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/javascripts/paper.js"></script>
+	<script type='text/javascript' src="/javascripts/paperScript.js"></script>
+		
+	<script type="text/javascript" src="http://zeptojs.com/zepto.min.js"></script>
     </head>
     <body>
       <div class="container ombre blanc">
@@ -86,6 +88,9 @@
     <option value='20'> 20</option>
   </select>
   <select id="opacity" class="1-100" placeholder="opacité">opacité</select>
+  
+  <a href="javascript:undo()">undo</a>
+  <a href="javascript:redo()">Redo</a>
   <div id="holder">
   
     <canvas id="myCanvas" width="920" height="640"></canvas>
@@ -108,12 +113,11 @@
               </footer>
             </center>
 		</div>
-      <script src="http://code.jquery.com/jquery.js"></script>
+		
+	
       <script src="js/bootstrap.min.js"></script>
 	  <script src="js/danstabulle.js"></script>
-	  <script type='text/javascript' src='/javascripts/paper.js'></script>
-	<script type="text/javascript" src="http://zeptojs.com/zepto.min.js"></script>
-  <script type='text/paperscript' src='/javascripts/paperScript.js' canvas="myCanvas"</script>
+<script type="text/javascript" src="javascripts/drawScripts.js"></script>
 
     </body>
   </html>
