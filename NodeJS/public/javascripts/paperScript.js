@@ -21,7 +21,7 @@ function undo()
 
 function redo()
 {
-	if(currentElement < pathList.length)
+	if(currentElement < pathList.length - 1)
 	{
 		project.activeLayer.addChild(pathList[currentElement + 1]);
 		view.draw();
