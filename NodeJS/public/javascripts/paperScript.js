@@ -4,11 +4,7 @@ var size;
 var raster;
 var hasRaster = false;
 var image;
-var usedTool = 0;
-
-
-tool.minDistance = 10;
-tool.maxDistance = 45;
+var opacity;
 
 //Rafraichissement en milliseconde;
 var rafraichissement = 1;
@@ -36,79 +32,42 @@ var bulleStyle = {
 };
 
 function onMouseDown(event) {
-
-    path = new Path();
 	color = getSelectValue('color');
 	size = getSelectValue('size');
-	if (usedTool == 0) {
+	opacity = getSelectValue('opacity')
+    path = new Path();
     path.strokeColor = color;
 	path.strokeWidth = size;
+	path.opacity = opacity / 100;
     path.add(event.point);
-	
-	 path_to_send = {
+
+path_to_send = {
         rgba : color,
         start : event.point,
-        path : [], 
+        path : [],
 		image : 0,
 		size : size,
 		hasRaster : false,
-		usedTool : 0
+		opacity : opacity
     };
-	}
-	else if (usedTool == 1) {
-		
-		var rgba = new HsbColor(Math.random() * 360, 1, 1);
-		
-		path.fillColor = rgba;
-		path.add(event.point);
-		path_to_send = {
-			rgba : 0,
-			start : event.point,
-			path : [], 
-			image : 0,
-			size : size,
-			hasRaster : false,
-			usedTool : 1
-    };
-	}
-}
-	
-function onMouseDrag(event) {
 
-	if (usedTool == 0){
+
+
+}
+
+function onMouseDrag(event) {
     path.add(event.point);
 
     // On ajoute les data au path
     path_to_send.path.push({
         point : event.point
     });
-	
-	}
-	else if (usedTool == 1)
-	{
-	    var step = event.delta / 2;
-		step.angle += 90;
-    
-		var top = event.middlePoint + step;
-		var bottom = event.middlePoint - step;
-    
-		path.add(top);
-		path.insert(0, bottom);
-		path.smooth();
-		
-		 path_to_send.path.push({
-			point : event.point,
-			top : top,
-			bottom : bottom
-    });
-	}
 
     //On push le path
     if ( !timer_is_active ) {
 
         send_paths_timer = setInterval( function() {
 
-			
             socket.emit('draw:progress', uid, JSON.stringify(path_to_send) );
             path_to_send.path = new Array();
 
@@ -117,41 +76,34 @@ function onMouseDrag(event) {
     }
 
     timer_is_active = true;;
-	
+
 }
 
 function onMouseUp(event) {
 
-	if (usedTool == 0)
-	{
-	if (path.length < 5) {
-    	var myCircle = new Path.Circle(event.point, 0.2);
-    	myCircle.strokeColor = color;
-	
-	}
-	//Si C'est une bulle :
-	if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
-		path.style = bulleStyle;
-		path.closed = true;
-		path.simplify(20);
-	}
-	}
-	else if (usedTool == 1)
-	{
-		path.add(event.point);
-		path.closed = true;
-		path.smooth();
-	}
-	
-	
-	path_to_send.end = event.point;
-	if (hasRaster){
-		path_to_send.hasRaster = true;
-		path_to_send.image = image.src;
-		hasRaster = false;
-	}
-	
-	
+if (path.length < 5) {
+     var myCircle = new Path.Circle(event.point, 0.2);
+     myCircle.strokeColor = color;
+
+}
+//Si C'est une bulle :
+if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
+	path.style = bulleStyle;
+	path.closed = true;
+	path.simplify(20);
+	path.opacity = 1;
+}
+else
+{
+	path.simplify();
+}
+if (hasRaster){
+path_to_send.hasRaster = true;
+path_to_send.image = image.src;
+hasRaster = false;
+}
+
+path_to_send.end = event.point;
 	
     socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
     clearInterval(send_paths_timer);
@@ -168,7 +120,7 @@ socket.on('draw:progress', function( artist, data ) {
     if ( artist !== uid && data ) {
 
        progress_external_path( JSON.parse( data ), artist );
-	   
+
     }
 
 });
@@ -177,7 +129,7 @@ socket.on('draw:end', function( artist, data ) {
 
     if ( artist !== uid && data ) {
        end_external_path( JSON.parse( data ), artist );
-	
+
     }
 
 });
@@ -201,7 +153,7 @@ socket.on('user:disconnect', function(user_count) {
 
 
 // ---------
-// SOCKET.IO 
+// SOCKET.IO
 
 
 function update_user_count( count ) {
@@ -218,34 +170,32 @@ var external_paths = {};
 var end_external_path = function( points, artist ) {
 
     var path = external_paths[artist];
-	
+
 	if (points.hasRaster)
 	{
-	    var img = new Image();
-	    img.src = points.image
+		var img = new Image();
+		img.src = points.image
 		raster = new Raster(img);
 		raster.position = view.center;
 		raster.scale(0.5);
 		view.draw();
 	}
     if (path) {
-	
-    path.add(points.end);
-        if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && points.usedTool == 0) {
+        if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
 			path.style = bulleStyle;
 			path.closed = true;
 			path.simplify(20);
-			
-	    }
-		if (points.usedTool == 1)
-		{
-			path.closed = true;
-			path.smooth();
+			path.opacity = 1;
+			view.draw();
 		}
-		view.draw();
-	external_paths[artist] = false;
+		else
+		{
+			path.simplify();
+		}
+		path.add(points.end);
+		external_paths[artist] = false;
     }
-
+		view.draw();
 };
 
 //Continue à dessiner en temps reel
@@ -259,61 +209,44 @@ progress_external_path = function( points, artist ) {
         external_paths[artist] = new Path();
         path = external_paths[artist];
         var start_point = new Point(points.start.x, points.start.y);
-
-		if (points.usedTool == 1)
-		{
-		var start_point = new Point(points.start.x, points.start.y);
-			path.fillColor = new HsbColor(Math.random() * 360, 1, 1);
+		path.opacity = points.opacity / 100;
+        path.strokeColor = points.rgba;
+		path.strokeWidth = points.size;
         path.add(start_point);
-		}
-		else if (points.usedTool == 0)
-		{        
-			path.strokeColor  = points.rgba;
-			path.strokeWidth = points.size;
-		}
-        path.add(start_point);
-
     }
 
     var paths = points.path;
     var length = paths.length;
+
   for (var i = 0; i < length; i++ ) {
-		if (path.usedTool == 0)
-		{
-			path.add(paths[i].point);
-			}
-		else if (points.usedTool == 1)
-		{
-			path.add(paths[i].top);
-			path.insert(0, paths[i].bottom);
-		}
+        path.add(paths[i].point);
     }
-view.draw();
+	view.draw();
 };
 
 function saveCanvas()
 {
-	var canvas = document.getElementById('myCanvas');
-	var dataURL = canvas.toDataURL();
-	document.getElementById('save').href = dataURL;
+var canvas = document.getElementById('myCanvas');
+var dataURL = canvas.toDataURL();
+document.getElementById('save').href = dataURL;
 }
 
 function getSelectValue(selectId)
 {
-	var elmt = document.getElementById(selectId);
-	if(elmt.multiple == false)
-	{
-		return elmt.options[elmt.selectedIndex].value;
-	}
-	var values = new Array();
-	for(var i=0; i< elmt.options.length; i++)
-	{
-		if(elmt.options[i].selected == true)
-		{
-			values[values.length] = elmt.options[i].value; 
-		}
-	}	
-	return values;	
+var elmt = document.getElementById(selectId);
+if(elmt.multiple == false)
+{
+return elmt.options[elmt.selectedIndex].value;
+}
+var values = new Array();
+for(var i=0; i< elmt.options.length; i++)
+{
+if(elmt.options[i].selected == true)
+{
+values[values.length] = elmt.options[i].value;
+}
+}	
+return values;	
 }
 
 
@@ -324,7 +257,7 @@ var holder = document.getElementById('holder'),
       filereader: typeof FileReader != 'undefined',
       dnd: 'draggable' in document.createElement('span'),
       formdata: !!window.FormData,
-    }, 
+    },
     support = {
       filereader: document.getElementById('filereader'),
       formdata: document.getElementById('formdata'),
@@ -335,7 +268,7 @@ var holder = document.getElementById('holder'),
       'image/gif': true
     },
     fileupload = document.getElementById('upload');
-	
+
 "filereader formdata".split(' ').forEach(function (api) {
   if (tests[api] === false) {
     support[api].className = 'fail';
@@ -375,25 +308,25 @@ function previewfile(file) {
     reader.onload = function (event) {
       image = new Image();
       image.src = event.target.result;
-	  raster = new Raster(image);
-	  
-	  
-	  raster.position = view.center;
-	  
-	  
-	  raster.scale(0.5);
-	  view.draw();
-	  hasRaster = true;
+raster = new Raster(image);
+
+
+raster.position = view.center;
+
+
+raster.scale(0.5);
+view.draw();
+hasRaster = true;
     };
 
     reader.readAsDataURL(file);
-  }  else {
+  } else {
     holder.innerHTML += '<p>Uploaded ' + file.name + ' ' + (file.size ? (file.size/1024|0) + 'K' : '');
     console.log(file);
   }
 }
 
-if (tests.dnd) { 
+if (tests.dnd) {
   holder.ondragover = function () { this.className = 'hover'; return false; };
   holder.ondragend = function () { this.className = ''; return false; };
   holder.ondrop = function (e) {

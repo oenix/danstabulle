@@ -262,10 +262,10 @@ progress_external_path = function( points, artist ) {
 
 		if (points.usedTool == 1)
 		{
-		var start_point = new Point(points.start.x, points.start.y);
+	var start_point = new Point(points.start.x, points.start.y);
 			path.fillColor = new HsbColor(Math.random() * 360, 1, 1);
         path.add(start_point);
-		}
+	}
 		else if (points.usedTool == 0)
 		{        
 			path.strokeColor  = points.rgba;
@@ -278,9 +278,11 @@ progress_external_path = function( points, artist ) {
     var paths = points.path;
     var length = paths.length;
   for (var i = 0; i < length; i++ ) {
+  
+			path.add(paths[i].point);
+			
 		if (path.usedTool == 0)
 		{
-			path.add(paths[i].point);
 			}
 		else if (points.usedTool == 1)
 		{
