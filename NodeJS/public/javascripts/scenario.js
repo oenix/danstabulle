@@ -1,4 +1,4 @@
-/* Generic and useful functions */
+﻿/* Generic and useful functions */
 
 function htmlEscape(str) {
     return String(str)
@@ -108,7 +108,7 @@ $(document).ready(function() {
 	socket.on('userConnection', function (newUser) {
 		addNewUser(newUser);
 		
-		updateChatWithEvent(newUser.pseudo + " s'est connecte.");
+		updateChatWithEvent(newUser.pseudo + " s'est connecté.");
 	});
 	
 	/* When an user disconnects, its nickname is deleted */
@@ -120,7 +120,7 @@ $(document).ready(function() {
 			}
 		});
 		
-		updateChatWithEvent(user.pseudo + " s'est deconnecte.");
+		updateChatWithEvent(user.pseudo + " s'est déconnecté.");
 	});
 	
 /* START OF Scenario chat management */
