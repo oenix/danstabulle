@@ -7,27 +7,9 @@ var image;
 var opacity;
 var pathList = [];
 var currentElement = -1;
-
-
-function undo()
-{
-	if(currentElement >= 0)
-	{
-		pathList[currentElement].remove();
-		view.draw();
-		currentElement--;
-	}
-}
-
-function redo()
-{
-	if(currentElement < pathList.length - 1)
-	{
-		project.activeLayer.addChild(pathList[currentElement + 1]);
-		view.draw();
-		currentElement ++;
-	}
-}
+var pathListExtern = [];
+var currentElementExtern = -1;
+var remove = -1;
 //Rafraichissement en milliseconde;
 var rafraichissement = 1;
 // Initialise Socket.io
@@ -36,12 +18,22 @@ var socket = io.connect('http://localhost:3000');
 var send_paths_timer;
 var timer_is_active = false;
 var path_to_send = {};
-	
-	
-	paper.install(window);
-	window.onload = function() {
-		paper.setup('myCanvas');
-		var tool = new Tool();
+
+
+
+
+
+function checked(id)
+{
+	checkbox = document.getElementById("smooth");
+	if (checkbox.checked)
+	{
+		return true;
+	}
+		return false;
+}
+
+
 	//Associer un Uid unique à chaque utilisateur
 var uid = (function() {
 	 var S4 = function() {
@@ -49,6 +41,47 @@ var uid = (function() {
 	};
 	return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 } () );
+
+
+function undo()
+{
+	if(currentElement >= 0)
+	{
+		pathList[currentElement].remove();
+		view.draw();
+		remove = currentElement;
+		currentElement--;
+		path_to_send = {
+		remove : remove
+		};
+		socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
+		remove = -1;
+	}
+}
+function redo()
+{
+	if(currentElement < pathList.length - 1)
+	{
+		project.activeLayer.addChild(pathList[currentElement + 1]);
+		view.draw();
+		
+		add = currentElement;
+		currentElement ++;
+		path_to_send = {
+		add : add
+		};
+		socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
+		add = -2;
+		
+	}
+}
+
+	
+	
+	paper.install(window);
+	window.onload = function() {
+	paper.setup('myCanvas');
+	var tool = new Tool();
 
 
 var bulleStyle = {
@@ -75,7 +108,10 @@ path_to_send = {
 		image : 0,
 		size : size,
 		hasRaster : false,
-		opacity : opacity
+		opacity : opacity,
+		remove : -1,
+		add : -2,
+		smooth : false
 	};
 }
 
@@ -119,7 +155,14 @@ if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.
 }
 else
 {
-	path.simplify();
+	if(checked("smooth"))
+	{
+		path.simplify();
+		path_to_send.smooth = true;
+	}
+	else
+		path_to_send.smooth = false;
+
 }
 if (hasRaster){
 	path_to_send.hasRaster = true;
@@ -134,6 +177,7 @@ if (hasRaster){
 	currentElement++;
 	if (currentElement != pathList.length -1)
 		currentElement = pathList.length - 1;
+		
 	socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
 	clearInterval(send_paths_timer);
 	path_to_send.path = new Array();
@@ -221,10 +265,22 @@ var end_external_path = function( points, artist ) {
 		}
 		else
 		{
-			path.simplify();
+			if (points.smooth)
+			{
+				path.simplify();
+			}
 		}
 		path.add(points.end);
+		pathListExtern.push(path);
 		external_paths[artist] = false;
+	}
+	if (points.remove >= 0)
+	{
+		pathListExtern[points.remove].remove();
+	}
+	if (points.add >= -1)
+	{
+		project.activeLayer.addChild(pathListExtern[points.add + 1]);
 	}
 		view.draw();
 };
