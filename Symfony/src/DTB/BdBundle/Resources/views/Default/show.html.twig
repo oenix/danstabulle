@@ -1,55 +1,59 @@
 {% extends '::layout.html.twig' %}
 
 {% block content %}
-<section id="Contenu" class="span4">
-    <img src="{{asset('img/emptyPage.png')}}" class="img-polaroid">
-</section>
-<section id="Contenu" class="jumbotron masthead span8">
-    <h2 style="margin-top: 50px;">{{bd.title}}</h2>
-    <p class="lead">{{bd.description}}<p>
-</section>
-<div class="span12">
-    <h2>Informations
-    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        {% if bd.creator.id == app.user.id %}
-        <a href="{{path('dtb_bd_update', {'id': bd.id})}}" class="btn btn-danger">Editer</a>
-        {% endif %}
-    {% endif %}
-    </h2>
+<div class="span9">
+    <h1>{{bd.title}}</h1>
     <hr>
-</div>
-<div class="span2"></div>
-<div class="span8 pado">
-    <table class="table table-striped table-hover table-bordered">
-        <tr>
-            <td class="leader">Créateur</td>
-            <td class="lead">{{bd.creator.username}}</td>
-        </tr>
-        <tr>
-            <td class="leader">Genre</td>
-            <td class="lead">{{bd.category.name}}</td>
-        </tr>
-        <tr>
-            <td class="leader">Age minimum</td>
-            <td class="lead">{{bd.category.requiredAge}}</td>
-        </tr>
-    </table>
-</div>
-<div class="span12">
-    <h2>Planches
-    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        {% if bd.creator.id == app.user.id %}
-            <a href="{{path('dtb_bd_add_planche', {'id': bd.id})}}" class="btn btn-success">Ajouter une planche</a>
+    <div class="span3">
+        <img src="{{asset('bd/cover'~ bd.id ~'.jpg')}}" class="img-polaroid">
+    </div>
+    <div class="span5">
+        <blockquote style="text-align: justify">{{bd.description}}</blockquote>
+    </div>
+    <div class="span8">
+        <h2>Planches
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            {% if bd.creator.id == app.user.id %}
+                <a href="{{path('dtb_bd_add_planche', {'id': bd.id})}}" class="btn btn-success">Ajouter une planche</a>
+            {% endif %}
         {% endif %}
-    {% endif %}
-    </h2>
-    <hr>
-    
-{% for planches in bd.planches %}
-    <img src="{{asset('img/emptyPage.png')}}" class="img-polaroid" />
-{% endfor %}
-    <p><br></p>
+        </h2>
+        <hr>
+
+    {% for planches in bd.planches %}
+        <img src="{{asset('img/emptyPage.png')}}" width="135px" class="img-polaroid" />
+    {% endfor %}
+        <p><br></p>
+    </div>
 </div>
-
-
+<div class="span3 well">
+    <ul class="nav nav-list">
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            {% if bd.creator.id != app.user.id %}
+        <li class="nav-header">Contribuer</li>
+        <li><a href="#">Rejoindre (Scénariste)</a></li>
+        <li><a href="#">Rejoindre (Dessinateur)</a></li>
+            {% endif %}
+        {% endif %}
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            {% if bd.creator.id == app.user.id %}
+            <li class="nav-header">Administrer</li>
+            <li><a href="{{path('dtb_bd_update', {'id': bd.id})}}">Editer</a></li>
+            <li><a href="#">Contributeurs</a></li>
+            <li><a href="#">Candidatures <span class="badge">0</span></a></li>
+            {% endif %}
+        {% endif %}
+        <li class="nav-header">Informations</li>
+        <li><b><small>Créateur</small></b></li>
+        <li><a href="{{path('dtb_show_user_profile', {'id':bd.creator.id})}}">{{bd.creator.username | capitalize}}</a></li>
+        <li><b><small>Catégorie</small></b></li>
+        <li>{{bd.category.name}}</li>
+        <li><b><small>Age Minimum</small></b></li>
+        <li>{{bd.category.requiredAge}} ans</li>
+        <li class="nav-header">Scénaristes</li>
+        <li>Aucun</li>
+        <li class="nav-header">Dessinateurs</li>
+        <li>Aucun</li>
+    </ul>
+</div>
 {% endblock %}
