@@ -1,0 +1,13 @@
+I) Editeur de texte :
+
+[X] - Empêcher l'interprétation du code html dans chat [30/04]
+[X] - Afficher en italique les connexions / déconnexions [29/04]
+[X] - Faire scroller vers le bas lors d'un nouveau message [29/04]
+[X] - Mieux intégrer le bouton Envoyer dans le design [29/04]
+[X] - Faire la fusion avec le serveur NodeJS de dessin [30/04]
+[X] - Voir le problème des accents dans les events chat ?
+[ ] - Régler le problème d'écriture dans la base de données
+[X] - Faire une nouvelle page d'index pour choisir quelle collabo [30/04]
+[ ] - Mettre le "utilisateur en ligne" en dehors de la liste déroulante
+
+II) Dessin collaboratif :
