@@ -1,3 +1,4 @@
+var tool1, tool2;
 var path;
 var color;
 var size;
@@ -10,6 +11,7 @@ var currentElement = -1;
 var pathListExtern = [];
 var currentElementExtern = -1;
 var remove = -1;
+var selected, segment;
 //Rafraichissement en milliseconde;
 var rafraichissement = 1;
 // Initialise Socket.io
@@ -20,10 +22,9 @@ var timer_is_active = false;
 var path_to_send = {};
 var path_to_send2 = {};
 
-
-
 function checked(id)
 {
+	checkbox = document.getElementById("smooth");
 	checkbox = document.getElementById("smooth");
 	if (checkbox.checked)
 	{
@@ -75,47 +76,100 @@ function redo()
 	}
 }
 
-	
-	
+
+function activateTool(tool)
+{
+	if (tool == "tool1")
+		tool1.activate();
+	else
+		tool2.activate();
+		
+}
+
+
 	paper.install(window);
 	
 	
 
 	window.onload = function() {
 	paper.setup('myCanvas');
-	var tool = new Tool();
-	
-
-	view.onFrame = function(event) {
-            pathList[0].rotate(3);
-        }
-
-
+	tool1 = new Tool();
+	tool2 = new Tool();
 	function text(position, texte)
 {
+
 	var text = new PointText(position);
+	text.content = prompt("Texte de la bulle","");
+	if (text.content == "null")
+	{
+		text.content = "";
+		return false;
+	}
 	text.fillColor = 'black';
-	text.font = "MS Comic";
+	text.font = "Script";
 	text.fontSize = 15;
-	text.strokeBounds = new Rectangle(50, 50, 50, 50);
-	text.content = prompt("Texte de la bulle",""); 
-	alert(text.point.length);
-	//text.point.x = text.point.x - text.point.length / 5;
-	//text.point.y = text.point.y - text.point.length /50;
+	
+	text.point.x = text.point.x - text.point.length / 12;
+	text.point.y = text.point.y - text.point.length /50;
+	return true;
 }
 	
-	
+	var movePath = false;
 var bulleStyle = {
 	fillColor: new RgbColor(255, 255, 255),
 	strokeColor: "black",
 	strokeWidth: 1.5
 };
 
+tool2.onMouseDown = function(event) {
+	var hitResult = paper.project.hitTest(event.point);
+    if (!hitResult)
+        return;
+	selected = hitResult.item;
+	
+	
+  if (event.modifiers.shift) {
+        if (hitResult.type == 'segment') {
+            hitResult.segment.remove();
+        }
+        return;
+    }
+	
+	if (hitResult) {
+        path = hitResult.item;
+        if (hitResult.type == 'segment') {
+            segment = hitResult.segment;
+        } //else if (hitResult.type == 'stroke') {
+            //var location = hitResult.location;
+      //      segment = path.insert(location.index + 1, event.point);
+        //    path.smooth();
+      //  }
+    }
+    movePath = hitResult.type == 'fill';
+    if (movePath)
+        project.activeLayer.addChild(hitResult.item);
+}
 
-tool.onMouseDown = function(event) {
+tool2.onMouseDrag = function(event) {
+   if (segment) {
+        segment.point = event.point;
+        path.smooth();
+    }else
+        path.position = event.point;
+}
 
+tool2.onMouseMove = function(event) {
+    project.activeLayer.selected = false;
+    if (event.item)
+        event.item.selected = true;
+}
 
+tool2.onMouseUp = function(event) {
+	selected = null;
+	segment = null;
+}
 
+tool1.onMouseDown = function(event) {
 
 
 
@@ -128,7 +182,7 @@ tool.onMouseDown = function(event) {
 	path.opacity = opacity / 100;
 	path.add(event.point);
 
-path_to_send = {
+	path_to_send = {
 		rgba : color,
 		start : event.point,
 		path : [],
@@ -140,7 +194,7 @@ path_to_send = {
 		add : -2,
 		smooth : false
 	};
-path_to_send2 = {
+	path_to_send2 = {
 		start : event.point,
 		rgba : color,
 		path : [],
@@ -151,7 +205,7 @@ path_to_send2 = {
 		
 }
 
-tool.onMouseDrag = function(event) {
+tool1.onMouseDrag = function(event) {
 	path.add(event.point);
 
 	// On ajoute les data au path
@@ -177,22 +231,25 @@ tool.onMouseDrag = function(event) {
 
 
 
-tool.onMouseUp = function (event) {	
+tool1.onMouseUp = function (event) {	
  var myCircle;
 if (path.length < 5) {
 	 myCircle = new Path.Circle(event.point, 15);
 	 myCircle.strokeColor = color;
-	 myCircle.radius =25;
-       myCircle.fillColor = 'black';
-        myCircle.strokeColor = 'white';
+	 myCircle.radius = 25;
+	 myCircle.fillColor = 'black';
+	 myCircle.strokeColor = 'white';
 }
 //Si C'est une bulle :
 if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && path.length > 20) {
-	path.style = bulleStyle;
-	path.closed = true;
-	path.simplify(20);
-	path.opacity = 1;
-	text(new Point(path.position.x, path.position.y), "Mon Text");
+
+	if (text(new Point(path.position.x, path.position.y)))
+	{
+		path.style = bulleStyle;
+		path.closed = true;
+		path.simplify(20);
+		path.opacity = 1;
+	}
 }
 else
 {
@@ -473,6 +530,6 @@ if (tests.dnd) {
 	readfiles(this.files);
   };
 }
+
 }
 //IMAGE DROP
-
