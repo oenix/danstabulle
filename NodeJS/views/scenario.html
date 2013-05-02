@@ -10,6 +10,12 @@
 	<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
    	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/javascripts/scenario.js"></script>
+	<!--<script type="text/javascript" src="/tinymce/tinymce.min.js"></script>-->
+		<script type="text/javascript" src="/tiny_mce/tiny_mce.js"></script>
+
+	<script type="text/javascript">
+
+	</script>
     </head>
     <body>
       <div class="container ombre blanc">
@@ -76,7 +82,7 @@
 			<hr>
 	
 			<div id="editorDiv">
-				<textarea class="ckeditor" name="editor"></textarea>
+				<textarea id="test" class="mceEditor"></textarea>
 			</div>
 			
 			<div id="chatDiv">
@@ -95,7 +101,7 @@
 				
 				<form id="chatSendMessageForm">
 					<textarea id="chatSendMessageArea" maxlength = '1000'></textarea>
-					<input type="button" id="chatSendMessageButton" value="Envoyer"/>
+					<input type="button" id="chatSendMessageButton" value="Envoyer" class="btn" style="padding-right: 12px;">
 				</form>
 			</div>
 		

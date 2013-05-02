@@ -207,13 +207,7 @@ tinyMCE.init({
 	});
 	  
 	socket.on('updateEditorText', function (text) {
-	
-		if (text != "")
-		{
 			updateEditorText(text);
-		}
-	
-		//setReadOnlyEditor();
 	});
 	
 /* END OF Scenario chat management */

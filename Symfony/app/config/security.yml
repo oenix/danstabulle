@@ -30,7 +30,7 @@ security:
                 check_path: fos_user_security_check
             logout:
                 path:       fos_user_security_logout
-                target:     /hello/test
+                target:     /
             remember_me:
                 key:        %secret%
 
