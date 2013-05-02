@@ -2,8 +2,6 @@ var tool1, tool2;
 var path;
 var color;
 var size;
-var raster;
-var hasRaster = false;
 var image;
 var opacity;
 var pathList = [];
@@ -21,6 +19,8 @@ var send_paths_timer;
 var timer_is_active = false;
 var path_to_send = {};
 var path_to_send2 = {};
+
+var texte = "";
 
 function checked(id)
 {
@@ -122,7 +122,7 @@ var uid = (function() {
 			if (text.content == "null")
 			{
 				text.content = "";
-				return false;
+				return "null";
 			}
 			text.fillColor = 'black';
 			text.font = "Script";
@@ -132,7 +132,7 @@ var uid = (function() {
 			text.point.y = text.point.y - text.point.length /50;
 			pathList.push(text);
 			currentElement++;
-			return true;
+			return text.content;
 		}
 
 		var movePath = false;
@@ -195,9 +195,11 @@ var uid = (function() {
 					color = getSelectValue('color');
 					size = getSelectValue('size');
 					opacity = getSelectValue('opacity')
+						
 					path = new paper.Path();
 					path.strokeColor = color;
 					path.strokeWidth = size;
+				
 					path.opacity = opacity / 100;
 					path.add(event.point);
 
@@ -211,7 +213,8 @@ var uid = (function() {
 						opacity : opacity,
 						remove : -1,
 						add : -2,
-						smooth : false
+						smooth : false,
+						texte : null
 					};
 					path_to_send2 = {
 						start : event.point,
@@ -252,6 +255,7 @@ var uid = (function() {
 
 					tool1.onMouseUp = function (event) {	
 						var myCircle;
+						var texteBulle;
 						if (path.length < 5) {
 							myCircle = new Path.Circle(event.point, 1);
 							myCircle.strokeColor = color;
@@ -261,13 +265,14 @@ var uid = (function() {
 						}
 						//Si C'est une bulle :
 						if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && path.length > 20) {
-
-							if (text(new Point(path.position.x, path.position.y)))
+							texteBulle = text(new Point(path.position.x, path.position.y));
+							if (texteBulle != "null")
 							{
 								path.style = bulleStyle;
 								path.closed = true;
 								path.simplify(20);
 								path.opacity = 1;
+								texte = texteBulle;
 							}
 						}
 						else
@@ -286,11 +291,10 @@ var uid = (function() {
 					//		path_to_send.hasRaster = true;
 					//		path_to_send.image = image.src;
 					//		hasRaster = false;
-					//	}
+					//		}
 
 						path_to_send.end = event.point;
-
-
+						path_to_send.texte = texteBulle;
 						pathList.push(path);
 						currentElement++;
 						if (currentElement != pathList.length -1)
@@ -301,7 +305,7 @@ var uid = (function() {
 						path_to_send.path = new Array();
 					//	path_to_send.hasRaster = false;
 						timer_is_active = false;
-						has_raster = false;
+					//	has_raster = false;
 						saveCanvas();
 					}
 
@@ -377,11 +381,24 @@ var uid = (function() {
 						}
 						if (path) {
 							if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
-								path.style = bulleStyle;
-								path.closed = true;
-								path.simplify(20);
-								path.opacity = 1;
+								if (points.texte != "null")
+								{
+									path.style = bulleStyle;
+									path.closed = true;
+									path.simplify(20);
+									path.opacity = 1;
+										var text = new PointText(path.position);
+										text.content = points.texte
+										text.fillColor = 'black';
+										text.font = "Script";
+										text.fontSize = 15;
+
+										text.point.x = text.point.x - text.point.length / 12;
+										text.point.y = text.point.y - text.point.length /50;
+										pathListExtern.push(text);
+										currentElement++;
 								view.draw();
+							}
 							}
 							else
 							{	
@@ -518,20 +535,28 @@ var uid = (function() {
 							reader.onload = function (event) {
 								image = new Image();
 								image.src = event.target.result;
-								raster = new Raster(image);
+								var raster1 = new Raster(image);
 
-
-								raster.position = view.center;
+							//	alert(image.src);
+								raster1.position = view.center;
 								//raster.scale(0.5);
 
 							//	hasRaster = true;
-								view.draw();
-								pathList.push(raster);
+								pathList.push(raster1);
 								currentElement++;
 								path_to_send.image = image.src;
 								path_to_send.hasRaster = true;
 								socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
 								path_to_send.hasRaster = false;
+						//		alert(raster.position);
+						
+								var path2 = new paper.Path();
+								path2.strokeColor = "black";
+								path2.strokeWidth = 10;
+
+								path2.opacity = 1;
+								path2.add(new paper.Point(0,0));
+								view.draw();
 							};
 
 							reader.readAsDataURL(file);
