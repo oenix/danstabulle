@@ -122,7 +122,7 @@ var uid = (function() {
 			if (text.content == "null")
 			{
 				text.content = "";
-				return "null";
+				return null;
 			}
 			text.fillColor = 'black';
 			text.font = "Script";
@@ -130,9 +130,8 @@ var uid = (function() {
 
 			text.point.x = text.point.x - text.point.length / 12;
 			text.point.y = text.point.y - text.point.length /50;
-			pathList.push(text);
 			currentElement++;
-			return text.content;
+			return text;
 		}
 
 		var movePath = false;
@@ -145,7 +144,7 @@ var uid = (function() {
 		tool2.onMouseDown = function(event) {
 			var hitResult = paper.project.hitTest(event.point);
 			if (!hitResult)
-			return;
+				return;
 			selected = hitResult.item;
 
 
@@ -266,13 +265,13 @@ var uid = (function() {
 						//Si C'est une bulle :
 						if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && path.length > 20) {
 							texteBulle = text(new Point(path.position.x, path.position.y));
-							if (texteBulle != "null")
+							if (texteBulle != null)
 							{
 								path.style = bulleStyle;
 								path.closed = true;
 								path.simplify(20);
 								path.opacity = 1;
-								texte = texteBulle;
+								texte = texteBulle.content;
 							}
 						}
 						else
@@ -294,8 +293,13 @@ var uid = (function() {
 					//		}
 
 						path_to_send.end = event.point;
-						path_to_send.texte = texteBulle;
 						pathList.push(path);
+						if (texteBulle != null)
+						{
+							path_to_send.texte = texteBulle.content;
+							pathList.push(texteBulle);
+							currentElement++;
+						}
 						currentElement++;
 						if (currentElement != pathList.length -1)
 						currentElement = pathList.length - 1;
