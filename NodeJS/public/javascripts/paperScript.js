@@ -294,9 +294,10 @@ var uid = (function() {
 
 						path_to_send.end = event.point;
 						pathList.push(path);
+						
+							path_to_send.texte = texteBulle.content;
 						if (texteBulle != null)
 						{
-							path_to_send.texte = texteBulle.content;
 							pathList.push(texteBulle);
 							currentElement++;
 						}
