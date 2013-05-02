@@ -40,7 +40,7 @@ height: 450px !important;
 
 	#chatDiv #connectedUsers {
 			float: left;
-			height: 200px;
+			height: 151px;
 			width: 190px;
 			background-color: #FFFFFF;
 			border: 1px solid #CCCCCC;
@@ -58,8 +58,9 @@ height: 450px !important;
 		
 		#chatDiv #connectedUsers #connectedUsersList {
 			float: left;
-			height: 150px;
-			overflow: auto;
+			height: 95px;
+			overflow-x: hidden;
+			overflow-y: auto;
 			width: 190px;
 			
 			padding-left: 0px;

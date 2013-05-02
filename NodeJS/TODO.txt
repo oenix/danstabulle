@@ -5,9 +5,15 @@ I) Editeur de texte :
 [X] - Faire scroller vers le bas lors d'un nouveau message [29/04]
 [X] - Mieux intégrer le bouton Envoyer dans le design [29/04]
 [X] - Faire la fusion avec le serveur NodeJS de dessin [30/04]
-[X] - Voir le problème des accents dans les events chat ?
-[ ] - Régler le problème d'écriture dans la base de données
+[X] - Voir le problème des accents dans les events chat ? [30/04]
 [X] - Faire une nouvelle page d'index pour choisir quelle collabo [30/04]
-[ ] - Mettre le "utilisateur en ligne" en dehors de la liste déroulante
+[X] - Mettre le "utilisateur en ligne" en dehors de la liste déroulante [30/04]
+
+[X] - Remplacer CKEditor par un autre éditeur de texte [01/05]
+[X] - Gestion des OnChange quand passage en gras etc [01/05]
+[X] - Recoder un plugin save pour sauvegarde en base [01/05]
+[ ] - Problème avec le undo quand retour à un éditeur vide
+
+[ ] - Régler le problème d'écriture dans la base de données
 
 II) Dessin collaboratif :

@@ -24,7 +24,7 @@ $(document).ready(function() {
 
 	var socket = io.connect();
 
-	var pseudo = prompt("/!\\ DEV MODE /!\\ - Please select a pseudo");
+	var pseudo = "Default" + Math.floor(Math.random() * 101);//prompt("/!\\ DEV MODE /!\\ - Please select a pseudo");
 	
 	if (pseudo == null || pseudo == "") {
 		pseudo = "Default";
@@ -32,29 +32,57 @@ $(document).ready(function() {
 
 	/* Editor events' initialization */
 	
-	CKEDITOR.on('instanceCreated', function (e) {
-		e.editor.on('change', function (ev) {
-			socket.emit('newTextVersion', ev.editor.getData()); 
-		});
 	
-		e.editor.on('blur', function (ev) {
-			saveEditorText(e.editor.getData());
-		});
-	});
 	
-	CKEDITOR.plugins.registered['save'] = {
-		init : function (editor) {
-			var command = editor.addCommand( 'save',
-				{
-					modes : { wysiwyg:1, source:1 },
-					exec : function( editor ) {
-						saveEditorText(editor.getData());
-					}
-				}
-			);
-			editor.ui.addButton( 'Save',{label : 'Save',command : 'save'});
-		}
+tinyMCE.init({
+	mode : "textareas", 
+	theme : "advanced", 
+	editor_selector :"mceEditor",
+    plugins : "advhr,insertdatetime,preview,save", 
+	save_onsavecallback: function() {console.log("Save");},
+	width : 670,
+	height : 496,
+    theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,|,fontselect,formatselect",
+    theme_advanced_buttons2 : "save,|,sub,sup,|,undo,redo,|,bullist,numlist,|,outdent,indent,|,link,unlink,image,|,forecolor",
+    theme_advanced_toolbar_location : "top",
+    theme_advanced_toolbar_align : "left",
+    theme_advanced_statusbar_location : "none",
+    theme_advanced_resizing : false,
+		
+	setup : function(ed) {
+		ed.onKeyUp.add(function(ed, e) {
+			sendEditorText(ed.getContent());
+		});
+		
+		ed.onChange.add(function(ed, e) {
+			sendEditorText(ed.getContent());
+		});
+
+		ed.onUndo.add(function(ed, e) {
+			sendEditorText(ed.getContent());
+		});
+		
+		ed.onRedo.add(function(ed, e) {
+			sendEditorText(ed.getContent());
+		});
+        
+		ed.onInit.add(function(ed, evt) {
+            tinymce.dom.Event.add(ed.getDoc(), 'blur', function(e) {
+                saveEditorText(ed.getContent());
+            });
+        });
 	}
+});
+
+	
+	/*tinymce.init({
+		selector: "#test",
+		menubar : false,
+		resize : false,
+		onchange_callback : "blabla"
+		//toolbar: "undo redo save | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent"
+	});*/
+	
 	
 	/* Tell the server the new user's connection */
 
@@ -83,14 +111,20 @@ $(document).ready(function() {
 	/* Update the content of the text editor */
   
 	function updateEditorText(text){
-		CKEDITOR.instances.editor.setData(text);
-	}
+		tinyMCE.activeEditor.setContent(text);
+	};
+	
+	/* Send the new text to the server for broadcasting */
+	
+	function sendEditorText(text) {
+		socket.emit('newTextVersion', text); 
+	};
 	
 	/* Send the text to the server in order to be saved */
 	
 	function saveEditorText(text){
 		socket.emit('saveEditorText', text);
-	}
+	};
 
 	/* Fill the page with the current text version and the users list */
 	
@@ -163,7 +197,7 @@ $(document).ready(function() {
 		sendChatMessage();
 	});
 	
-	/* Permet d'envoyer un message en appuyant sur entrée */
+	/* Permet d'envoyer un message en appuyant sur entrÃ©e */
 	
 	$("#chatSendMessageArea").keypress(function(event) {
 		if ( event.which == 13 ) {
