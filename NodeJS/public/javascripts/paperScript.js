@@ -111,11 +111,12 @@ function activateTool(tool)
 	
 	text.point.x = text.point.x - text.point.length / 12;
 	text.point.y = text.point.y - text.point.length /50;
+	pathList.push(text);
 	return true;
 }
 	
 	var movePath = false;
-var bulleStyle = {
+	var bulleStyle = {
 	fillColor: new RgbColor(255, 255, 255),
 	strokeColor: "black",
 	strokeWidth: 1.5
@@ -155,28 +156,26 @@ tool2.onMouseDrag = function(event) {
         segment.point = event.point;
         path.smooth();
     }else
-        path.position = event.point;
+        path.position = path.position.add(event.delta);
 }
 
 tool2.onMouseMove = function(event) {
     project.activeLayer.selected = false;
     if (event.item)
-        event.item.selected = true;
+       event.item.selected = true;
 }
 
 tool2.onMouseUp = function(event) {
 	selected = null;
 	segment = null;
+	hitResult = null;
 }
 
 tool1.onMouseDown = function(event) {
-
-
-
 	color = getSelectValue('color');
 	size = getSelectValue('size');
 	opacity = getSelectValue('opacity')
-	path = new Path();
+	path = new paper.Path();
 	path.strokeColor = color;
 	path.strokeWidth = size;
 	path.opacity = opacity / 100;
@@ -234,10 +233,10 @@ tool1.onMouseDrag = function(event) {
 tool1.onMouseUp = function (event) {	
  var myCircle;
 if (path.length < 5) {
-	 myCircle = new Path.Circle(event.point, 15);
+	 myCircle = new Path.Circle(event.point, 1);
 	 myCircle.strokeColor = color;
-	 myCircle.radius = 25;
-	 myCircle.fillColor = 'black';
+	// myCircle.radius = 1;
+	 myCircle.fillColor = color;
 	 myCircle.strokeColor = 'white';
 }
 //Si C'est une bulle :
