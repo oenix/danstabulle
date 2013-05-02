@@ -83,10 +83,14 @@ function autocomplete()
 	{
 		
 		
-		for(var j = 0; j < 100; j++)
+		for(var j = 0; j < 15; j++)
 		{
+		//	pathList[i].simplify();
 			var clone = pathList[i].clone();
-			clone.position = clone.position.add(new Point(clone.position.x + (10* j+1),0));
+			//clone.smooth();
+			//clone.simplify();
+			clone.position = clone.position.add(new Point(clone.position.x + (60 * j+1),0));
+			//clone.simplify();
 		}
 	}
 	view.draw();
