@@ -76,6 +76,21 @@ function redo()
 	}
 }
 
+function autocomplete()
+{
+	var i = 0;
+	for (i = pathList.length - 1 ; i >= 0; i--)
+	{
+		
+		
+		for(var j = 0; j < 100; j++)
+		{
+			var clone = pathList[i].clone();
+			clone.position = clone.position.add(new Point(clone.position.x + (10* j+1),0));
+		}
+	}
+	view.draw();
+}
 
 function activateTool(tool)
 {
