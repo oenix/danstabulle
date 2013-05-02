@@ -1,3 +1,4 @@
+var tool1, tool2;
 var path;
 var color;
 var size;
@@ -10,6 +11,7 @@ var currentElement = -1;
 var pathListExtern = [];
 var currentElementExtern = -1;
 var remove = -1;
+var selected, segment;
 //Rafraichissement en milliseconde;
 var rafraichissement = 1;
 // Initialise Socket.io
@@ -18,13 +20,11 @@ var socket = io.connect('http://localhost:3000');
 var send_paths_timer;
 var timer_is_active = false;
 var path_to_send = {};
-
-
-
-
+var path_to_send2 = {};
 
 function checked(id)
 {
+	checkbox = document.getElementById("smooth");
 	checkbox = document.getElementById("smooth");
 	if (checkbox.checked)
 	{
@@ -76,32 +76,127 @@ function redo()
 	}
 }
 
-	
-	
+function autocomplete()
+{
+	var i = 0;
+	for (i = pathList.length - 1 ; i >= 0; i--)
+	{
+		
+		
+		for(var j = 0; j < 100; j++)
+		{
+			var clone = pathList[i].clone();
+			clone.position = clone.position.add(new Point(clone.position.x + (10* j+1),0));
+		}
+	}
+	view.draw();
+}
+
+function activateTool(tool)
+{
+	if (tool == "tool1")
+		tool1.activate();
+	else
+		tool2.activate();
+		
+}
+
+
 	paper.install(window);
+	
+	
+
 	window.onload = function() {
 	paper.setup('myCanvas');
-	var tool = new Tool();
+	tool1 = new Tool();
+	tool2 = new Tool();
+	function text(position, texte)
+{
 
-
-var bulleStyle = {
+	var text = new PointText(position);
+	text.content = prompt("Texte de la bulle","");
+	if (text.content == "null")
+	{
+		text.content = "";
+		return false;
+	}
+	text.fillColor = 'black';
+	text.font = "Script";
+	text.fontSize = 15;
+	
+	text.point.x = text.point.x - text.point.length / 12;
+	text.point.y = text.point.y - text.point.length /50;
+	pathList.push(text);
+	return true;
+}
+	
+	var movePath = false;
+	var bulleStyle = {
 	fillColor: new RgbColor(255, 255, 255),
 	strokeColor: "black",
 	strokeWidth: 1.5
 };
 
-tool.onMouseDown = function(event) {
+tool2.onMouseDown = function(event) {
+	var hitResult = paper.project.hitTest(event.point);
+    if (!hitResult)
+        return;
+	selected = hitResult.item;
 	
+	
+  if (event.modifiers.shift) {
+        if (hitResult.type == 'segment') {
+            hitResult.segment.remove();
+        }
+        return;
+    }
+	
+	if (hitResult) {
+        path = hitResult.item;
+        if (hitResult.type == 'segment') {
+            segment = hitResult.segment;
+        } //else if (hitResult.type == 'stroke') {
+            //var location = hitResult.location;
+      //      segment = path.insert(location.index + 1, event.point);
+        //    path.smooth();
+      //  }
+    }
+    movePath = hitResult.type == 'fill';
+    if (movePath)
+        project.activeLayer.addChild(hitResult.item);
+}
+
+tool2.onMouseDrag = function(event) {
+   if (segment) {
+        segment.point = event.point;
+        path.smooth();
+    }else
+        path.position = path.position.add(event.delta);
+}
+
+tool2.onMouseMove = function(event) {
+    project.activeLayer.selected = false;
+    if (event.item)
+       event.item.selected = true;
+}
+
+tool2.onMouseUp = function(event) {
+	selected = null;
+	segment = null;
+	hitResult = null;
+}
+
+tool1.onMouseDown = function(event) {
 	color = getSelectValue('color');
 	size = getSelectValue('size');
 	opacity = getSelectValue('opacity')
-	path = new Path();
+	path = new paper.Path();
 	path.strokeColor = color;
 	path.strokeWidth = size;
 	path.opacity = opacity / 100;
 	path.add(event.point);
 
-path_to_send = {
+	path_to_send = {
 		rgba : color,
 		start : event.point,
 		path : [],
@@ -113,13 +208,22 @@ path_to_send = {
 		add : -2,
 		smooth : false
 	};
+	path_to_send2 = {
+		start : event.point,
+		rgba : color,
+		path : [],
+		size : size,
+		opacity : opacity
+		};
+		
+		
 }
 
-tool.onMouseDrag = function(event) {
+tool1.onMouseDrag = function(event) {
 	path.add(event.point);
 
 	// On ajoute les data au path
-	path_to_send.path.push({
+	path_to_send2.path.push({
 		point : event.point
 	});
 
@@ -128,8 +232,8 @@ tool.onMouseDrag = function(event) {
 
 		send_paths_timer = setInterval( function() {
 
-			socket.emit('draw:progress', uid, JSON.stringify(path_to_send) );
-			path_to_send.path = new Array();
+			socket.emit('draw:progress', uid, JSON.stringify(path_to_send2) );
+			path_to_send2.path = new Array();
 
 		}, rafraichissement);
 
@@ -139,19 +243,27 @@ tool.onMouseDrag = function(event) {
 
 }
 
-tool.onMouseUp = function (event) {
 
+
+tool1.onMouseUp = function (event) {	
+ var myCircle;
 if (path.length < 5) {
-	 var myCircle = new Path.Circle(event.point, 0.2);
+	 myCircle = new Path.Circle(event.point, 1);
 	 myCircle.strokeColor = color;
-
+	// myCircle.radius = 1;
+	 myCircle.fillColor = color;
+	 myCircle.strokeColor = 'white';
 }
 //Si C'est une bulle :
-if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
-	path.style = bulleStyle;
-	path.closed = true;
-	path.simplify(20);
-	path.opacity = 1;
+if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && path.length > 20) {
+
+	if (text(new Point(path.position.x, path.position.y)))
+	{
+		path.style = bulleStyle;
+		path.closed = true;
+		path.simplify(20);
+		path.opacity = 1;
+	}
 }
 else
 {
@@ -162,6 +274,7 @@ else
 	}
 	else
 		path_to_send.smooth = false;
+	
 
 }
 if (hasRaster){
@@ -186,6 +299,7 @@ if (hasRaster){
 	has_raster = false;
 	saveCanvas();
 }
+
 
 
 socket.on('draw:progress', function( artist, data ) {
@@ -264,7 +378,7 @@ var end_external_path = function( points, artist ) {
 			view.draw();
 		}
 		else
-		{
+		{	
 			if (points.smooth)
 			{
 				path.simplify();
@@ -430,5 +544,6 @@ if (tests.dnd) {
 	readfiles(this.files);
   };
 }
+
 }
 //IMAGE DROP

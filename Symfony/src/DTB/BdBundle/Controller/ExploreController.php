@@ -11,7 +11,7 @@ class ExploreController extends Controller
 {
     public function indexAction()
     {
-        $bandeDessinees = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee')->findAll();
+        $bandeDessinees = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee')->findBy(array(), array("id" => "asc"));
         $categories = $this->getDoctrine()->getRepository('DTBBdBundle:Categorie')->findBy(array(), array("name" => "asc"));
         
         return $this->render('DTBBdBundle:Explore:index.html.twig', 

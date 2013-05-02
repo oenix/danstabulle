@@ -627,9 +627,9 @@ var Point = this.Point = Base.extend({
 		return point;
 	},
 
-	getAngle: function() {
+	/*getAngle: function() {
 		return this.getAngleInRadians(arguments[0]) * 180 / Math.PI;
-	},
+	},*/
 
 	setAngle: function(angle) {
 		angle = this._angle = angle * Math.PI / 180;

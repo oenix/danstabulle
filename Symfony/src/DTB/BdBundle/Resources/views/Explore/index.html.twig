@@ -52,13 +52,13 @@
         }
         .ff-items a:hover span{
             height: 120px;
-            opacity: 1;
+            opacity: 0.9;
         }
         .ff-items li img{
             display: block;
         }
         .ff-items li{
-            margin: 3px;
+            margin: 0px;
             float: left;
             width: 0px;
             -webkit-transform: scale(0,0);
@@ -71,6 +71,7 @@
         .ff-container input.ff-selector-type-all:checked ~ .ff-items li
         {
             width: 188px;
+            margin: 3px;
             -webkit-transform: scale(1,1);
             -moz-transform: scale(1,1);
             -o-transform: scale(1,1);
@@ -107,61 +108,61 @@
         }
     {% endfor %}
         @-webkit-keyframes scaleUp {
-            50% { width: 188px; -webkit-transform: scale(0,0); }
-            100% { width: 188px; -webkit-transform: scale(1,1); }
+            50% { margin: 3px; width: 188px; -webkit-transform: scale(0,0); }
+            100% { margin: 3px; width: 188px; -webkit-transform: scale(1,1); }
         }
         @-webkit-keyframes scaleDown {
-            0% { width: 188px;-webkit-transform: scale(1,1);}
-            99% { width: 188px; -webkit-transform: scale(0,0);}
-            100% { width: 0px; -webkit-transform: scale(0,0); }
+            0% { margin: 3px; width: 188px;-webkit-transform: scale(1,1);}
+            99% { margin: 3px; width: 188px; -webkit-transform: scale(0,0);}
+            100% { margin: 0px; width: 0px; -webkit-transform: scale(0,0); }
         }
         @-moz-keyframes scaleUp {
-            50% { width: 188px; -moz-transform: scale(0,0); }
-            100% { width: 188px; -moz-transform: scale(1,1); }
+            50% { margin: 3px; width: 188px; -moz-transform: scale(0,0); }
+            100% { margin: 3px; width: 188px; -moz-transform: scale(1,1); }
         }
         @-moz-keyframes scaleDown {
-            0% { width: 188px;-moz-transform: scale(1,1);}
-            99% { width: 188px; -moz-transform: scale(0,0);}
-            100% { width: 0px; -moz-transform: scale(0,0); }
+            0% { margin: 3px; width: 188px;-moz-transform: scale(1,1);}
+            99% { margin: 3px; width: 188px; -moz-transform: scale(0,0);}
+            100% { margin: 0px; width: 0px; -moz-transform: scale(0,0); }
         }
         @-o-keyframes scaleUp {
-            50% { width: 188px; -o-transform: scale(0,0); }
-            100% { width: 188px; -o-transform: scale(1,1); }
+            50% { margin: 3px; width: 188px; -o-transform: scale(0,0); }
+            100% { margin: 3px; width: 188px; -o-transform: scale(1,1); }
         }
         @-o-keyframes scaleDown {
-            0% { width: 188px;-o-transform: scale(1,1);}
-            99% { width: 188px; -o-transform: scale(0,0);}
-            100% { width: 0px; -o-transform: scale(0,0); }
+            0% { margin: 3px; width: 188px;-o-transform: scale(1,1);}
+            99% { margin: 3px; width: 188px; -o-transform: scale(0,0);}
+            100% { margin: 0px; width: 0px; -o-transform: scale(0,0); }
         }
         @-ms-keyframes scaleUp {
-            50% { width: 188px; -ms-transform: scale(0,0); }
-            100% { width: 188px; -ms-transform: scale(1,1); }
+            50% { margin: 3px; width: 188px; -ms-transform: scale(0,0); }
+            100% { margin: 3px; width: 188px; -ms-transform: scale(1,1); }
         }
         @-ms-keyframes scaleDown {
-            0% { width: 188px;-ms-transform: scale(1,1);}
-            99% { width: 188px; -ms-transform: scale(0,0);}
-            100% { width: 0px; -ms-transform: scale(0,0); }
+            0% { margin: 3px; width: 188px;-ms-transform: scale(1,1);}
+            99% { margin: 3px; width: 188px; -ms-transform: scale(0,0);}
+            100% { margin: 0px; width: 0px; -ms-transform: scale(0,0); }
         }
         @keyframes scaleUp {
-            50% { width: 188px; transform: scale(0,0); }
-            100% { width: 188px; transform: scale(1,1); }
+            50% { margin: 3px; width: 188px; transform: scale(0,0); }
+            100% { margin: 3px; width: 188px; transform: scale(1,1); }
         }
         @keyframes scaleDown {
-            0% { width: 188px; transform: scale(1,1);}
-            99% { width: 188px; transform: scale(0,0);}
-            100% { width: 0px; transform: scale(0,0); }
+            0% { margin: 3px; width: 188px; transform: scale(1,1);}
+            99% { margin: 3px; width: 188px; transform: scale(0,0);}
+            100% { margin: 0px; width: 0px; transform: scale(0,0); }
         }
         
         #comment {
             position: absolute;
             top: 240px;
             margin-top: 15px;
-          }
+        }
 
         #comment.fixed {
             position: fixed;
             top: 0;
-          }
+        }
           
         .color2 {
             background-color: #DA2D3D !important;          
@@ -173,7 +174,7 @@
             background-color: #B9C96A !important;          
         }
         .color5 {
-            background-color: #E81EEF !important;          
+            background-color: #B40059 !important;          
         }
         .color6 {
             background-color: #B06009 !important;          
@@ -187,11 +188,10 @@
         .color9 {
             background-color: #90529B !important;          
         }
-        
     </style>
     <div class="span2" id="comment">
         <button class="btn btn-block btn-info">
-            <label for="select-type-all" class="ff-label-type-all">All</label>
+            <label for="select-type-all" class="ff-label-type-all">Toutes</label>
         </button>
         {% for category in categories %}
         <button class="btn btn-block">
@@ -212,7 +212,7 @@
                     <li class="ff-item-type-{{bd.category.id}}">
                         <a href="{{path('dtb_bd_show', {'id': bd.id})}}">
                             <span class="color{{bd.category.id}}">{{bd.title}}</span>
-                            <img src="{{asset('img/emptyPage.png')}}" />
+                            <img src="{{asset('bd/cover'~ bd.id ~'.jpg')}}" />
                         </a>
                     </li>
             {% endfor %}

@@ -1,10 +1,20 @@
 {% extends '::layout.html.twig' %}
 
 {% block content %}
+<style>
+        textarea
+        {
+            width: 500px;
+            height: 100px;
+        }
+</style>
 <div style="text-align: center">
     <form method="post" action="{{path('dtb_bd_create')}}">
-{{form_widget(form)}}
+        <legend>Créer une nouvelle Bande Dessinée</legend>
+        {{form_widget(form)}}
+        <div class="form-actions">
             <input type="submit" class="btn btn-primary" />
-        </form>
-    </div>
+        </div>
+    </form>
+</div>
 {% endblock %}
