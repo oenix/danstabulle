@@ -282,11 +282,11 @@ var uid = (function() {
 
 
 						}
-						if (hasRaster){
-							path_to_send.hasRaster = true;
-							path_to_send.image = image.src;
-							hasRaster = false;
-						}
+					//	if (hasRaster){
+					//		path_to_send.hasRaster = true;
+					//		path_to_send.image = image.src;
+					//		hasRaster = false;
+					//	}
 
 						path_to_send.end = event.point;
 
@@ -299,7 +299,7 @@ var uid = (function() {
 						socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
 						clearInterval(send_paths_timer);
 						path_to_send.path = new Array();
-						path_to_send.hasRaster = false;
+					//	path_to_send.hasRaster = false;
 						timer_is_active = false;
 						has_raster = false;
 						saveCanvas();
