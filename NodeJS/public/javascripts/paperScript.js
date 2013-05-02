@@ -130,7 +130,7 @@ var uid = (function() {
 
 			text.point.x = text.point.x - text.point.length / 12;
 			text.point.y = text.point.y - text.point.length /50;
-			currentElement++;
+		//	currentElement++;
 			return text;
 		}
 
@@ -282,7 +282,7 @@ var uid = (function() {
 								path_to_send.smooth = true;
 							}
 							else
-							path_to_send.smooth = false;
+								path_to_send.smooth = false;
 
 
 						}
@@ -295,22 +295,22 @@ var uid = (function() {
 						path_to_send.end = event.point;
 						pathList.push(path);
 						
-							path_to_send.texte = texteBulle.content;
 						if (texteBulle != null)
 						{
+							path_to_send.texte = texteBulle.content;
 							pathList.push(texteBulle);
-							currentElement++;
+						 	currentElement++;
 						}
 						currentElement++;
 						if (currentElement != pathList.length -1)
-						currentElement = pathList.length - 1;
+							currentElement = pathList.length - 1;
 
 						socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
 						clearInterval(send_paths_timer);
 						path_to_send.path = new Array();
-					//	path_to_send.hasRaster = false;
+						path_to_send.hasRaster = false;
 						timer_is_active = false;
-					//	has_raster = false;
+						has_raster = false;
 						saveCanvas();
 					}
 
@@ -385,24 +385,23 @@ var uid = (function() {
 							view.draw();
 						}
 						if (path) {
-							var texteToAdd = null;
+							var text;
 							if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
-								if (points.texte != "null")
+								if (points.texte != null)
 								{
 									path.style = bulleStyle;
 									path.closed = true;
 									path.simplify(20);
 									path.opacity = 1;
-										var text = new PointText(path.position);
-										text.content = points.texte
-										text.fillColor = 'black';
-										text.font = "Script";
-										text.fontSize = 15;
+									text = new PointText(path.position);
+									text.content = points.texte
+									text.fillColor = 'black';
+									text.font = "Script";
+									text.fontSize = 15;
 
-										text.point.x = text.point.x - text.point.length / 12;
-										text.point.y = text.point.y - text.point.length /50;
-										textToAdd = text;
-								view.draw();
+									text.point.x = text.point.x - text.point.length / 12;
+									text.point.y = text.point.y - text.point.length /50;
+									view.draw();
 							}
 							}
 							else
@@ -415,10 +414,9 @@ var uid = (function() {
 							path.add(points.end);
 							
 							pathListExtern.push(path);
-							if (textToAdd != null)
+							if (text != null)
 							{
-								pathListExtern.push(textToAdd);
-								
+								pathListExtern.push(text);
 							}
 							external_paths[artist] = false;
 						}
@@ -557,16 +555,8 @@ var uid = (function() {
 								currentElement++;
 								path_to_send.image = image.src;
 								path_to_send.hasRaster = true;
-								socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
+							//	socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
 								path_to_send.hasRaster = false;
-						//		alert(raster.position);
-						
-								var path2 = new paper.Path();
-								path2.strokeColor = "black";
-								path2.strokeWidth = 10;
-
-								path2.opacity = 1;
-								path2.add(new paper.Point(0,0));
 								view.draw();
 							};
 
