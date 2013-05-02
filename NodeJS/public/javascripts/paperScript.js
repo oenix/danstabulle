@@ -384,6 +384,7 @@ var uid = (function() {
 							view.draw();
 						}
 						if (path) {
+							var texteToAdd = null;
 							if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
 								if (points.texte != "null")
 								{
@@ -399,8 +400,7 @@ var uid = (function() {
 
 										text.point.x = text.point.x - text.point.length / 12;
 										text.point.y = text.point.y - text.point.length /50;
-										pathListExtern.push(text);
-										currentElement++;
+										textToAdd = text;
 								view.draw();
 							}
 							}
@@ -412,7 +412,13 @@ var uid = (function() {
 								}
 							}
 							path.add(points.end);
+							
 							pathListExtern.push(path);
+							if (textToAdd != null)
+							{
+								pathListExtern.push(textToAdd);
+								
+							}
 							external_paths[artist] = false;
 						}
 						if (points.remove >= 0)
