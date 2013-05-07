@@ -146,8 +146,7 @@ var uid = (function() {
 			if (!hitResult)
 				return;
 			selected = hitResult.item;
-
-
+			
 			if (event.modifiers.shift) {
 				if (hitResult.type == 'segment') {
 					hitResult.segment.remove();
@@ -174,7 +173,8 @@ var uid = (function() {
 				if (segment) {
 					segment.point = event.point;
 					path.smooth();
-					}else
+					}
+					else
 					path.position = path.position.add(event.delta);
 				}
 
@@ -185,11 +185,15 @@ var uid = (function() {
 				}
 
 				tool2.onMouseUp = function(event) {
-					selected = null;
-					segment = null;
-					hitResult = null;
-				}
+					path_to_send.update = get_indice(selected);
+					path_to_send.updatePath = new Point(pathList[get_indice(selected)].position.x, pathList[get_indice(selected)].position.y);
+					socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+						selected = null;
+						segment = null;
+						hitResult = null;
 
+				}
+				
 				tool1.onMouseDown = function(event) {
 					color = getSelectValue('color');
 					size = getSelectValue('size');
@@ -213,7 +217,9 @@ var uid = (function() {
 						remove : -1,
 						add : -2,
 						smooth : false,
-						texte : null
+						texte : null,
+						update : -1,
+						updatePath : null
 					};
 					path_to_send2 = {
 						start : event.point,
@@ -239,7 +245,7 @@ var uid = (function() {
 
 						send_paths_timer = setInterval( function() {
 
-							socket.emit('draw:progress', uid, JSON.stringify(path_to_send2) );
+							socket.emit('draw:progress', uid, JSON.stringify(path_to_send2));
 							path_to_send2.path = new Array();
 
 							}, rafraichissement);
@@ -353,7 +359,15 @@ var uid = (function() {
 
 
 
-
+					function get_indice(path)
+					{
+						for (var i  = 0; i < pathList.length; i++)
+						{
+							if (path == pathList[i])
+								return i
+						}
+						return -1;
+					}
 
 					// ---------
 					// SOCKET.IO
@@ -427,6 +441,10 @@ var uid = (function() {
 						if (points.add >= -1)
 						{
 							project.activeLayer.addChild(pathListExtern[points.add + 1]);
+						}
+						if (points.update != -1)
+						{
+							pathListExtern[points.update].position = points.updatePath;
 						}
 						view.draw();
 					};
