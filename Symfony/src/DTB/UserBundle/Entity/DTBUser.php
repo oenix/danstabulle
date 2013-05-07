@@ -307,6 +307,7 @@ class DTBUser extends BaseUser {
      */
     public function __construct()
     {
+		parent::__construct();
         $this->bandesDessineesCreated = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
