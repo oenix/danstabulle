@@ -202,6 +202,7 @@ var uid = (function() {
 					path = new paper.Path();
 					path.strokeColor = color;
 					path.strokeWidth = size;
+				 	path.strokeCap =  'round';
 				
 					path.opacity = opacity / 100;
 					path.add(event.point);
@@ -442,7 +443,7 @@ var uid = (function() {
 						{
 							project.activeLayer.addChild(pathListExtern[points.add + 1]);
 						}
-						if (points.update != -1)
+						if (points.update != null)
 						{
 							pathListExtern[points.update].position = points.updatePath;
 						}
