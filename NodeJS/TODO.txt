@@ -12,7 +12,9 @@ I) Editeur de texte :
 [X] - Remplacer CKEditor par un autre éditeur de texte [01/05]
 [X] - Gestion des OnChange quand passage en gras etc [01/05]
 [X] - Recoder un plugin save pour sauvegarde en base [01/05]
-[ ] - Problème avec le undo quand retour à un éditeur vide
+[X] - Problème avec le undo quand retour à un éditeur vide [02/05]
+
+[ ] - Voir pour améliorer le design général de la scrollbar
 
 [ ] - Régler le problème d'écriture dans la base de données
 
