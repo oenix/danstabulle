@@ -14,7 +14,9 @@ I) Editeur de texte :
 [X] - Recoder un plugin save pour sauvegarde en base [01/05]
 [X] - Problème avec le undo quand retour à un éditeur vide [02/05]
 
-[ ] - Voir pour améliorer le design général de la scrollbar
+[ ] - Voir pour améliorer et uniformiser le design des scroolbars
+[ ] - Faire en sorte d'ouvrir le profil utilisateur lors clic pseudo
+[ ] - Problème avec le redimensionnement de l'image dans le texte
 
 [ ] - Régler le problème d'écriture dans la base de données
 
