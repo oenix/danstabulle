@@ -27,6 +27,20 @@ class BandeDessinee {
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="needDrawers", type="boolean", nullable=true)
+     */
+    private $needDrawers;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="needScenarists", type="boolean", nullable=true)
+     */
+    private $needScenarists;
 
     /**
      * @var string
@@ -54,6 +68,19 @@ class BandeDessinee {
      * @ORM\OneToMany(targetEntity="DTB\BdBundle\Entity\Planche", mappedBy="bandeDessinee")
      */
     private $planches;
+    
+    /**
+     * @ORM\ManytoMany(targetEntity="DTB\UserBundle\Entity\DTBUser", inversedBy="bandesDessineesScenarist", cascade={"persist"})
+     * @ORM\JoinTable(name="bds_scenarists")
+     */
+    private $scenarists;
+    
+    /**
+     * @ORM\ManytoMany(targetEntity="DTB\UserBundle\Entity\DTBUser", inversedBy="bandesDessineesDrawer", cascade={"persist"})
+     * @ORM\JoinTable(name="bds_drawers")
+     */
+    private $drawers;
+
 
     /**
      * Get id
@@ -133,6 +160,8 @@ class BandeDessinee {
      */
     public function __construct() {
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->drawers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->scenarists = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -164,7 +193,6 @@ class BandeDessinee {
     public function getTags() {
         return $this->tags;
     }
-
 
     /**
      * Add planches
@@ -220,5 +248,117 @@ class BandeDessinee {
     public function getCreator()
     {
         return $this->creator;
+    }
+
+    /**
+     * Add scenarists
+     *
+     * @param \DTB\UserBundle\Entity\DTBUser $scenarists
+     * @return BandeDessinee
+     */
+    public function addScenarist(\DTB\UserBundle\Entity\DTBUser $scenarists)
+    {
+        $this->scenarists[] = $scenarists;
+    
+        return $this;
+    }
+
+    /**
+     * Remove scenarists
+     *
+     * @param \DTB\UserBundle\Entity\DTBUser $scenarists
+     */
+    public function removeScenarist(\DTB\UserBundle\Entity\DTBUser $scenarists)
+    {
+        $this->scenarists->removeElement($scenarists);
+    }
+
+    /**
+     * Get scenarists
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getScenarists()
+    {
+        return $this->scenarists;
+    }
+
+    /**
+     * Add drawers
+     *
+     * @param \DTB\UserBundle\Entity\DTBUser $drawers
+     * @return BandeDessinee
+     */
+    public function addDrawer(\DTB\UserBundle\Entity\DTBUser $drawers)
+    {
+        $this->drawers[] = $drawers;
+    
+        return $this;
+    }
+
+    /**
+     * Remove drawers
+     *
+     * @param \DTB\UserBundle\Entity\DTBUser $drawers
+     */
+    public function removeDrawer(\DTB\UserBundle\Entity\DTBUser $drawers)
+    {
+        $this->drawers->removeElement($drawers);
+    }
+
+    /**
+     * Get drawers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDrawers()
+    {
+        return $this->drawers;
+    }
+
+    /**
+     * Set needDrawers
+     *
+     * @param boolean $needDrawers
+     * @return BandeDessinee
+     */
+    public function setNeedDrawers($needDrawers)
+    {
+        $this->needDrawers = $needDrawers;
+    
+        return $this;
+    }
+
+    /**
+     * Get needDrawers
+     *
+     * @return boolean 
+     */
+    public function getNeedDrawers()
+    {
+        return $this->needDrawers;
+    }
+
+    /**
+     * Set needScenarists
+     *
+     * @param boolean $needScenarists
+     * @return BandeDessinee
+     */
+    public function setNeedScenarists($needScenarists)
+    {
+        $this->needScenarists = $needScenarists;
+    
+        return $this;
+    }
+
+    /**
+     * Get needScenarists
+     *
+     * @return boolean 
+     */
+    public function getNeedScenarists()
+    {
+        return $this->needScenarists;
     }
 }

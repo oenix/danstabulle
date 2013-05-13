@@ -3,170 +3,159 @@
 .planche{width: 100px;display:inline; margin:10px;}
 .planche2{width:15%}
 
-      /* Custom container */
-      .container{
-        max-width: 1050px;
-		width:1050px;
-      }
-	  
-	  .blanc{
-	    background-color:#ffffff;
-		  padding-top:20px;
-		padding-left:10px;
-		padding-right:10px;
-	  }
-	  
-      .container > hr {
-        margin: 60px 0;
-      }
-	  
-	  .ombre {
-		box-shadow: 0 0 1px #c1c1c1;
-		-moz-box-shadow: 0 0 1px #c1c1c1;  
-		-webkit-box-shadow: 0 0 1px  0#c1c1c1; 
-		}
+/* Custom container */
+.container{
+    max-width: 1050px;
+    width:1050px;
+}
 
-	    .ombre2 {
-		height:300px;
-		box-shadow: 0 0 1px #c1c1c1;
-		-moz-box-shadow: 0 0 1px #000;  
-		-webkit-box-shadow: 0 0 1px #000; 
-	  }
-		
-      /* Main marketing message and sign up button */
-      .jumbotron {
-        margin: 80px 0;
-        text-align: center;
-      }
-      .jumbotron h1 {
-        font-size: 100px;
-        line-height: 1;
-      }
-      .jumbotron .lead {
-        font-size: 24px;
-        line-height: 1.25;
-      }
-      .jumbotron .btn {
-        font-size: 21px;
-        padding: 14px 24px;
-      }
+.blanc{
+    background-color:#ffffff;
+    padding-top:20px;
+    padding-left:10px;
+    padding-right:10px;
+    margin-top: 30px;
+}
 
-      /* Supporting marketing content */
-      .marketing {
-        margin: 60px 0;
-      }
-      .marketing p + h4 {
-        margin-top: 28px;
-      }
-	  
-	    .leader{
-        font-size: 25px;
-        line-height: 1.25;
-      }
-      /* Customize the navbar links to be fill the entire space of the .navbar */
-	  
-	  .navbar{
-	  }
-      .navbar .navbar-inner {
-        padding: 0;
-      }
-      .navbar .nav {
-        margin: 0;
-        display: table;
-        width: 100%;
-		
-      }
-      .navbar .nav li {
-        display: table-cell;
-        width: 1%;
-        float: none;
-      }
-      .navbar .nav li a {
-        font-weight: bold;
-        text-align: center;
-        border-left: 1px solid rgba(255,255,255,.75);
-        border-right: 1px solid rgba(0,0,0,.1);
-      }
-      .navbar .nav li:first-child a {
-        border-left: 0;
-        border-radius: 3px 0 0 3px;
-      }
-      .navbar .nav li:last-child a {
-        border-right: 0;
-        border-radius: 0 3px 3px 0;
-      }
+.container > hr {
+    margin: 60px 0;
+}
 
-      /* Sticky footer styles
-      -------------------------------------------------- */
+.ombre {
+    box-shadow: 0 0 1px #c1c1c1;
+    -moz-box-shadow: 0 0 1px #c1c1c1;  
+    -webkit-box-shadow: 0 0 1px  0#c1c1c1; 
+}
 
-      html,
-      body {
-        height: 100%;
-		background-color:#f8f8f8;
-        /* The html and body elements cannot have any padding or margin. */
-      }
+.ombre2 {
+    height:300px;
+    box-shadow: 0 0 1px #c1c1c1;
+    -moz-box-shadow: 0 0 1px #000;  
+    -webkit-box-shadow: 0 0 1px #000; 
+}
 
-      /* Wrapper for page content to push down footer */
-      #wrap {
-        min-height: 100%;
-        height: auto !important;
-        height: 100%;
-        /* Negative indent footer by it's height */
-        margin: 0 auto -60px;
-      }
+/* Main marketing message and sign up button */
+.jumbotron {
+    margin: 80px 0;
+    text-align: center;
+}
+.jumbotron h1 {
+    font-size: 100px;
+    line-height: 1;
+}
+.jumbotron .lead {
+    font-size: 24px;
+    line-height: 1.25;
+}
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
 
-      /* Set the fixed height of the footer here */
-      #push,
-      #footer {
-        height: 60px;
-      }
-      #footer {
-        background-color: #f5f5f5;
-      }
-	  
-	  .center {
-        text-align: center;
-      }
-	  .pado {
-        margin-top: 24px;
-	  }
-	  	
-	.searchform {
-		height:15px;
-		margin-bottom:17px;
-		margin-left:8px;
-		width:100px;
-	}
-	.searchtext{
+/* Supporting marketing content */
+.marketing {
+    margin: 60px 0;
+}
+.marketing p + h4 {
+    margin-top: 28px;
+}
+
+.leader{
+    font-size: 25px;
+    line-height: 1.25;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,
+body {
+    height: 100%;
+    background-color:#f8f8f8;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+    height: 60px;
+}
+#footer {
+    background-color: #f5f5f5;
+}
+
+.center {
+    text-align: center;
+}
+.pado {
+    margin-top: 24px;
+}
+
+.searchform {
+    height:15px;
+    margin-bottom:17px;
+    margin-left:8px;
+    width:100px;
+}
+.searchtext{
     width: 100%;
     height: 190px;
     background-image: none;
-	}
-	.searchButton {
+}
+.searchButton {
     position: absolute; 
     margin: -22px 0 0 -26px;
-   }
-   .annonces {
-     text-align:center;
-     margin: 0 auto;
-    }
+}
+.annonces {
+    text-align:center;
+    margin: 0 auto;
+}
 
-    .change .apres, .change:hover .avant {
-      display : none;
-  }
+.change .apres, .change:hover .avant {
+    display : none;
+}
 
-  .change:hover .apres {
+.change:hover .apres {
     display : block;
-      }
+}
 
- .after {
+.after {
     height:15px;
     margin-bottom:0px;
     width:200px;
- }
+}
 .footer {
-	padding-left:10px;
-	padding-right:10px;
+    padding-left:10px;
+    padding-right:10px;
     padding-top:0px;
- }
-	
+}
+
+.navbar {
+    margin-bottom: 0;
+    box-shadow: inset 0 1px white,0 1px 3px rgba(34,25,25,0.4);
+    -moz-box-shadow: inset 0 1px #fff,0 1px 2px rgba(34,25,25,0.4);
+    -webkit-box-shadow: inset 0 1px white,0 1px 3px rgba(34,25,25,0.4);
+    background-color: #FFFFFF;
+}
+
+.navbar .navbar-inner {
+    border: none;
+    border-radius: 0 0 0 0;
+    padding-left: 0;
+    padding-right: 0;
+    height: 45px;
+    padding-top: 5px;
+    background-color: #FFFFFF;
+    background-image: none;
+    width: 1100px;
+    margin: auto;
+}

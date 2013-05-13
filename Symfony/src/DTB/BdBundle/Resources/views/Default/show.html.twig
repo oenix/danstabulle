@@ -28,6 +28,21 @@
 </div>
 <div class="span3 well">
     <ul class="nav nav-list">
+        <li class="nav-header">Votre rôle</li>
+        {% if bd.creator.id == app.user.id %}
+        <li>Administrateur</li>
+        {% else %}
+        {% for user in bd.scenarists %}
+            {% if user.id == app.user.id %}
+            <li>Scénariste</li>
+            {% endif %}
+        {% endfor %}
+        {% for user in bd.drawers %}
+            {% if user.id == app.user.id %}
+            <li>Dessinateur</li>
+            {% endif %}
+        {% endfor %}
+        {% endif %}
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             {% if bd.creator.id != app.user.id %}
         <li class="nav-header">Contribuer</li>
@@ -51,9 +66,19 @@
         <li><b><small>Age Minimum</small></b></li>
         <li>{{bd.category.requiredAge}} ans</li>
         <li class="nav-header">Scénaristes</li>
-        <li>Aucun</li>
+        {% if bd.needScenarists %}
+        <li>Cette BD a besoin de scénaristes.</li>
+        {% endif %}
+        {% for user in bd.scenarists %}
+        <li><a href="{{path('dtb_show_user_profile', {'id':user.id})}}">{{user.username | capitalize}}</a></li>
+        {% endfor %}
         <li class="nav-header">Dessinateurs</li>
-        <li>Aucun</li>
+        {% if bd.needScenarists %}
+        <li>Cette BD a besoin de dessinateurs.</li>
+        {% endif %}
+        {% for user in bd.drawers %}
+        <li><a href="{{path('dtb_show_user_profile', {'id':user.id})}}">{{user.username | capitalize}}</a></li>
+        {% endfor %}
     </ul>
 </div>
 {% endblock %}

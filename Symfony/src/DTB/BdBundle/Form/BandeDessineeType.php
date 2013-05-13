@@ -15,6 +15,8 @@ class BandeDessineeType extends AbstractType
             ->add('description')
             ->add('category')
             ->add('tags')
+            ->add('needDrawers')
+            ->add('needScenarists')
         ;
     }
 

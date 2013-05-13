@@ -87,7 +87,15 @@ class DTBUser extends BaseUser {
      * @ORM\OneToMany(targetEntity="DTB\BdBundle\Entity\BandeDessinee", mappedBy="creator")
      */
     private $bandesDessineesCreated;
-
+    /**
+     * @ORM\ManyToMany(targetEntity="DTB\BdBundle\Entity\BandeDessinee", mappedBy="scenarists")
+     */
+    private $bandesDessineesScenarist;
+    /**
+     * @ORM\ManyToMany(targetEntity="DTB\BdBundle\Entity\BandeDessinee", mappedBy="drawers")
+     */
+    private $bandesDessineesDrawer;    
+    
     /**
      * Get id
      *
@@ -307,8 +315,10 @@ class DTBUser extends BaseUser {
      */
     public function __construct()
     {
-		parent::__construct();
+        parent::__construct();
         $this->bandesDessineesCreated = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bandesDessineesScenarist = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bandesDessineesDrawer = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -342,5 +352,71 @@ class DTBUser extends BaseUser {
     public function getBandesDessineesCreated()
     {
         return $this->bandesDessineesCreated;
+    }
+
+    /**
+     * Add bandesDessineesScenarist
+     *
+     * @param \DTB\BdBundle\Entity\BandeDessinee $bandesDessineesScenarist
+     * @return DTBUser
+     */
+    public function addBandesDessineesScenarist(\DTB\BdBundle\Entity\BandeDessinee $bandesDessineesScenarist)
+    {
+        $this->bandesDessineesScenarist[] = $bandesDessineesScenarist;
+    
+        return $this;
+    }
+
+    /**
+     * Remove bandesDessineesScenarist
+     *
+     * @param \DTB\BdBundle\Entity\BandeDessinee $bandesDessineesScenarist
+     */
+    public function removeBandesDessineesScenarist(\DTB\BdBundle\Entity\BandeDessinee $bandesDessineesScenarist)
+    {
+        $this->bandesDessineesScenarist->removeElement($bandesDessineesScenarist);
+    }
+
+    /**
+     * Get bandesDessineesScenarist
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBandesDessineesScenarist()
+    {
+        return $this->bandesDessineesScenarist;
+    }
+
+    /**
+     * Add bandesDessineesDrawer
+     *
+     * @param \DTB\BdBundle\Entity\BandeDessinee $bandesDessineesDrawer
+     * @return DTBUser
+     */
+    public function addBandesDessineesDrawer(\DTB\BdBundle\Entity\BandeDessinee $bandesDessineesDrawer)
+    {
+        $this->bandesDessineesDrawer[] = $bandesDessineesDrawer;
+    
+        return $this;
+    }
+
+    /**
+     * Remove bandesDessineesDrawer
+     *
+     * @param \DTB\BdBundle\Entity\BandeDessinee $bandesDessineesDrawer
+     */
+    public function removeBandesDessineesDrawer(\DTB\BdBundle\Entity\BandeDessinee $bandesDessineesDrawer)
+    {
+        $this->bandesDessineesDrawer->removeElement($bandesDessineesDrawer);
+    }
+
+    /**
+     * Get bandesDessineesDrawer
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBandesDessineesDrawer()
+    {
+        return $this->bandesDessineesDrawer;
     }
 }
