@@ -77,6 +77,16 @@ class CandidateController extends Controller
     public function seeAction($id)
     {
         $bd = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee')->find($id);
+        
+        $role = array("admin" => ($bd->getCreator() == $this->getUser()),
+                      "drawer" => $bd->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bd->getScenarists()->contains($this->getUser()));
+        
+        if (!$role['admin'])
+        {
+            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+        }
+        
         $candidaturesDrawer = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->findBy(array("bd" => $bd, "type" => "drawer"));
         $candidaturesScenarist = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->findBy(array("bd" => $bd, "type" => "scenarist"));
                 

@@ -32,6 +32,15 @@ class DefaultController extends Controller
         
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
         $bandeDessinee = $repository->find($id);
+        
+        $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
+                      "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
+        
+        if (!$role['admin'])
+        {
+            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+        }
  
         $planche = new Planche();
         $planche->setBandeDessinee($bandeDessinee);
@@ -80,6 +89,15 @@ class DefaultController extends Controller
         
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
         $bandeDessinee = $repository->find($id);
+        
+        $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
+                      "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
+        
+        if (!$role['admin'])
+        {
+            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+        }
         
         $form = $this->createForm(new BandeDessineeType, $bandeDessinee);
         
