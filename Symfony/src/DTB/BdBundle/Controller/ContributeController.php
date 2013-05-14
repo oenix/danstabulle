@@ -20,7 +20,10 @@ class ContributeController extends Controller
                 ->getRepository('DTBBdBundle:BandeDessinee')
                 ->findBy(array('creator' => $this->getUser()->getID()), array("id" => "asc"));
         
+        $cd = $this->getUser()->getBandesDessineesDrawer();
+        $cs = $this->getUser()->getBandesDessineesScenarist();
+        
         return $this->render('DTBBdBundle:Contribute:index.html.twig', 
-                array('bds' => $bandeDessinees));
+                array('bds' => $bandeDessinees, 'cd' => $cd, 'cs' => $cs));
     }
 }

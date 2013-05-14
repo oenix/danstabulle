@@ -76,6 +76,43 @@ class CandidateController extends Controller
     
     public function seeAction($id)
     {
-        return $this->render('DTBBdBundle:Candidate:see.html.twig', array());
+        $bd = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee')->find($id);
+        $candidaturesDrawer = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->findBy(array("bd" => $bd, "type" => "drawer"));
+        $candidaturesScenarist = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->findBy(array("bd" => $bd, "type" => "scenarist"));
+                
+        return $this->render('DTBBdBundle:Candidate:see.html.twig', array("bd" => $bd, "cd" => $candidaturesDrawer, "cs" => $candidaturesScenarist ));
+    }
+    
+    public function validateAction($id)
+    {
+        $candidature = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->find($id);
+        $user = $candidature->getUser();
+        $bd = $candidature->getBd();
+        
+        if ($candidature->getType() == "drawer")
+            $bd->addDrawer($user);
+        else
+            $bd->addScenarist ($user);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($bd);
+        $em->flush();
+        
+        $em->remove($candidature);
+        $em->flush();
+        
+        return $this->redirect($this->generateUrl('dtb_bd_see_candidatures', array("id" => $bd->getId())));
+    }
+    
+    public function deleteAction($id)
+    {
+        $candidature = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->find($id);
+        $bd = $candidature->getBd();
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($candidature);
+        $em->flush();
+        
+        return $this->redirect($this->generateUrl('dtb_bd_see_candidatures', array("id" => $bd->getId())));
     }
 }

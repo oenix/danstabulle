@@ -112,7 +112,7 @@ class Candidature
     /**
      * Get bd
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \DTB\BdBundle\Entity\BandeDessinee 
      */
     public function getBd()
     {

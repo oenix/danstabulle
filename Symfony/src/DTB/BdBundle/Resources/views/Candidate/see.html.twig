@@ -1,5 +1,66 @@
 {% extends '::layout.html.twig' %}
 
 {% block content %}
-lol
+<h2>Contributions pour "<a href="{{path('dtb_bd_show', {'id': bd.id})}}">{{bd.title}}</a>"</h2>
+<div class="span9">
+    <h3>Candidatures</h3>
+    <h4>Dessinateurs</h4>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th width="20px">#</th>
+                <th width="100px">Utilisateur</th>
+                <th>Lettre de Motivation</th>
+                <th width="50px">Actions</th>
+            </tr>
+        </thead>
+        {% for c in cd %}
+        <tr>
+            <td>{{c.id}}</td>
+            <td>{{c.user.username}}</td>
+            <td>{{c.coverletter}}</td>
+            <td>
+                <a href="{{path('dtb_bd_validate_candidature', {"id":c.id})}}"><i class="icon-ok"></i></a> 
+                <a href="{{path('dtb_bd_delete_candidature', {"id":c.id})}}"><i class="icon-remove"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h4>Scénaristes</h4>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th width="20px">#</th>
+                <th width="100px">Utilisateur</th>
+                <th>Lettre de Motivation</th>
+                <th width="50px">Actions</th>
+            </tr>
+        </thead>
+        {% for c in cs %}
+        <tr>
+            <td>{{c.id}}</td>
+            <td>{{c.user.username}}</td>
+            <td>{{c.coverletter}}</td>
+            <td>
+                <a href="{{path('dtb_bd_validate_candidature', {"id":c.id})}}"><i class="icon-ok"></i></a> 
+                <a href="{{path('dtb_bd_delete_candidature', {"id":c.id})}}"><i class="icon-remove"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="span3" style="margin-left: 50px">
+<h3>Collaborateurs</h3>
+    <ul class="nav nav-list">
+        <li class="nav-header">Dessinateurs</li>
+        {% for user in bd.drawers %}
+        <li><a href="{{path('dtb_show_user_profile', {'id':user.id})}}">{{user.username | capitalize}}</a></li>
+        {% endfor %}
+        <li class="nav-header">Scénaristes</li>
+        {% for user in bd.scenarists %}
+        <li><a href="{{path('dtb_show_user_profile', {'id':user.id})}}">{{user.username | capitalize}}</a></li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

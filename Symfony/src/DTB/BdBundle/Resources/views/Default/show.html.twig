@@ -32,10 +32,10 @@
         {% if role.admin %}
         <li>Administrateur</li>
         {% endif %}
-        {% if role.drawer %}
+        {% if role.drawer and not(role.admin) %}
         <li>Dessinateur</li>
         {% endif %}
-        {% if role.scenarist %}
+        {% if role.scenarist and not(role.admin) %}
         <li>Scénariste</li>
         {% endif %}
         {% if not(role.scenarist or role.drawer or role.admin) %}
@@ -58,7 +58,7 @@
             {% if bd.creator.id == app.user.id %}
         <li class="nav-header">Administrer</li>
         <li><a href="{{path('dtb_bd_update', {'id': bd.id})}}">Editer</a></li>
-        <li><a href="{{path('dtb_bd_see_candidatures', {'id': bd.id})}}">Candidatures <span class="badge">{{bd.candidatures.count}}</span></a></li>
+        <li><a href="{{path('dtb_bd_see_candidatures', {'id': bd.id})}}">Contributeurs <span class="badge">{{bd.candidatures.count}}</span></a></li>
             {% endif %}
         {% endif %}
             

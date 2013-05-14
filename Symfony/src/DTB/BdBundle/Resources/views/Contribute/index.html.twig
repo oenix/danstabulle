@@ -2,7 +2,7 @@
 
 {% block content %}
 <div style="text-align: center; padding-top: 40px;">
-    <a href="#" class="btn btn-large btn-info disabled">Rejoindre une Bande Dessinée</a>
+    <a href="{{ path('dtb_bd_explore') }}" class="btn btn-large btn-info">Rejoindre une Bande Dessinée</a>
     <a href="{{ path('dtb_bd_create') }}" class="btn btn-large btn-success">Créer une Bande Dessinée</a>
 </div>
 <hr>
@@ -20,7 +20,26 @@
 </div>
 <div class="span6">
     <h2>Bandes Dessinées rejointes</h2>
-    Aucune pour l'instant.
+    <h3>Dessinateur</h3>
+    <table class="table table-bordered table-striped" style="width: 90%;">
+    {% for bd in cd %}
+        <tr><td>
+            <a href="{{path('dtb_bd_show', {'id': bd.id})}}">
+                {{bd.title}}
+            </a>
+        </td></tr>
+    {% endfor %}
+    </table>
+    <h3>Scénariste</h3>
+    <table class="table table-bordered table-striped" style="width: 90%;">
+    {% for bd in cs %}
+        <tr><td>
+            <a href="{{path('dtb_bd_show', {'id': bd.id})}}">
+                {{bd.title}}
+            </a>
+        </td></tr>
+    {% endfor %}
+    </table>
 </div>
 <div class="span12"><br/><br/></div>
 <div class="span12"><br/><br/></div>

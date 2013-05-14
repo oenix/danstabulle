@@ -33,3 +33,11 @@ dtb_bd_candidate_scenarist:
 dtb_bd_see_candidatures:
     pattern:  /seeCandidates/{id}
     defaults: { _controller: DTBBdBundle:Candidate:see }
+    
+dtb_bd_validate_candidature:
+    pattern:  /validateCandidate/{id}
+    defaults: { _controller: DTBBdBundle:Candidate:validate }
+    
+dtb_bd_delete_candidature:
+    pattern:  /deleteCandidate/{id}
+    defaults: { _controller: DTBBdBundle:Candidate:delete }
