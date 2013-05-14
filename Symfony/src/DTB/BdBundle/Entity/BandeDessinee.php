@@ -63,6 +63,11 @@ class BandeDessinee {
      * @ORM\ManyToMany(targetEntity="DTB\BdBundle\Entity\Tag", inversedBy="bandesDessinees", cascade={"persist"})
      */
     private $tags;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="DTB\BdBundle\Entity\Candidature", mappedBy="bd", cascade={"persist"})
+     */
+    private $candidatures;
 
     /**
      * @ORM\OneToMany(targetEntity="DTB\BdBundle\Entity\Planche", mappedBy="bandeDessinee")
@@ -360,5 +365,38 @@ class BandeDessinee {
     public function getNeedScenarists()
     {
         return $this->needScenarists;
+    }
+
+    /**
+     * Add candidatures
+     *
+     * @param \DTB\BdBundle\Entity\Candidature $candidatures
+     * @return BandeDessinee
+     */
+    public function addCandidature(\DTB\BdBundle\Entity\Candidature $candidatures)
+    {
+        $this->candidatures[] = $candidatures;
+    
+        return $this;
+    }
+
+    /**
+     * Remove candidatures
+     *
+     * @param \DTB\BdBundle\Entity\Candidature $candidatures
+     */
+    public function removeCandidature(\DTB\BdBundle\Entity\Candidature $candidatures)
+    {
+        $this->candidatures->removeElement($candidatures);
+    }
+
+    /**
+     * Get candidatures
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCandidatures()
+    {
+        return $this->candidatures;
     }
 }

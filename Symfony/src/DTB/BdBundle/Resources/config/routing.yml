@@ -21,3 +21,15 @@ dtb_bd_show:
 dtb_bd_add_planche:
     pattern:  /addPlanche/{id}
     defaults: { _controller: DTBBdBundle:Default:addPlanche }
+    
+dtb_bd_candidate_drawer:
+    pattern:  /candidateDrawer/{id}
+    defaults: { _controller: DTBBdBundle:Candidate:drawer }
+    
+dtb_bd_candidate_scenarist:
+    pattern:  /candidateScenarist/{id}
+    defaults: { _controller: DTBBdBundle:Candidate:scenarist }
+    
+dtb_bd_see_candidatures:
+    pattern:  /seeCandidates/{id}
+    defaults: { _controller: DTBBdBundle:Candidate:see }

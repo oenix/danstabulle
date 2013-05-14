@@ -87,6 +87,12 @@ class DTBUser extends BaseUser {
      * @ORM\OneToMany(targetEntity="DTB\BdBundle\Entity\BandeDessinee", mappedBy="creator")
      */
     private $bandesDessineesCreated;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="DTB\BdBundle\Entity\Candidature", mappedBy="user")
+     */
+    private $candidatures;
+    
     /**
      * @ORM\ManyToMany(targetEntity="DTB\BdBundle\Entity\BandeDessinee", mappedBy="scenarists")
      */
@@ -315,8 +321,10 @@ class DTBUser extends BaseUser {
      */
     public function __construct()
     {
-		parent::__construct();
+        parent::__construct();
         $this->bandesDessineesCreated = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bandesDessineesScenarist = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bandesDessineesDrawer = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -416,5 +424,38 @@ class DTBUser extends BaseUser {
     public function getBandesDessineesDrawer()
     {
         return $this->bandesDessineesDrawer;
+    }
+
+    /**
+     * Add candidatures
+     *
+     * @param \DTB\BdBundle\Entity\Candidature $candidatures
+     * @return DTBUser
+     */
+    public function addCandidature(\DTB\BdBundle\Entity\Candidature $candidatures)
+    {
+        $this->candidatures[] = $candidatures;
+    
+        return $this;
+    }
+
+    /**
+     * Remove candidatures
+     *
+     * @param \DTB\BdBundle\Entity\Candidature $candidatures
+     */
+    public function removeCandidature(\DTB\BdBundle\Entity\Candidature $candidatures)
+    {
+        $this->candidatures->removeElement($candidatures);
+    }
+
+    /**
+     * Get candidatures
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCandidatures()
+    {
+        return $this->candidatures;
     }
 }

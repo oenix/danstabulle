@@ -16,7 +16,12 @@ class DefaultController extends Controller
         
         $bandeDessinee = $repository->find($id);
         
-        return $this->render('DTBBdBundle:Default:show.html.twig', array('bd' => $bandeDessinee));
+        $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
+                      "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
+        
+        return $this->render('DTBBdBundle:Default:show.html.twig', array('bd' => $bandeDessinee,
+            'role' => $role));
     }
     
     public function addPlancheAction($id)
