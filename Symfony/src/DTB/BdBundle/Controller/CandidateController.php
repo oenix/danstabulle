@@ -99,6 +99,15 @@ class CandidateController extends Controller
         $user = $candidature->getUser();
         $bd = $candidature->getBd();
         
+        $role = array("admin" => ($bd->getCreator() == $this->getUser()),
+                      "drawer" => $bd->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bd->getScenarists()->contains($this->getUser()));
+        
+        if (!$role['admin'])
+        {
+            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+        }
+        
         if ($candidature->getType() == "drawer")
             $bd->addDrawer($user);
         else
@@ -118,6 +127,15 @@ class CandidateController extends Controller
     {
         $candidature = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->find($id);
         $bd = $candidature->getBd();
+        
+        $role = array("admin" => ($bd->getCreator() == $this->getUser()),
+                      "drawer" => $bd->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bd->getScenarists()->contains($this->getUser()));
+        
+        if (!$role['admin'])
+        {
+            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+        }
         
         $em = $this->getDoctrine()->getManager();
         $em->remove($candidature);
