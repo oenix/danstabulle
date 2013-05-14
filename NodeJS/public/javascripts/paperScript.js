@@ -1,4 +1,4 @@
-var tool1, tool2;
+var tool1, tool2, tool3;
 var path;
 var color;
 var size;
@@ -20,11 +20,11 @@ var timer_is_active = false;
 var path_to_send = {};
 var path_to_send2 = {};
 
-var texte = "";
+
+var rectangleForMe;
 
 function checked(id)
 {
-	checkbox = document.getElementById("smooth");
 	checkbox = document.getElementById("smooth");
 	if (checkbox.checked)
 	{
@@ -99,10 +99,11 @@ var uid = (function() {
 	function activateTool(tool)
 	{
 		if (tool == "tool1")
-		tool1.activate();
+			tool1.activate();
+		else if (tool == "tool2")
+			tool2.activate();
 		else
-		tool2.activate();
-
+			tool3.activate();
 	}
 
 
@@ -112,8 +113,10 @@ var uid = (function() {
 
 	window.onload = function() {
 		paper.setup('myCanvas');
-		tool1 = new Tool();
-		tool2 = new Tool();
+		tool1 = new Tool(); // Pinceau
+		tool2 = new Tool(); // Select
+	    tool3 = new Tool(); // Draw for me
+		
 		function text(position, texte)
 		{
 
@@ -135,41 +138,63 @@ var uid = (function() {
 		}
 
 		var movePath = false;
+		
 		var bulleStyle = {
 			fillColor: new RgbColor(255, 255, 255),
 			strokeColor: "black",
 			strokeWidth: 1.5
 		};
+		
+			tool3.onMouseDown = function(event) {
+				rectangleForMe = new paper.Path.Rectangle(event.point,1);
+				rectangleForMe.strokeColor = 'black';
+				rectangleForMe.fillColor = 'white';
+				var rectangle = new Rectangle(20,60);
 
-		tool2.onMouseDown = function(event) {
-			var hitResult = paper.project.hitTest(event.point);
-			if (!hitResult)
-				return;
-			selected = hitResult.item;
+			//	alert(rectangleForMe.rectangle.size);
+				view.draw();
+				
+			}
 			
-			if (event.modifiers.shift) {
-				if (hitResult.type == 'segment') {
-					hitResult.segment.remove();
-				}
-				return;
+			tool3.onMouseDrag = function(event) {
+			//	rectangleForMe.size = rectangleForMe.size.add(event.delta.length);
+				
+				view.draw();
 			}
+		
+		
+		
+		
 
-			if (hitResult) {
-				path = hitResult.item;
-				if (hitResult.type == 'segment') {
-					segment = hitResult.segment;
-				} //else if (hitResult.type == 'stroke') {
-					//var location = hitResult.location;
-					//      segment = path.insert(location.index + 1, event.point);
-					//    path.smooth();
-					//  }
-				}
-				movePath = hitResult.type == 'fill';
-				if (movePath)
-				project.activeLayer.addChild(hitResult.item);
-			}
+				tool2.onMouseDown = function(event) {
+					var hitResult = paper.project.hitTest(event.point);
+					if (!hitResult)
+						return;
+					selected = hitResult.item;
+				
+					if (event.modifiers.shift) {
+						if (hitResult.type == 'segment') {
+							hitResult.segment.remove();
+						}
+						return;
+					}
 
-			tool2.onMouseDrag = function(event) {
+					if (hitResult) {
+						path = hitResult.item;
+						if (hitResult.type == 'segment') {
+							segment = hitResult.segment;
+						} //else if (hitResult.type == 'stroke') {
+						//var location = hitResult.location;
+							//      segment = path.insert(location.index + 1, event.point);
+						//    path.smooth();
+						//  }
+						}
+						movePath = hitResult.type == 'fill';
+						if (movePath)
+						project.activeLayer.addChild(hitResult.item);
+					}
+
+				tool2.onMouseDrag = function(event) {
 				if (segment) {
 					segment.point = event.point;
 					path.smooth();
@@ -181,7 +206,7 @@ var uid = (function() {
 				tool2.onMouseMove = function(event) {
 					project.activeLayer.selected = false;
 					if (event.item)
-					event.item.selected = true;
+						event.item.selected = true;
 				}
 
 				tool2.onMouseUp = function(event) {
@@ -191,7 +216,7 @@ var uid = (function() {
 						selected = null;
 						segment = null;
 						hitResult = null;
-
+					saveCanvas();
 				}
 				
 				tool1.onMouseDown = function(event) {
