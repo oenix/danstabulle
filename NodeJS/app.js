@@ -180,6 +180,12 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.emit('draw:progress', uid, co_ordinates)
 
 	});
+	
+	socket.on('modification:end', function (uid, co_ordinates) {
+    
+		io.sockets.emit('modification:end', uid, co_ordinates)
+
+	});
   
 	socket.on('draw:end', function (uid, co_ordinates) {
     

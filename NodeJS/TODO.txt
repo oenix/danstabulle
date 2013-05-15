@@ -21,3 +21,14 @@ I) Editeur de texte :
 [ ] - Régler le problème d'écriture dans la base de données
 
 II) Dessin collaboratif :
+
+Gestion plusieurs instances éditeur
+Gestions plusieurs instances navigateur
+
+Aide à l’écriture [6h]
+- Formation [2h]
+- Choix de la forme [1h]
+- Implémentation [3h]
+
+Améliorations de l’intégration 2h
+Tests et correction de bugs mineurs 3h

@@ -1,4 +1,4 @@
-var tool1, tool2;
+var tool1, tool2, tool3;
 var path;
 var color;
 var size;
@@ -19,12 +19,13 @@ var send_paths_timer;
 var timer_is_active = false;
 var path_to_send = {};
 var path_to_send2 = {};
+var drawForMe = [];
 
-var texte = "";
+
+var rectangleForMe;
 
 function checked(id)
 {
-	checkbox = document.getElementById("smooth");
 	checkbox = document.getElementById("smooth");
 	if (checkbox.checked)
 	{
@@ -99,10 +100,11 @@ var uid = (function() {
 	function activateTool(tool)
 	{
 		if (tool == "tool1")
-		tool1.activate();
+			tool1.activate();
+		else if (tool == "tool2")
+			tool2.activate();
 		else
-		tool2.activate();
-
+			tool3.activate();
 	}
 
 
@@ -112,13 +114,15 @@ var uid = (function() {
 
 	window.onload = function() {
 		paper.setup('myCanvas');
-		tool1 = new Tool();
-		tool2 = new Tool();
-		function text(position, texte)
+		tool1 = new Tool(); // Pinceau
+		tool2 = new Tool(); // Select
+	    tool3 = new Tool(); // Draw for me
+		
+		function text(position, question)
 		{
 
-			var text = new PointText(position);
-			text.content = prompt("Texte de la bulle","");
+			var text = new PointText(position, question);
+			text.content = prompt(question,"");
 			if (text.content == "null")
 			{
 				text.content = "";
@@ -135,41 +139,83 @@ var uid = (function() {
 		}
 
 		var movePath = false;
+		
 		var bulleStyle = {
 			fillColor: new RgbColor(255, 255, 255),
 			strokeColor: "black",
 			strokeWidth: 1.5
 		};
-
-		tool2.onMouseDown = function(event) {
-			var hitResult = paper.project.hitTest(event.point);
-			if (!hitResult)
-				return;
-			selected = hitResult.item;
+		
+		tool3.onMouseDown = function(event) {
+				path = new paper.Path();
+				path.strokeColor = "red";
+				path.strokeWidth = 1;
+			 	path.strokeCap =  'round';
+				path.add(event.point);
+				view.draw();
+				
+		}
 			
-			if (event.modifiers.shift) {
-				if (hitResult.type == 'segment') {
-					hitResult.segment.remove();
+		tool3.onMouseDrag = function(event) {
+			//	rectangleForMe.size = rectangleForMe.size.add(event.delta.length);
+				path.add(event.point);
+				view.draw();
+		}
+		
+			tool3.onMouseUp = function(event) {
+				//	rectangleForMe.size = rectangleForMe.size.add(event.delta.length);
+				if (path.length > 100)
+				{
+					path.closed = true;
+					path.fillColor = "white";
+					var textDrawForMe = text(new Point(path.position.x, path.position.y), "Que souhaitez vous faire dessiner ?");
+					view.draw();
+					drawForMe.push(path);
+					drawForMe.push(textDrawForMe);
 				}
-				return;
-			}
-
-			if (hitResult) {
-				path = hitResult.item;
-				if (hitResult.type == 'segment') {
-					segment = hitResult.segment;
-				} //else if (hitResult.type == 'stroke') {
-					//var location = hitResult.location;
-					//      segment = path.insert(location.index + 1, event.point);
-					//    path.smooth();
-					//  }
+				else
+				{
+					path.remove();
 				}
-				movePath = hitResult.type == 'fill';
-				if (movePath)
-				project.activeLayer.addChild(hitResult.item);
 			}
+		
+			view.onFrame = function(event){
+				for (var i = 0; i < drawForMe.length; i+=2)
+				{
+					drawForMe[i].strokeColor.hue += 0.1;
+				}
+			}
+		
 
-			tool2.onMouseDrag = function(event) {
+				tool2.onMouseDown = function(event) {
+					var hitResult = paper.project.hitTest(event.point);
+					if (!hitResult)
+						return;
+					selected = hitResult.item;
+				
+					if (event.modifiers.shift) {
+						if (hitResult.type == 'segment') {
+							hitResult.segment.remove();
+						}
+						return;
+					}
+
+					if (hitResult) {
+						path = hitResult.item;
+						if (hitResult.type == 'segment') {
+							segment = hitResult.segment;
+						} //else if (hitResult.type == 'stroke') {
+						//var location = hitResult.location;
+							//      segment = path.insert(location.index + 1, event.point);
+						//    path.smooth();
+						//  }
+						}
+						movePath = hitResult.type == 'fill';
+						if (movePath)
+						project.activeLayer.addChild(hitResult.item);
+					}
+
+				tool2.onMouseDrag = function(event) {
 				if (segment) {
 					segment.point = event.point;
 					path.smooth();
@@ -181,7 +227,7 @@ var uid = (function() {
 				tool2.onMouseMove = function(event) {
 					project.activeLayer.selected = false;
 					if (event.item)
-					event.item.selected = true;
+						event.item.selected = true;
 				}
 
 				tool2.onMouseUp = function(event) {
@@ -191,7 +237,7 @@ var uid = (function() {
 						selected = null;
 						segment = null;
 						hitResult = null;
-
+					saveCanvas();
 				}
 				
 				tool1.onMouseDown = function(event) {
@@ -199,9 +245,23 @@ var uid = (function() {
 					size = getSelectValue('size');
 					opacity = getSelectValue('opacity')
 						
+					var hitResult = paper.project.hitTest(event.point);
+					if (hitResult)
+					{
+						var itemSelected = hitResult.item;
+						for (var i = 0; i < drawForMe.length; i++)
+						{
+							if (itemSelected == drawForMe[i])
+							{
+								drawForMe[i].remove();
+								drawForMe[i + 1].remove();
+							}
+						}	
+					}
 					path = new paper.Path();
 					path.strokeColor = color;
 					path.strokeWidth = size;
+				 	path.strokeCap =  'round';
 				
 					path.opacity = opacity / 100;
 					path.add(event.point);
@@ -228,8 +288,8 @@ var uid = (function() {
 						size : size,
 						opacity : opacity
 					};
-
-
+					
+			
 				}
 
 				tool1.onMouseDrag = function(event) {
@@ -270,7 +330,7 @@ var uid = (function() {
 						}
 						//Si C'est une bulle :
 						if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && path.length > 20) {
-							texteBulle = text(new Point(path.position.x, path.position.y));
+							texteBulle = text(new Point(path.position.x, path.position.y), "Texte de la bulle");
 							if (texteBulle != null)
 							{
 								path.style = bulleStyle;
@@ -292,11 +352,6 @@ var uid = (function() {
 
 
 						}
-					//	if (hasRaster){
-					//		path_to_send.hasRaster = true;
-					//		path_to_send.image = image.src;
-					//		hasRaster = false;
-					//		}
 
 						path_to_send.end = event.point;
 						pathList.push(path);
@@ -442,7 +497,7 @@ var uid = (function() {
 						{
 							project.activeLayer.addChild(pathListExtern[points.add + 1]);
 						}
-						if (points.update != -1)
+						if (points.update != null)
 						{
 							pathListExtern[points.update].position = points.updatePath;
 						}
