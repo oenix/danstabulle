@@ -76,6 +76,10 @@ class CandidateController extends Controller
     
     public function seeAction($id)
     {
+        if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedHttpException('You have to be logged in');
+        }
+        
         $bd = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee')->find($id);
         
         $role = array("admin" => ($bd->getCreator() == $this->getUser()),
@@ -95,6 +99,10 @@ class CandidateController extends Controller
     
     public function validateAction($id)
     {
+        if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedHttpException('You have to be logged in');
+        }
+        
         $candidature = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->find($id);
         $user = $candidature->getUser();
         $bd = $candidature->getBd();
@@ -125,6 +133,10 @@ class CandidateController extends Controller
     
     public function deleteAction($id)
     {
+        if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedHttpException('You have to be logged in');
+        }
+        
         $candidature = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->find($id);
         $bd = $candidature->getBd();
         
