@@ -19,6 +19,7 @@ var send_paths_timer;
 var timer_is_active = false;
 var path_to_send = {};
 var path_to_send2 = {};
+var drawForMe = [];
 
 
 var rectangleForMe;
@@ -117,11 +118,11 @@ var uid = (function() {
 		tool2 = new Tool(); // Select
 	    tool3 = new Tool(); // Draw for me
 		
-		function text(position, texte)
+		function text(position, question)
 		{
 
-			var text = new PointText(position);
-			text.content = prompt("Texte de la bulle","");
+			var text = new PointText(position, question);
+			text.content = prompt(question,"");
 			if (text.content == "null")
 			{
 				text.content = "";
@@ -145,25 +146,45 @@ var uid = (function() {
 			strokeWidth: 1.5
 		};
 		
-			tool3.onMouseDown = function(event) {
-				rectangleForMe = new paper.Path.Rectangle(event.point,1);
-				rectangleForMe.strokeColor = 'black';
-				rectangleForMe.fillColor = 'white';
-				var rectangle = new Rectangle(20,60);
-
-			//	alert(rectangleForMe.rectangle.size);
+		tool3.onMouseDown = function(event) {
+				path = new paper.Path();
+				path.strokeColor = "red";
+				path.strokeWidth = 1;
+			 	path.strokeCap =  'round';
+				path.add(event.point);
 				view.draw();
 				
-			}
+		}
 			
-			tool3.onMouseDrag = function(event) {
+		tool3.onMouseDrag = function(event) {
 			//	rectangleForMe.size = rectangleForMe.size.add(event.delta.length);
-				
+				path.add(event.point);
 				view.draw();
+		}
+		
+			tool3.onMouseUp = function(event) {
+				//	rectangleForMe.size = rectangleForMe.size.add(event.delta.length);
+				if (path.length > 100)
+				{
+					path.closed = true;
+					path.fillColor = "white";
+					var textDrawForMe = text(new Point(path.position.x, path.position.y), "Que souhaitez vous faire dessiner ?");
+					view.draw();
+					drawForMe.push(path);
+					drawForMe.push(textDrawForMe);
+				}
+				else
+				{
+					path.remove();
+				}
 			}
 		
-		
-		
+			view.onFrame = function(event){
+				for (var i = 0; i < drawForMe.length; i+=2)
+				{
+					drawForMe[i].strokeColor.hue += 0.1;
+				}
+			}
 		
 
 				tool2.onMouseDown = function(event) {
@@ -224,6 +245,19 @@ var uid = (function() {
 					size = getSelectValue('size');
 					opacity = getSelectValue('opacity')
 						
+					var hitResult = paper.project.hitTest(event.point);
+					if (hitResult)
+					{
+						var itemSelected = hitResult.item;
+						for (var i = 0; i < drawForMe.length; i++)
+						{
+							if (itemSelected == drawForMe[i])
+							{
+								drawForMe[i].remove();
+								drawForMe[i + 1].remove();
+							}
+						}	
+					}
 					path = new paper.Path();
 					path.strokeColor = color;
 					path.strokeWidth = size;
@@ -254,8 +288,8 @@ var uid = (function() {
 						size : size,
 						opacity : opacity
 					};
-
-
+					
+			
 				}
 
 				tool1.onMouseDrag = function(event) {
@@ -296,7 +330,7 @@ var uid = (function() {
 						}
 						//Si C'est une bulle :
 						if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && path.length > 20) {
-							texteBulle = text(new Point(path.position.x, path.position.y));
+							texteBulle = text(new Point(path.position.x, path.position.y), "Texte de la bulle");
 							if (texteBulle != null)
 							{
 								path.style = bulleStyle;
@@ -318,11 +352,6 @@ var uid = (function() {
 
 
 						}
-					//	if (hasRaster){
-					//		path_to_send.hasRaster = true;
-					//		path_to_send.image = image.src;
-					//		hasRaster = false;
-					//		}
 
 						path_to_send.end = event.point;
 						pathList.push(path);
