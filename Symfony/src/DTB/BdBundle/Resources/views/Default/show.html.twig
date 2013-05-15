@@ -46,10 +46,10 @@
             {% if bd.creator.id != app.user.id %}
         <li class="nav-header">Contribuer</li>
                 {% if not(role.scenarist) %}
-        <li><a href="{{path('dtb_bd_candidate_drawer', {'id': bd.id})}}">Rejoindre (Scénariste)</a></li>
+        <li><a href="{{path('dtb_bd_candidate_scenarist', {'id': bd.id})}}">Rejoindre (Scénariste)</a></li>
                 {% endif %}
                 {% if not(role.drawer) %}
-        <li><a href="{{path('dtb_bd_candidate_scenarist', {'id': bd.id})}}">Rejoindre (Dessinateur)</a></li>
+        <li><a href="{{path('dtb_bd_candidate_drawer', {'id': bd.id})}}">Rejoindre (Dessinateur)</a></li>
                 {% endif %}
             {% endif %}
         {% endif %}
