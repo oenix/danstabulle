@@ -153,25 +153,45 @@ var uid = (function() {
 			 	path.strokeCap =  'round';
 				path.add(event.point);
 				view.draw();
-				
+				path_to_send = {
+					start : event.point,
+					path : [],
+					texte : ""
+				};
 		}
 			
 		tool3.onMouseDrag = function(event) {
-			//	rectangleForMe.size = rectangleForMe.size.add(event.delta.length);
 				path.add(event.point);
 				view.draw();
+				path_to_send.path.push({
+					point : event.point
+				});
+				if ( !timer_is_active )
+				{
+					send_paths_timer = setInterval( function() {
+							socket.emit('drawForMe:progress', uid, JSON.stringify(path_to_send));
+							path_to_send.path = new Array();
+
+							}, rafraichissement);
+
+						}
+
+						timer_is_active = true;;
 		}
 		
 			tool3.onMouseUp = function(event) {
-				//	rectangleForMe.size = rectangleForMe.size.add(event.delta.length);
 				if (path.length > 100)
 				{
 					path.closed = true;
 					path.fillColor = "white";
+					path.smooth();
+					path_to_send.end = event.point;
 					var textDrawForMe = text(new Point(path.position.x, path.position.y), "Que souhaitez vous faire dessiner ?");
 					view.draw();
 					drawForMe.push(path);
 					drawForMe.push(textDrawForMe);
+					path_to_send.texte = textDrawForMe.content;
+					socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send));
 				}
 				else
 				{
@@ -200,16 +220,14 @@ var uid = (function() {
 						return;
 					}
 
-					if (hitResult) {
+					if (hitResult) 
+					{
 						path = hitResult.item;
-						if (hitResult.type == 'segment') {
+						if (hitResult.type == 'segment') 
+						{
 							segment = hitResult.segment;
-						} //else if (hitResult.type == 'stroke') {
-						//var location = hitResult.location;
-							//      segment = path.insert(location.index + 1, event.point);
-						//    path.smooth();
-						//  }
-						}
+						} 
+					}
 						movePath = hitResult.type == 'fill';
 						if (movePath)
 						project.activeLayer.addChild(hitResult.item);
@@ -225,9 +243,9 @@ var uid = (function() {
 				}
 
 				tool2.onMouseMove = function(event) {
-					project.activeLayer.selected = false;
+				/*	project.activeLayer.selected = false;
 					if (event.item)
-						event.item.selected = true;
+						event.item.selected = true;*/
 				}
 
 				tool2.onMouseUp = function(event) {
@@ -244,28 +262,7 @@ var uid = (function() {
 					color = getSelectValue('color');
 					size = getSelectValue('size');
 					opacity = getSelectValue('opacity')
-						
-					var hitResult = paper.project.hitTest(event.point);
-					if (hitResult)
-					{
-						var itemSelected = hitResult.item;
-						for (var i = 0; i < drawForMe.length; i++)
-						{
-							if (itemSelected == drawForMe[i])
-							{
-								drawForMe[i].remove();
-								drawForMe[i + 1].remove();
-							}
-						}	
-					}
-					path = new paper.Path();
-					path.strokeColor = color;
-					path.strokeWidth = size;
-				 	path.strokeCap =  'round';
-				
-					path.opacity = opacity / 100;
-					path.add(event.point);
-
+					
 					path_to_send = {
 						rgba : color,
 						start : event.point,
@@ -279,8 +276,33 @@ var uid = (function() {
 						smooth : false,
 						texte : null,
 						update : -1,
-						updatePath : null
+						updatePath : null,
+						drawForMe : -1
 					};
+						
+					var hitResult = paper.project.hitTest(event.point);
+					if (hitResult)
+					{
+						var itemSelected = hitResult.item;
+						for (var i = 0; i < drawForMe.length; i++)
+						{
+							if (itemSelected == drawForMe[i])
+							{
+								drawForMe[i].remove();
+								drawForMe[i + 1].remove();
+								path_to_send.drawForMe = i;
+							}
+						}
+						
+					}
+					path = new paper.Path();
+					path.strokeColor = color;
+					path.strokeWidth = size;
+				 	path.strokeCap =  'round';
+				
+					path.opacity = opacity / 100;
+					path.add(event.point);
+
 					path_to_send2 = {
 						start : event.point,
 						rgba : color,
@@ -329,7 +351,7 @@ var uid = (function() {
 							myCircle.strokeColor = 'white';
 						}
 						//Si C'est une bulle :
-						if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && path.length > 20) {
+						if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && path.length > 200) {
 							texteBulle = text(new Point(path.position.x, path.position.y), "Texte de la bulle");
 							if (texteBulle != null)
 							{
@@ -370,6 +392,7 @@ var uid = (function() {
 						clearInterval(send_paths_timer);
 						path_to_send.path = new Array();
 						path_to_send.hasRaster = false;
+						path_to_send.drawForMe = -1;
 						timer_is_active = false;
 						has_raster = false;
 						saveCanvas();
@@ -395,6 +418,22 @@ var uid = (function() {
 						}
 
 					});
+					
+					socket.on('drawForMe:progress', function( artist, data ) {
+								if ( artist !== uid && data ) {
+									draw_for_me_real_time( JSON.parse( data ), artist );
+
+								}
+
+							});
+					socket.on('drawForMe:end', function( artist, data ) {
+
+							if ( artist !== uid && data ) {
+								draw_for_me_end( JSON.parse( data ), artist );
+
+							}
+
+						});
 
 
 
@@ -437,7 +476,57 @@ var uid = (function() {
 
 
 					var external_paths = {};
+					
+					//Applique les effets d'un path extérieur
+					var draw_for_me_real_time = function (points, artist ) {
+						
+						var path = external_paths[artist];
 
+						if ( !path ) {
+
+							external_paths[artist] = new Path();
+							path = external_paths[artist];
+							var start_point = new Point(points.start.x, points.start.y);
+							path.strokeColor = "red";
+							path.add(start_point);
+						}
+
+						var paths = points.path;
+						var length = paths.length;
+
+						for (var i = 0; i < length; i++ ) {
+							path.add(paths[i].point);
+						}
+						
+						view.draw();
+					}
+					
+
+					var draw_for_me_end= function (points, artist ) {
+							var path = external_paths[artist];
+							
+							if (path) 
+							{
+
+							//path.add(points.end);
+							path.closed = true;
+							path.fillColor = "white";
+							path.end = points.end;
+							
+							var texts = new PointText(path.position);
+							texts.content = points.texte
+							texts.fillColor = 'black';
+							texts.font = "Script";
+							texts.fontSize = 15;
+							texts.point.x = texts.point.x - texts.point.length / 12;
+							texts.point.y = texts.point.y - texts.point.length /50;
+							view.draw();
+							
+							external_paths[artist] = false;
+							drawForMe.push(path);
+							drawForMe.push(texts);
+						}
+						}
 					//Applique les effets d'un path extérieur
 					var end_external_path = function( points, artist ) {
 
@@ -453,9 +542,11 @@ var uid = (function() {
 							pathListExtern.push(raster);
 							view.draw();
 						}
-						if (path) {
+						if (path) 
+						{
 							var text;
-							if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) {
+							if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30) 
+							{
 								if (points.texte != null)
 								{
 									path.style = bulleStyle;
@@ -497,6 +588,11 @@ var uid = (function() {
 						{
 							project.activeLayer.addChild(pathListExtern[points.add + 1]);
 						}
+						if (points.drawForMe != -1)
+						{
+							drawForMe[points.drawForMe].remove();
+							drawForMe[points.drawForMe + 1].remove();
+						}
 						if (points.update != null)
 						{
 							pathListExtern[points.update].position = points.updatePath;
@@ -529,6 +625,8 @@ var uid = (function() {
 						}
 						view.draw();
 					};
+
+
 
 					function saveCanvas()
 					{

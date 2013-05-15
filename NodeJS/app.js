@@ -192,5 +192,17 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.emit('draw:end', uid, co_ordinates);
 
 	});
+	
+	socket.on('drawForMe:progress', function (uid, co_ordinates) {
+    
+		io.sockets.emit('drawForMe:progress', uid, co_ordinates);
+
+	});
+	
+	socket.on('drawForMe:end', function (uid, co_ordinates) {
+    
+		io.sockets.emit('drawForMe:end', uid, co_ordinates);
+
+	});
 
 });
