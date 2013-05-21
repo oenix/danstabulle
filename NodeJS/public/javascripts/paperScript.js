@@ -73,8 +73,9 @@ function showLayer(nbLayer)
 function newLayer()
 {
 	layer.push(new Layer());
-	printLayers();
 	selectedLayer.push(true);
+	activeLayer = selectedLayer.length - 1;
+	printLayers();
 }
 
 function checked(id)
