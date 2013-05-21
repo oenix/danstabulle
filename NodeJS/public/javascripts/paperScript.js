@@ -24,9 +24,46 @@ var drawForMe = [];
 
 var rectangleForMe;
 
+var layer = [];
+var activeLayer = 0;
+
+function printLayers()
+{
+	var htmlLayer = "";
+	for (var i = 0; i < layer.length; i++) {
+		 htmlLayer = htmlLayer + "<li>  <input type='checkbox' onclick='showLayer("+ i +")' checked='checked' id='visible" + i + "'> <a href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
+	}
+	document.getElementById("calques").innerHTML= htmlLayer;	
+
+}
+
+function activateLayer(nbLayer)
+{
+	layer[nbLayer].activate();
+	activeLayer = nbLayer;
+}
+
+function showLayer(nbLayer)
+{
+	if (checked("visible" + nbLayer))
+	{
+		layer[nbLayer].visible = true;
+	}
+	else
+	{
+		layer[nbLayer].visible = false;
+	}
+}
+
+function newLayer()
+{
+	layer.push(new Layer());
+	printLayers();
+}
+
 function checked(id)
 {
-	checkbox = document.getElementById("smooth");
+	checkbox = document.getElementById(id);
 	if (checkbox.checked)
 	{
 		return true;
@@ -114,6 +151,8 @@ var uid = (function() {
 
 	window.onload = function() {
 		paper.setup('myCanvas');
+		
+		layer[activeLayer] = project.activeLayer;
 		tool1 = new Tool(); // Pinceau
 		tool2 = new Tool(); // Select
 	    tool3 = new Tool(); // Draw for me
@@ -147,6 +186,8 @@ var uid = (function() {
 		};
 		
 		tool3.onMouseDown = function(event) {
+			
+			layer[activeLayer].visible = !layer[activeLayer].visible;
 				path = new paper.Path();
 				path.strokeColor = "red";
 				path.strokeWidth = 1;
@@ -262,7 +303,7 @@ var uid = (function() {
 					color = getSelectValue('color');
 					size = getSelectValue('size');
 					opacity = getSelectValue('opacity')
-					
+					printLayers();
 					path_to_send = {
 						rgba : color,
 						start : event.point,
