@@ -25,19 +25,23 @@ var drawForMe = [];
 var rectangleForMe;
 
 var layer = [];
+var selectedLayer = [];
 var activeLayer = 0;
 
 function printLayers()
 {
 	var htmlLayer = "";
 	for (var i = 0; i < layer.length; i++) {
+		var checked = "";
+		if (selectedLayer[i])
+			checked = "checked='checked'";
 		if (i == activeLayer)
 		{
-			htmlLayer = htmlLayer + "<li>  <input type='checkbox' onclick='showLayer("+ i +")' checked='checked' id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
+			htmlLayer = htmlLayer + "<li>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
 		}
 		else
 		{
-		 	htmlLayer = htmlLayer + "<li>  <input type='checkbox' onclick='showLayer("+ i +")' checked='checked' id='visible" + i + "'> <a href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a> </li>";
+		 	htmlLayer = htmlLayer + "<li>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a> </li>";
 		}
 	}
 	document.getElementById("calques").innerHTML= htmlLayer;	
@@ -53,12 +57,15 @@ function activateLayer(nbLayer)
 
 function showLayer(nbLayer)
 {
+	
 	if (checked("visible" + nbLayer))
 	{
+		selectedLayer[nbLayer] = true;
 		layer[nbLayer].visible = true;
 	}
 	else
 	{
+		selectedLayer[nbLayer] = false;
 		layer[nbLayer].visible = false;
 	}
 }
@@ -67,6 +74,7 @@ function newLayer()
 {
 	layer.push(new Layer());
 	printLayers();
+	selectedLayer.push(true);
 }
 
 function checked(id)
@@ -161,6 +169,7 @@ var uid = (function() {
 		paper.setup('myCanvas');
 		
 		layer[activeLayer] = project.activeLayer;
+		selectedLayer[activeLayer] = true;
 		tool1 = new Tool(); // Pinceau
 		tool2 = new Tool(); // Select
 	    tool3 = new Tool(); // Draw for me
