@@ -31,7 +31,14 @@ function printLayers()
 {
 	var htmlLayer = "";
 	for (var i = 0; i < layer.length; i++) {
-		 htmlLayer = htmlLayer + "<li>  <input type='checkbox' onclick='showLayer("+ i +")' checked='checked' id='visible" + i + "'> <a href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
+		if (i == activeLayer)
+		{
+			htmlLayer = htmlLayer + "<li>  <input type='checkbox' onclick='showLayer("+ i +")' checked='checked' id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
+		}
+		else
+		{
+		 	htmlLayer = htmlLayer + "<li>  <input type='checkbox' onclick='showLayer("+ i +")' checked='checked' id='visible" + i + "'> <a href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a> </li>";
+		}
 	}
 	document.getElementById("calques").innerHTML= htmlLayer;	
 
@@ -41,6 +48,7 @@ function activateLayer(nbLayer)
 {
 	layer[nbLayer].activate();
 	activeLayer = nbLayer;
+	printLayers();
 }
 
 function showLayer(nbLayer)
