@@ -24,9 +24,64 @@ var drawForMe = [];
 
 var rectangleForMe;
 
+var layer = [];
+var selectedLayer = [];
+var activeLayer = 0;	
+
+
+function printLayers()
+{
+	var htmlLayer = "";
+	for (var i = 0; i < layer.length; i++) {
+		var checked = "";
+		if (selectedLayer[i])
+			checked = "checked='checked'";
+		if (i == activeLayer)
+		{
+			htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
+		}
+		else
+		{
+		 	htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a> </li>";
+		}
+	}
+	document.getElementById("calques").innerHTML= htmlLayer;	
+
+}
+
+function activateLayer(nbLayer)
+{
+	layer[nbLayer].activate();
+	activeLayer = nbLayer;
+	printLayers();
+}
+
+function showLayer(nbLayer)
+{
+	
+	if (checked("visible" + nbLayer))
+	{
+		selectedLayer[nbLayer] = true;
+		layer[nbLayer].visible = true;
+	}
+	else
+	{
+		selectedLayer[nbLayer] = false;
+		layer[nbLayer].visible = false;
+	}
+}
+
+function newLayer()
+{
+	layer.push(new Layer());
+	selectedLayer.push(true);
+	activeLayer = selectedLayer.length - 1;
+	printLayers();
+}
+
 function checked(id)
 {
-	checkbox = document.getElementById("smooth");
+	checkbox = document.getElementById(id);
 	if (checkbox.checked)
 	{
 		return true;
@@ -114,6 +169,8 @@ var uid = (function() {
 
 	window.onload = function() {
 		paper.setup('myCanvas');
+		layer[activeLayer] = project.activeLayer;
+		selectedLayer[activeLayer] = true;
 		tool1 = new Tool(); // Pinceau
 		tool2 = new Tool(); // Select
 	    tool3 = new Tool(); // Draw for me
@@ -147,6 +204,8 @@ var uid = (function() {
 		};
 		
 		tool3.onMouseDown = function(event) {
+			
+			layer[activeLayer].visible = !layer[activeLayer].visible;
 				path = new paper.Path();
 				path.strokeColor = "red";
 				path.strokeWidth = 1;
@@ -262,7 +321,7 @@ var uid = (function() {
 					color = getSelectValue('color');
 					size = getSelectValue('size');
 					opacity = getSelectValue('opacity')
-					
+					printLayers();
 					path_to_send = {
 						rgba : color,
 						start : event.point,
@@ -726,7 +785,6 @@ var uid = (function() {
 								currentElement++;
 								path_to_send.image = image.src;
 								path_to_send.hasRaster = true;
-							//	socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
 								path_to_send.hasRaster = false;
 								view.draw();
 							};
@@ -755,3 +813,5 @@ var uid = (function() {
 
 				}
 				//IMAGE DROP
+				
+			

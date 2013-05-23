@@ -24,7 +24,7 @@ $(document).ready(function() {
 
 	var socket = io.connect();
 
-	var pseudo = "Default" + Math.floor(Math.random() * 101);//prompt("/!\\ DEV MODE /!\\ - Please select a pseudo");
+	var pseudo = "oenix" + Math.floor(Math.random() * 101);//prompt("/!\\ DEV MODE /!\\ - Please select a pseudo");
 	
 	if (pseudo == null || pseudo == "") {
 		pseudo = "Default";

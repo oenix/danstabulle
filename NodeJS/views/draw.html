@@ -8,17 +8,20 @@
 	<link href="/stylesheets/style.css" rel="stylesheet" media="screen">
 	
 <script type="text/javascript" src="javascripts/jquery.js"></script>
+
+
 	<script type='text/javascript' src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/javascripts/paper.js"></script>
 	<script type='text/javascript' src="/javascripts/paperScript.js"></script>
 	<script type="text/javascript" src="javascripts/zepto.js"></script>
+<script src="javascripts/drawScripts.js"></script>
     </head>
     <body>
       <div class="container ombre blanc">
 
         <div class="masthead">
         <div style="text-align: center; margin-bottom: 10px">
-          <img src="img/logoPlicMini.png">
+          <img id="logo"  src="img/logoPlicMini.png">
         </div>
           <div class="navbar">
             <div class="navbar-inner">
@@ -75,7 +78,7 @@
   <p> Dessiner</p>
   <p><a id="save" href="#"> Sauvegarder</a></p>
   
-	<a href="javascript:activateTool('tool1');">Pinceau</a> /
+	<a href="javascript:activateTool('tool1');" id="pinceau">Pinceau</a> /
     <a href="javascript:activateTool('tool2');">Select</a> /
 	<a href="javascript:activateTool('tool3');">Draw For Me</a>
   <select id='color'>
@@ -103,6 +106,8 @@
   <a href="javascript:redo()">Redo</a>
 <input type="checkbox" id="smooth"> Lisser
 <a href="javascript:autocomplete()">Autocompleter</a>
+
+<a href="javascript:newLayer()" id="newLayer">Nouveau Calque</a>
   <div id="holder">
   
     <canvas id="myCanvas" width="920" height="640"></canvas>
@@ -115,6 +120,15 @@
   <p id="progress"></p>
   
         </section>
+		<section class="calques" id="container ombre " class="span8">
+			<h2>Calques</h2>
+			<ul id="calques" class="dragable">
+				<li draggable='true'>  <input type='checkbox' onclick='showLayer(0)' id='visible0'> <a class='selectedLayer' href='javascript:activateLayer(0);'>Calque 0</a></li>
+					<li draggable='true'>  <input type='checkbox' onclick='showLayer(1)' id='visible1'> <a class='selectedLayer' href='javascript:activateLayer(1);'>Calque 1</a></li>
+			
+			</ul>
+			<div id="log"></div>
+			</section>
 		</div>
 		
       <div class="container ombre footer">
@@ -129,7 +143,6 @@
 	
       <script src="js/bootstrap.min.js"></script>
 	  <script src="js/danstabulle.js"></script>
-<script type="text/javascript" src="javascripts/drawScripts.js"></script>
 
     </body>
   </html>
