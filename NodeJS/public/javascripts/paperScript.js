@@ -26,7 +26,8 @@ var rectangleForMe;
 
 var layer = [];
 var selectedLayer = [];
-var activeLayer = 0;
+var activeLayer = 0;	
+
 
 function printLayers()
 {
@@ -37,11 +38,11 @@ function printLayers()
 			checked = "checked='checked'";
 		if (i == activeLayer)
 		{
-			htmlLayer = htmlLayer + "<li>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
+			htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
 		}
 		else
 		{
-		 	htmlLayer = htmlLayer + "<li>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a> </li>";
+		 	htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a> </li>";
 		}
 	}
 	document.getElementById("calques").innerHTML= htmlLayer;	
@@ -168,7 +169,6 @@ var uid = (function() {
 
 	window.onload = function() {
 		paper.setup('myCanvas');
-		
 		layer[activeLayer] = project.activeLayer;
 		selectedLayer[activeLayer] = true;
 		tool1 = new Tool(); // Pinceau
@@ -785,7 +785,6 @@ var uid = (function() {
 								currentElement++;
 								path_to_send.image = image.src;
 								path_to_send.hasRaster = true;
-							//	socket.emit('draw:end', uid, JSON.stringify(path_to_send) );
 								path_to_send.hasRaster = false;
 								view.draw();
 							};
@@ -814,3 +813,5 @@ var uid = (function() {
 
 				}
 				//IMAGE DROP
+				
+			

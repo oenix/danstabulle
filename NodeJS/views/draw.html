@@ -14,13 +14,79 @@
 	<script type="text/javascript" src="/javascripts/paper.js"></script>
 	<script type='text/javascript' src="/javascripts/paperScript.js"></script>
 	<script type="text/javascript" src="javascripts/zepto.js"></script>
+	<script>
+	$(function() {
+
+	  function createDataTransfers()
+	  {
+		$.event.props.push('dataTransfer');
+		dragLayers();
+	  }
+
+	  var dragLayers = function() {
+		 var i, $this, $log = $('#log');
+
+		    $('#calques li').on({
+		        // on commence le drag
+		        dragstart: function(e) {
+		            $this = $(this);
+		            i = $(this).index();
+		            $(this).css('opacity', '1');
+
+		            // on garde le texte en mémoire (A, B, C ou D)
+		            e.dataTransfer.setData('text/html', $(this).html());
+		        },
+		        // on passe sur un élément draggable
+		        dragenter: function(e) {
+		            // on augmente la taille pour montrer le draggable
+	
+		            e.preventDefault();
+		        },
+		        // on quitte un élément draggable
+		        dragleave: function() {
+		            // on remet la taille par défaut
+		       
+		        },
+		        // déclenché tant qu on a pas lâché l élément
+		        dragover: function(e) {
+		            e.preventDefault();
+		
+		        },
+		        // on lâche l élément
+		        drop: function(e) {
+		            // si l élément sur lequel on drop n'est pas l'élément de départ
+		            if (i !== $(this).index()) {
+		                // on récupère le texte initial
+		                var data = e.dataTransfer.getData('text/html');
+
+		 
+
+		                // on met le nouveau texte à la place de l ancien et inversement
+		              	$this.html($(this).html());
+						$(this).html(data);
+		            }
+
+		        },
+		        // fin du drag (même sans drop)
+		        dragend: function() {
+		        },
+
+		    });
+	  }
+
+
+	  $("#newLayer").hover(createDataTransfers);
+
+	});
+	</script>
+	
     </head>
     <body>
       <div class="container ombre blanc">
 
         <div class="masthead">
         <div style="text-align: center; margin-bottom: 10px">
-          <img src="img/logoPlicMini.png">
+          <img id="logo"  src="img/logoPlicMini.png">
         </div>
           <div class="navbar">
             <div class="navbar-inner">
@@ -77,7 +143,7 @@
   <p> Dessiner</p>
   <p><a id="save" href="#"> Sauvegarder</a></p>
   
-	<a href="javascript:activateTool('tool1');">Pinceau</a> /
+	<a href="javascript:activateTool('tool1');" id="pinceau">Pinceau</a> /
     <a href="javascript:activateTool('tool2');">Select</a> /
 	<a href="javascript:activateTool('tool3');">Draw For Me</a>
   <select id='color'>
@@ -105,7 +171,8 @@
   <a href="javascript:redo()">Redo</a>
 <input type="checkbox" id="smooth"> Lisser
 <a href="javascript:autocomplete()">Autocompleter</a>
-<a href="javascript:newLayer()">Nouveau Calque</a>
+
+<a href="javascript:newLayer()" id="newLayer">Nouveau Calque</a>
   <div id="holder">
   
     <canvas id="myCanvas" width="920" height="640"></canvas>
@@ -120,8 +187,12 @@
         </section>
 		<section class="calques" id="container ombre " class="span8">
 			<h2>Calques</h2>
-			<ul id="calques">
+			<ul id="calques" class="dragable">
+				<li draggable='true'>  <input type='checkbox' onclick='showLayer(0)' id='visible0'> <a class='selectedLayer' href='javascript:activateLayer(0);'>Calque 0</a></li>
+					<li draggable='true'>  <input type='checkbox' onclick='showLayer(1)' id='visible1'> <a class='selectedLayer' href='javascript:activateLayer(1);'>Calque 1</a></li>
+			
 			</ul>
+			<div id="log"></div>
 			</section>
 		</div>
 		
