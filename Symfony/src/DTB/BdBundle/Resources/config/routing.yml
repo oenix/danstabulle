@@ -17,6 +17,10 @@ dtb_bd_update:
 dtb_bd_show:
     pattern:  /showBD/{id}
     defaults: { _controller: DTBBdBundle:Default:show }
+    
+dtb_bd_show_planche:
+    pattern:  /showPlanche/{id}
+    defaults: { _controller: DTBBdBundle:Default:showPlanche }
 
 dtb_bd_add_planche:
     pattern:  /addPlanche/{id}

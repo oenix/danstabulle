@@ -1,0 +1,74 @@
+{% extends '::layout.html.twig' %}
+
+{% block stylesheets %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>
+<style>
+.planche { width: 600px; height: 600px; overflow: hidden; max-width: 600px; max-height: 600px; float: left; }
+.demo{width:150px;height:150px; position: relative; border: 5px solid #FFFFFF; float: left; margin: 0px;}
+.demo img {width: 100%; height: 100%;}
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>Page {{planche.page}} <small> "<a href="{{path('dtb_bd_show', {'id': bd.id})}}">{{bd.title}}</a>"</small></h2>
+<div class="span8">
+    <div class="planche img-polaroid">
+        <div class="demo" imgID="1"><img src="http://interfacelift.com/wallpaper/D47cd523/03270_anemonepoolreflections_1024x640.jpg" /></div>
+        <div class="demo" imgID="2"><img src="http://interfacelift.com/wallpaper/D47cd523/03270_anemonepoolreflections_1024x640.jpg" /></div>
+        <div class="demo" imgID="3"><img src="http://interfacelift.com/wallpaper/D47cd523/03270_anemonepoolreflections_1024x640.jpg" /></div>
+        <div class="demo" imgID="4"><img src="http://interfacelift.com/wallpaper/D47cd523/03270_anemonepoolreflections_1024x640.jpg" /></div>
+        <div class="demo" imgID="5"><img src="http://interfacelift.com/wallpaper/D47cd523/03270_anemonepoolreflections_1024x640.jpg" /></div>
+        <div class="demo" imgID="6"><img src="http://interfacelift.com/wallpaper/D47cd523/03270_anemonepoolreflections_1024x640.jpg" /></div>
+    </div>
+</div>
+<div class="span5" id="Status">
+    <input type="text" id="valuePlanche" placeholder="Entrez un numéro de page (/{{nbPlanche}})" style="margin-bottom: 0px;"/>
+    <input type="submit" id="goToPlanche" class="btn btn-success" value="Aller à la page" />
+    <br/><br/>
+    <a href="#" class="btn btn-block btn-info disabled">Ajouter une image</a>
+    <br/>
+</div>
+</body>
+<script>
+$(function(){
+	$('.demo')
+	.draggable({
+		grid: [ 10,10 ],
+		containment : '.planche',
+		stop: function(event) {
+			var offset = $(this).offset();
+			var id = $(this).attr("imgID");
+                        var xPos = offset.left - $(".planche").offset().left;
+                        var yPos = offset.top - $(".planche").offset().top;
+			$("#Status").append("Drag " + id + " : ");
+                        $('#Status').append('x: ' + xPos);
+                        $('#Status').append('; y: ' + yPos);
+			$("#Status").append("<br/>");
+			}
+		})
+	.resizable({
+		grid: 10,
+		handles: "all",
+		stop: function(event) {
+			var width = $(event.target).width();
+			var height = $(event.target).height();
+			var id = $(this).attr("imgID");
+			$("#Status").append("Resize " + id + " : "); 
+			$('#Status').append('w: ' + width);
+                        $('#Status').append('; h: ' + height);
+			$("#Status").append("<br/>"); 
+			}
+		})
+        .click(function() {alert("Edition de l'image : " + $(this).attr("imgID"))});
+                
+     $("#goToPlanche").click(function () {
+         var value = $("#valuePlanche").val();
+         var url = "{{path('dtb_bd_show_planche', {'id': "text"})}}";
+         url = url.replace("text", value);
+         alert(url);
+         window.location = url;
+    });      
+});
+</script>
+{% endblock %}

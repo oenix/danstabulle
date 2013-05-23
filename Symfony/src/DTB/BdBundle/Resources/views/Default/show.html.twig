@@ -19,10 +19,13 @@
         {% endif %}
         </h2>
         <hr>
-
-    {% for planches in bd.planches %}
-        <img src="{{asset('img/emptyPage.png')}}" width="135px" class="img-polaroid" />
-    {% endfor %}
+        {% if role.admin or role.drawer%}
+            <a href="{{path('dtb_bd_show_planche', {'id': 1})}}">Naviguer entre les planches</a>
+        {% else %}
+            {% for planches in bd.planches %}
+                <img src="{{asset('img/emptyPage.png')}}" width="135px" class="img-polaroid" />
+            {% endfor %}
+        {% endif %}
         <p><br></p>
     </div>
 </div>
