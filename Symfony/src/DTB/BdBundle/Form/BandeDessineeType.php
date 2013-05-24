@@ -15,8 +15,8 @@ class BandeDessineeType extends AbstractType
             ->add('description')
             ->add('category')
             ->add('tags')
-            ->add('needDrawers')
-            ->add('needScenarists')
+            ->add('needDrawers', 'checkbox', array('attr' => array('class' => 'ios-switch'), 'label' => 'Votre bande dessinée a t-elle besoin de Dessinateurs?'))
+            ->add('needScenarists', 'checkbox', array('attr' => array('class' => 'ios-switch'), 'label' => 'Votre bande dessinée a t-elle besoin de Scénaristes?'))
         ;
     }
 

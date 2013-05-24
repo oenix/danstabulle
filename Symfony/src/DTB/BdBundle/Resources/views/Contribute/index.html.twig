@@ -8,7 +8,7 @@
 <hr>
 <div class="span7">
     <h2>Bandes Dessinées créées</h2>
-    <table class="table table-bordered table-striped" style="width: 90%;">
+    <table class="table table-striped" style="width: 90%;">
     {% for bd in bds %}
         <tr><td>
             <a href="{{path('dtb_bd_show', {'id': bd.id})}}">
@@ -21,7 +21,7 @@
 <div class="span6">
     <h2>Bandes Dessinées rejointes</h2>
     <h3>Dessinateur</h3>
-    <table class="table table-bordered table-striped" style="width: 90%;">
+    <table class="table table-striped" style="width: 90%;">
     {% for bd in cd %}
         <tr><td>
             <a href="{{path('dtb_bd_show', {'id': bd.id})}}">
@@ -31,7 +31,7 @@
     {% endfor %}
     </table>
     <h3>Scénariste</h3>
-    <table class="table table-bordered table-striped" style="width: 90%;">
+    <table class="table table-striped" style="width: 90%;">
     {% for bd in cs %}
         <tr><td>
             <a href="{{path('dtb_bd_show', {'id': bd.id})}}">

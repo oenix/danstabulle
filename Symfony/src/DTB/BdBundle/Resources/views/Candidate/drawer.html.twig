@@ -11,9 +11,12 @@
 <div style="text-align: center">
     <form method="post" action="{{path('dtb_bd_candidate_drawer', {'id': bd.id})}}">
         <legend>Rejoindre "{{bd.title}}" en tant que <b>Dessinateur</b></legend>
+        <div class="alert alert-info">
+            <strong>Informations!</strong> Votre lettre de motivation permettra à l'administrateur de la bande dessinée de sélectionner les meilleurs candidats. Plus celle-ci sera ingénieuse, bien construite et représentative de votre talent, plus vous aurez de chance d'être partenaire de la bande dessinée.
+        </div>
         {{form_widget(form)}}
         <div class="form-actions">
-            <input type="submit" class="btn btn-primary" />
+            <input type="submit" class="btn btn-primary" value="Valider votre candidature" />
         </div>
     </form>
 </div>
