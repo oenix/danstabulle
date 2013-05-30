@@ -38,7 +38,7 @@ function printLayers()
 			checked = "checked='checked'";
 		if (i == activeLayer)
 		{
-			htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
+			htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer("+ i +")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
 		}
 		else
 		{
@@ -77,6 +77,13 @@ function newLayer()
 	selectedLayer.push(true);
 	activeLayer = selectedLayer.length - 1;
 	printLayers();
+}
+
+function sendNewLayer()
+{
+	path_to_send.newLayer = 1;
+	socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+	path_to_send.newLayer = 0;
 }
 
 function checked(id)
@@ -171,9 +178,17 @@ var uid = (function() {
 		paper.setup('myCanvas');
 		layer[activeLayer] = project.activeLayer;
 		selectedLayer[activeLayer] = true;
+		printLayers();
 		tool1 = new Tool(); // Pinceau
 		tool2 = new Tool(); // Select
 	    tool3 = new Tool(); // Draw for me
+		
+		
+		path_to_send = {
+			activeLayer : 0,
+			newLayer : 0
+		};
+		
 		
 		function text(position, question)
 		{
@@ -205,7 +220,6 @@ var uid = (function() {
 		
 		tool3.onMouseDown = function(event) {
 			
-			layer[activeLayer].visible = !layer[activeLayer].visible;
 				path = new paper.Path();
 				path.strokeColor = "red";
 				path.strokeWidth = 1;
@@ -233,7 +247,7 @@ var uid = (function() {
 
 							}, rafraichissement);
 
-						}
+				}
 
 						timer_is_active = true;;
 		}
@@ -251,10 +265,12 @@ var uid = (function() {
 					drawForMe.push(textDrawForMe);
 					path_to_send.texte = textDrawForMe.content;
 					socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send));
+					
 				}
 				else
 				{
 					path.remove();
+					socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send));
 				}
 			}
 		
@@ -321,24 +337,24 @@ var uid = (function() {
 					color = getSelectValue('color');
 					size = getSelectValue('size');
 					opacity = getSelectValue('opacity')
-					printLayers();
-					path_to_send = {
-						rgba : color,
-						start : event.point,
-						path : [],
-						image : 0,
-						size : size,
-						hasRaster : false,
-						opacity : opacity,
-						remove : -1,
-						add : -2,
-						smooth : false,
-						texte : null,
-						update : -1,
-						updatePath : null,
-						drawForMe : -1
-					};
-						
+				
+						path_to_send = {
+							rgba : color,
+							start : event.point,
+							path : [],
+							image : 0,
+							size : size,
+							hasRaster : false,
+							opacity : opacity,
+							remove : -1,
+							add : -2,
+							smooth : false,
+							texte : null,
+							update : -1,
+							updatePath : null,
+							drawForMe : -1,
+							activeLayer : activeLayer
+						};
 					var hitResult = paper.project.hitTest(event.point);
 					if (hitResult)
 					{
@@ -367,7 +383,8 @@ var uid = (function() {
 						rgba : color,
 						path : [],
 						size : size,
-						opacity : opacity
+						opacity : opacity,
+						activeLayer : activeLayer
 					};
 					
 			
@@ -542,7 +559,6 @@ var uid = (function() {
 						var path = external_paths[artist];
 
 						if ( !path ) {
-
 							external_paths[artist] = new Path();
 							path = external_paths[artist];
 							var start_point = new Point(points.start.x, points.start.y);
@@ -566,25 +582,31 @@ var uid = (function() {
 							
 							if (path) 
 							{
-
-							//path.add(points.end);
-							path.closed = true;
-							path.fillColor = "white";
-							path.end = points.end;
+								if (path.length > 100)
+								{	
+									//path.add(points.end);
+									path.closed = true;
+									path.fillColor = "white";
+									path.end = points.end;
 							
-							var texts = new PointText(path.position);
-							texts.content = points.texte
-							texts.fillColor = 'black';
-							texts.font = "Script";
-							texts.fontSize = 15;
-							texts.point.x = texts.point.x - texts.point.length / 12;
-							texts.point.y = texts.point.y - texts.point.length /50;
-							view.draw();
+									var texts = new PointText(path.position);
+									texts.content = points.texte
+									texts.fillColor = 'black';
+									texts.font = "Script";
+									texts.fontSize = 15;
+									texts.point.x = texts.point.x - texts.point.length / 12;
+									texts.point.y = texts.point.y - texts.point.length /50;
+									view.draw();
 							
-							external_paths[artist] = false;
-							drawForMe.push(path);
-							drawForMe.push(texts);
-						}
+									external_paths[artist] = false;
+									drawForMe.push(path);
+									drawForMe.push(texts);
+								}
+								else
+								{
+									path.remove();
+								}
+							}
 						}
 					//Applique les effets d'un path extérieur
 					var end_external_path = function( points, artist ) {
@@ -647,14 +669,21 @@ var uid = (function() {
 						{
 							project.activeLayer.addChild(pathListExtern[points.add + 1]);
 						}
-						if (points.drawForMe != -1)
+						if (points.drawForMe != -1 && points.drawForMe != null)
 						{
 							drawForMe[points.drawForMe].remove();
 							drawForMe[points.drawForMe + 1].remove();
 						}
-						if (points.update != null)
+						if (points.update != -1 && points.update != null)
 						{
 							pathListExtern[points.update].position = points.updatePath;
+						}
+						if (points.newLayer == true)
+						{
+						    var llayer = activeLayer;
+							newLayer();
+							activeLayer = llayer;
+							printLayers();
 						}
 						view.draw();
 					};
@@ -666,7 +695,7 @@ var uid = (function() {
 						var path = external_paths[artist];
 
 						if ( !path ) {
-
+							layer[points.activeLayer].activate();
 							external_paths[artist] = new Path();
 							path = external_paths[artist];
 							var start_point = new Point(points.start.x, points.start.y);
@@ -674,6 +703,7 @@ var uid = (function() {
 							path.strokeColor = points.rgba;
 							path.strokeWidth = points.size;
 							path.add(start_point);
+							layer[activeLayer].activate();
 						}
 
 						var paths = points.path;

@@ -106,8 +106,14 @@
   <a href="javascript:redo()">Redo</a>
 <input type="checkbox" id="smooth"> Lisser
 <a href="javascript:autocomplete()">Autocompleter</a>
-
-<a href="javascript:newLayer()" id="newLayer">Nouveau Calque</a>
+<script>
+function addLayer()
+{
+     newLayer();
+     sendNewLayer();
+}
+</script>
+<a href="javascript:addLayer()" id="newLayer">Nouveau Calque</a>
   <div id="holder">
   
     <canvas id="myCanvas" width="920" height="640"></canvas>
@@ -123,9 +129,7 @@
 		<section class="calques" id="container ombre " class="span8">
 			<h2>Calques</h2>
 			<ul id="calques" class="dragable">
-				<li draggable='true'>  <input type='checkbox' onclick='showLayer(0)' id='visible0'> <a class='selectedLayer' href='javascript:activateLayer(0);'>Calque 0</a></li>
-					<li draggable='true'>  <input type='checkbox' onclick='showLayer(1)' id='visible1'> <a class='selectedLayer' href='javascript:activateLayer(1);'>Calque 1</a></li>
-			
+
 			</ul>
 			<div id="log"></div>
 			</section>
