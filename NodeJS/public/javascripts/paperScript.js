@@ -81,9 +81,9 @@ function newLayer()
 
 function sendNewLayer()
 {
-	path_to_send.newLayer = 1;
+	path_to_send.newLayer = true;
 	socket.emit('draw:end', uid, JSON.stringify(path_to_send));
-	path_to_send.newLayer = 0;
+	path_to_send.newLayer = false;
 }
 
 function deleteLayer(id)
@@ -91,6 +91,9 @@ function deleteLayer(id)
 	layer[id].remove();
 	layer.unset(layer[id]);
 	printLayers();
+	path_to_send.deleteLayer = id;
+	socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+	path_to_send.deleteLayer = -1;
 }
 
 function checked(id)
@@ -193,7 +196,8 @@ var uid = (function() {
 		
 		path_to_send = {
 			activeLayer : 0,
-			newLayer : 0
+			newLayer : false,
+			deleteLayer : -1
 		};
 		
 		
@@ -691,11 +695,17 @@ var uid = (function() {
 						{
 							pathListExtern[points.update].position = points.updatePath;
 						}
-						if (points.newLayer == true)
+						if (points.newLayer)
 						{
 						    var llayer = activeLayer;
 							newLayer();
 							activeLayer = llayer;
+							printLayers();
+						}
+						if (points.deleteLayer != -1 && points.deleteLayer != null)
+						{
+							layer[points.deleteLayer].remove();
+							layer.unset(layer[points.deleteLayer]);
 							printLayers();
 						}
 						view.draw();
