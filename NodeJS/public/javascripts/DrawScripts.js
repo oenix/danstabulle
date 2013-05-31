@@ -1,5 +1,12 @@
+Array.prototype.unset = function(val){
+	var index = this.indexOf(val)
+	if(index > -1){
+		this.splice(index,1)
+	}
+}
 
-  $(function(){
+
+$(function(){
     var $select = $(".1-100");
     for (i=100;i>=0;i--){
         $select.append($('<option></option>').val(i).html(i))

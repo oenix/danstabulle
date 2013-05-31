@@ -38,11 +38,11 @@ function printLayers()
 			checked = "checked='checked'";
 		if (i == activeLayer)
 		{
-			htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer("+ i +")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a></li>";
+			htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer("+ i +")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> </li>";
 		}
 		else
 		{
-		 	htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a> </li>";
+		 	htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer("+ i +")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer("+ i + ");'>Calque "+ i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a></li>";
 		}
 	}
 	document.getElementById("calques").innerHTML= htmlLayer;	
@@ -84,6 +84,13 @@ function sendNewLayer()
 	path_to_send.newLayer = 1;
 	socket.emit('draw:end', uid, JSON.stringify(path_to_send));
 	path_to_send.newLayer = 0;
+}
+
+function deleteLayer(id)
+{
+	layer[id].remove();
+	layer.unset(layer[id]);
+	printLayers();
 }
 
 function checked(id)
@@ -305,7 +312,7 @@ var uid = (function() {
 					}
 						movePath = hitResult.type == 'fill';
 						if (movePath)
-						project.activeLayer.addChild(hitResult.item);
+							project.activeLayer.addChild(hitResult.item);
 					}
 
 				tool2.onMouseDrag = function(event) {
@@ -324,6 +331,12 @@ var uid = (function() {
 				}
 
 				tool2.onMouseUp = function(event) {
+				/* Pouvoir modifier uniquement nos traits	
+					for (var i = 0; i < pathList.length; i++)
+					{
+						if (selected == pathList[i])
+							
+					}*/
 					path_to_send.update = get_indice(selected);
 					path_to_send.updatePath = new Point(pathList[get_indice(selected)].position.x, pathList[get_indice(selected)].position.y);
 					socket.emit('draw:end', uid, JSON.stringify(path_to_send));
