@@ -22,9 +22,21 @@ class Planche
     private $id;
     
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="page", type="integer")
+     */
+    private $page;
+    
+    /**
      * @ORM\ManytoOne(targetEntity="DTB\BdBundle\Entity\BandeDessinee", inversedBy="planches", cascade={"persist"})
      */
     private $bandeDessinee;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="DTB\BdBundle\Entity\Image", mappedBy="planche")
+     */
+    private $images;
 
 
     /**

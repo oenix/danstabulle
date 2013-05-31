@@ -24,6 +24,25 @@ class DefaultController extends Controller
             'role' => $role));
     }
     
+    public function showPlancheAction($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Planche');
+        
+        $planche = $repository->findBy(array('page' => intval($id)))[0];
+        $bandeDessinee = $planche->getBandeDessinee();
+        
+        $maxPagePlanche = $repository->findBy(array(), array('page' => "desc"))[0];
+        
+        $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
+                      "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
+        
+        return $this->render('DTBBdBundle:Default:showPlanche.html.twig', array('bd' => $bandeDessinee,
+            'role' => $role,
+            'planche' => $planche,
+            'nbPlanche' => $maxPagePlanche->getPage()));
+    }
+    
     public function addPlancheAction($id)
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -32,6 +51,9 @@ class DefaultController extends Controller
         
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
         $bandeDessinee = $repository->find($id);
+        
+        $maxPagePlanche = $this->getDoctrine()->getRepository('DTBBdBundle:Planche')
+                               ->findBy(array(), array('page' => "desc"))[0];
         
         $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
                       "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
@@ -44,6 +66,7 @@ class DefaultController extends Controller
  
         $planche = new Planche();
         $planche->setBandeDessinee($bandeDessinee);
+        $planche->setPage($maxPagePlanche->getPage() + 1);
         
         $em = $this->getDoctrine()->getManager();
         $em->persist($planche);

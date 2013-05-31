@@ -110,32 +110,9 @@ class Candidature
     }
 
     /**
-     * Add bd
-     *
-     * @param \DTB\BdBundle\Entity\BandeDessinee $bd
-     * @return Candidature
-     */
-    public function addBd(\DTB\BdBundle\Entity\BandeDessinee $bd)
-    {
-        $this->bd[] = $bd;
-    
-        return $this;
-    }
-
-    /**
-     * Remove bd
-     *
-     * @param \DTB\BdBundle\Entity\BandeDessinee $bd
-     */
-    public function removeBd(\DTB\BdBundle\Entity\BandeDessinee $bd)
-    {
-        $this->bd->removeElement($bd);
-    }
-
-    /**
      * Get bd
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \DTB\BdBundle\Entity\BandeDessinee 
      */
     public function getBd()
     {
@@ -163,5 +140,18 @@ class Candidature
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set bd
+     *
+     * @param \DTB\BdBundle\Entity\BandeDessinee $bd
+     * @return Candidature
+     */
+    public function setBd(\DTB\BdBundle\Entity\BandeDessinee $bd = null)
+    {
+        $this->bd = $bd;
+    
+        return $this;
     }
 }

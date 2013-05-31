@@ -11,7 +11,7 @@ class CandidatureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('coverLetter')
+            ->add('coverLetter', 'textarea', array('label' => "Lette de Motivation"))
         ;
     }
 
