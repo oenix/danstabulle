@@ -18,17 +18,23 @@ I) Editeur de texte :
 [ ] - Faire en sorte d'ouvrir le profil utilisateur lors clic pseudo
 [ ] - Problème avec le redimensionnement de l'image dans le texte
 
+[X] - Nettoyer le code des restes de CKEditor et du code inutile
+
+[ ] - Pour hacker le site : changer l'ID dans le JS...
+
 [ ] - Régler le problème d'écriture dans la base de données
 
+
+/* Rendu du 04/06/13 */
+
+- Nettoyage du code
+- Utilisation des rooms
+
+Reste à faire :
+
+- Récupérer les infos du serveur en vrai 6h
+- Améliorations de l’intégration 2h
+- Tests et correction de bugs mineurs 3h
+- Versionning Beaucoup d'heures
+
 II) Dessin collaboratif :
-
-Gestion plusieurs instances éditeur
-Gestions plusieurs instances navigateur
-
-Aide à l’écriture [6h]
-- Formation [2h]
-- Choix de la forme [1h]
-- Implémentation [3h]
-
-Améliorations de l’intégration 2h
-Tests et correction de bugs mineurs 3h
