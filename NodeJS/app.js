@@ -160,7 +160,7 @@ io.sockets.on('connection', function (socket) {
 			editingScenarios.push({
 				id: infos.scenarioId,
 				connectedClients: [newUser],
-				connectedUsers : [{pseudo: infos.pseudo, cpt: 1}]
+				connectedUsers : [{pseudo: infos.pseudo, cpt: 1}],
 				active_connections: 1, 
 				currentText: ""});
 				

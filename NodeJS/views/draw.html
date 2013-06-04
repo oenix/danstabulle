@@ -80,7 +80,8 @@
   
 	<a href="javascript:activateTool('tool1');" id="pinceau">Pinceau</a> /
     <a href="javascript:activateTool('tool2');">Select</a> /
-	<a href="javascript:activateTool('tool3');">Draw For Me</a>
+	<a href="javascript:activateTool('tool3');">Draw For Me</a> /
+	<a href="javascript:activateTool('tool4');">Forme</a>
   <select id='color'>
     <option value='#000000'> Noir</option>
     <option value='#ffffff'> Blanc</option>
@@ -102,6 +103,13 @@
   </select>
   <select id="opacity" class="1-100" placeholder="opacité">opacité</select>
   
+</select>
+  <select id='shape' placeholder="Forme">
+  <option value='square'> Carré</option>
+  <option value='circle'> Rond</option>
+  <option value='arc'> Arcs</option>
+<option value='triangle'> Triangle</option>
+</select>
   <a href="javascript:undo()">undo</a>
   <a href="javascript:redo()">Redo</a>
 <input type="checkbox" id="smooth"> Lisser

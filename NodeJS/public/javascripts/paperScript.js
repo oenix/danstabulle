@@ -1,4 +1,4 @@
-var tool1, tool2, tool3;
+var tool1, tool2, tool3, tool4;
 var path;
 var color;
 var size;
@@ -175,8 +175,10 @@ var uid = (function() {
 			tool1.activate();
 		else if (tool == "tool2")
 			tool2.activate();
-		else
+		else if (tool == "tool3")
 			tool3.activate();
+		else
+			tool4.activate();
 	}
 
 
@@ -192,6 +194,7 @@ var uid = (function() {
 		tool1 = new Tool(); // Pinceau
 		tool2 = new Tool(); // Select
 	    tool3 = new Tool(); // Draw for me
+		tool4 = new Tool(); // Formes
 		
 		
 		path_to_send = {
@@ -228,6 +231,53 @@ var uid = (function() {
 			strokeColor: "black",
 			strokeWidth: 1.5
 		};
+		
+		var start;
+		tool4.onMouseDown = function(event)
+		{
+			start = event.point
+		}
+		
+		
+		tool4.onMouseUp= function(event) {
+			var shape;
+			type = getSelectValue('shape');
+			color = getSelectValue('color');
+			opacity = getSelectValue('opacity');
+			
+			if (type == "circle")
+			{
+		    	shape = new paper.Path.Circle( event.middlePoint, event.delta.length / 2);
+		    //	circle.strokeColor = 'black';
+		    	shape.fillColor = color;
+				shape.opacity = opacity;
+			}
+			if (type == "square")
+			{
+		 		shape = new paper.Path.Rectangle(start, event.point);
+			    //shape.strokeColor = 'black';
+			   	shape.fillColor = color;
+			}
+			if (type == "arc")
+			{
+		 		shape = new paper.Path.Arc(start, event.point);
+			    //shape.strokeColor = 'black';
+			   	shape.strokeColor = color;
+			}
+			if (type == "triangle")
+			{
+		    	var sides = 3;
+		    	var radius = 40;
+		    	var shape = new Path.RegularPolygon(event.point, sides ,event.delta.length);
+		 	//	shape = new paper.Path.RegularPolygon(start, 3 , event.point);
+			    //shape.strokeColor = 'black';
+			   	shape.fillColor = color;
+			}
+			pathList.push(shape);
+			currentElement += 1;
+		}
+		
+		
 		
 		tool3.onMouseDown = function(event) {
 			
