@@ -98,9 +98,6 @@ function saveScenarioDatabase(text) {
 
 /**/
 
-var currentText = "";
-var connectedClients = [] ; // [{id: socket.id, pseudo: userPseudo}]
-var active_connections = 0; // Le nombre de connections actives
 var editingScenarios = []; // La liste des scénario en cours d'édition
 
 //Scenario {id, connectedClients, active_connections, currentText}
@@ -126,7 +123,7 @@ function getEditingScenarioIndex(scenarioId)
 	return -1;
 }
 
-function getPseudoInstancesInScenario(scenarioIndex, userPseudo)
+function getPseudoIndex(scenarioIndex, userPseudo)
 {
 	for (var i = 0; i < editingScenarios[scenarioIndex].connectedUsers.length; i++) 
 	{
@@ -138,6 +135,24 @@ function getPseudoInstancesInScenario(scenarioIndex, userPseudo)
 	
 	return -1;
 }
+
+/* Return the scenario index and the pseudo associated to the socket */
+function getInfosFromSocket(socketId)
+{
+	for (var i = 0; i < editingScenarios.length; i++) {
+
+		for (var j = 0; j < editingScenarios[i].connectedClients.length; j++) {
+		
+			if (editingScenarios[i].connectedClients[j].id == socketId) {
+			
+				return {pseudo: editingScenarios[i].connectedClients[j].pseudo, scenarioIndex: i, socketIndex: j};
+			}
+		}
+	}
+	
+	return {pseudo: "", scenarioIndex: -1, socketIndex: -1};
+}
+
 
 io.sockets.on('connection', function (socket) {
 
@@ -170,16 +185,30 @@ io.sockets.on('connection', function (socket) {
 			/* On ajout l'utilisateur à la liste de ceux qui éditent ce scénario */
 			editingScenarios[scenarioIndex].connectedClients.push(newUser);
 			
-			editingScenarios[scenarioIndex].active_connections++;
+			editingScenarios[scenarioIndex].active_connections++; 
 			
-			/* */
+			/* Cherche à savoir si l'utilisateur est déjà connecté sur ce scénario */
+			indexPseudo = getPseudoIndex(scenarioIndex, infos.pseudo);
 			
-			/* On broadcast l'évènement à tous les utilisateurs dans cette room / scénario */
-			socket.broadcast.to("s" + infos.scenarioId).emit('userConnection', newUser);
+			console.log("INDEX PSEUDO = " + indexPseudo);
+			
+			if (indexPseudo == -1) // ça n'est pas le cas
+			{
+				editingScenarios[scenarioIndex].connectedUsers.push({pseudo: infos.pseudo, cpt: 1});
+				
+				/* On broadcast l'évènement à tous les utilisateurs dans cette room / scénario */
+				socket.broadcast.to("s" + infos.scenarioId).emit('userConnection', newUser);
+			} 
+			else
+			{
+				editingScenarios[scenarioIndex].connectedUsers[indexPseudo].cpt++;
+				
+				console.log("Pseudo " + infos.pseudo + " is present " + editingScenarios[scenarioIndex].connectedUsers[indexPseudo].cpt);
+			}
 		}
 		
 		/* On donne au nouvel utilisateur les informations nécessaires pour initialiser la page */
-		socket.emit('initPage', {text: editingScenarios[scenarioIndex].currentText, clients: editingScenarios[scenarioIndex].connectedClients});
+		socket.emit('initPage', {text: editingScenarios[scenarioIndex].currentText, users: editingScenarios[scenarioIndex].connectedUsers});
 		
 		console.log('New user with pseudo : ' + infos.pseudo + " and ID : " + socketId);
 	});
@@ -212,27 +241,39 @@ io.sockets.on('connection', function (socket) {
     });
 	
 	socket.on('disconnect', function() {
-		for (var i = 0; i < editingScenarios.length; i++) {
+	
+		infos = getInfosFromSocket(socket.id);
+		
+		/* An error occured */
+		if (infos.scenarioIndex == -1)
+			return;
+			
+		pseudoIndex = getPseudoIndex(infos.scenarioIndex, infos.pseudo);
+			
+		if (pseudoIndex == -1)
+			return;
+			
+		editingScenarios[infos.scenarioIndex].connectedUsers[pseudoIndex].cpt--;
 
-			for (var j = 0; j < editingScenarios[i].connectedClients.length; j++) {
-				
-				if (socket.id == editingScenarios[i].connectedClients[j].id) {
-				
-					socket.broadcast.to("s" + editingScenarios[i].id).emit('userDisconnection', editingScenarios[i].connectedClients[j]);
-					
-					console.log(editingScenarios[i].connectedClients[j].pseudo + " has disconnected");
-					
-					editingScenarios[i].connectedClients.remove(j);
-					
-					editingScenarios[i].active_connections--;
-					
-					return;
-				}
-			}
+		if (editingScenarios[infos.scenarioIndex].connectedUsers[pseudoIndex].cpt == 0)
+		{		
+			console.log("UN UTILISATEUR EST MORT");
+		
+			socket.broadcast.to("s" + editingScenarios[infos.scenarioIndex].id).emit('userDisconnection', infos.pseudo);
+			
+			editingScenarios[infos.scenarioIndex].active_connections--;
+			
+			editingScenarios[infos.scenarioIndex].connectedUsers.remove(pseudoIndex);
 		}
+		
+		editingScenarios[infos.scenarioIndex].connectedClients.remove(infos.socketIndex);
+					
+		//console.log(editingScenarios[i].connectedClients[j].pseudo + " has disconnected");
 	});
 	
 	/* Drawing management */
+	
+	active_connections = 0;
 	
 	active_connections++
 

@@ -6,17 +6,16 @@
     <link href="stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="stylesheets/danstabulle.css" rel="stylesheet" media="screen">
 	<link href="stylesheets/scenario.css" rel="stylesheet" >
+	<link href="fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
+
 	<script type="text/javascript" src="/javascripts/jquery.js"></script>
 	<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
    	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/javascripts/scenario.js"></script>
-	<!--<script type="text/javascript" src="/tinymce/tinymce.min.js"></script>-->
-		<script type="text/javascript" src="/tiny_mce/tiny_mce.js"></script>
-
-	<script type="text/javascript">
-
-	</script>
-    </head>
+	<script type="text/javascript" src="/tiny_mce/tiny_mce.js"></script>
+	<script type="text/javascript" src="/fancybox/jquery.fancybox.js"></script>
+	
+  </head>
     <body>
       <div class="container ombre blanc">
 
@@ -77,7 +76,43 @@
 		
 		<section id="Contenu" class="span12">
         
-			<h1>Scénario</h1>
+			<h1>Scénario</h1> 
+			
+			<a id="scenarioStructure" href="#writingHelper" title="Structure du scénario">Rappels sur le scénario</a>
+			
+			<div id="writingHelper">
+				<ul id="writingHelperCategories">
+					<li class="writingHelperCategory"><a id="helperTrame" href="#">Trame</a></li>
+					<li class="writingHelperCategory"><a id="helperPerso" href="#">Personnages</a></li>
+					<li class="writingHelperCategory"><a id="helperLieux" href="#">Lieux</a></li>
+				</ul>
+				<div id=writingHelperMain">
+					<div class="writingHelperMainContent" id="scenarioStoryMain">
+						<h3>Rappel de la trame</h3>
+						<p>
+							Marvin sauve le monde au 42ème jour.
+						</p>
+					</div>
+					<div class="writingHelperMainContent" id="scenarioCaractersMain">
+						<h3>Rappel des personnages</h3>
+						<dl> 
+							<dt>Marvin</dt> 
+							<dd>Le gentil</dd> 
+							<dt>Carmouze</dt> 
+							<dd>Le méchant</dd> 
+						</dl>
+					</div>
+					<div class="writingHelperMainContent" id="scenarioPlacesMain">
+						<h3>Rappel de la trame</h3>
+						<dl> 
+							<dt>Epita</dt> 
+							<dd>Endroit scolaire</dd> 
+							<dt>Bar</dt> 
+							<dd>Endroit bien</dd> 
+						</dl>
+					</div>
+				</div>
+			</div>
 		
 			<hr>
 	
