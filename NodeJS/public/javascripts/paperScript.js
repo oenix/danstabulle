@@ -200,7 +200,10 @@ var uid = (function() {
 		path_to_send = {
 			activeLayer : 0,
 			newLayer : false,
-			deleteLayer : -1
+			deleteLayer : -1,
+			doShape : null,
+			shapePosition : 0,
+			shapeEvent : 0
 		};
 		
 		
@@ -245,36 +248,53 @@ var uid = (function() {
 			color = getSelectValue('color');
 			opacity = getSelectValue('opacity');
 			
+			
 			if (type == "circle")
 			{
 		    	shape = new paper.Path.Circle( event.middlePoint, event.delta.length / 2);
-		    //	circle.strokeColor = 'black';
 		    	shape.fillColor = color;
-				shape.opacity = opacity;
+		
+				path_to_send.doShape = "circle";
+				path_to_send.shapePosition = event.middlePoint;
+				path_to_send.shapeEvent = event.delta.length / 2;
 			}
 			if (type == "square")
 			{
 		 		shape = new paper.Path.Rectangle(start, event.point);
 			    //shape.strokeColor = 'black';
 			   	shape.fillColor = color;
+				path_to_send.doShape = "square";
+				path_to_send.shapePosition = start;
+				path_to_send.shapeEvent = event.point;
 			}
 			if (type == "arc")
 			{
 		 		shape = new paper.Path.Arc(start, event.point);
 			    //shape.strokeColor = 'black';
 			   	shape.strokeColor = color;
+				path_to_send.doShape = "arc";
+				path_to_send.shapePosition = start;
+				path_to_send.shapeEvent = event.point;
 			}
 			if (type == "triangle")
 			{
 		    	var sides = 3;
 		    	var radius = 40;
-		    	var shape = new Path.RegularPolygon(event.point, sides ,event.delta.length);
+		     shape = new Path.RegularPolygon(event.point, sides ,event.delta.length);
 		 	//	shape = new paper.Path.RegularPolygon(start, 3 , event.point);
 			    //shape.strokeColor = 'black';
 			   	shape.fillColor = color;
+				path_to_send.doShape = "triangle";
+				path_to_send.shapePosition = event.point;
+				path_to_send.shapeEvent = event.delta.length;
 			}
+			shape.opacity = opacity / 100;
+			path_to_send.opacity = opacity;
 			pathList.push(shape);
 			currentElement += 1;
+			path_to_send.rgba = color;
+			socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+			path_to_send.doShape = null;
 		}
 		
 		
@@ -727,6 +747,7 @@ var uid = (function() {
 								pathListExtern.push(text);
 							}
 							external_paths[artist] = false;
+			
 						}
 						if (points.remove >= 0)
 						{
@@ -758,7 +779,38 @@ var uid = (function() {
 							layer.unset(layer[points.deleteLayer]);
 							printLayers();
 						}
-						view.draw();
+				
+						if (points.doShape != null)
+						{	
+							
+								if (points.doShape == "square")
+								{
+									shape = new paper.Path.Rectangle(points.shapePosition, points.shapeEvent);
+								   	shape.fillColor = points.rgba
+									pathListExtern.push(shape);
+								}
+								else if (points.doShape == "circle")
+								{
+									shape = new paper.Path.Circle(points.shapePosition, points.shapeEvent);
+							    	shape.fillColor = points.rgba;
+									pathListExtern.push(shape);
+								}
+								else if (points.doShape == "arc")
+								{
+									shape = new paper.Path.Arc(points.shapePosition, points.shapeEvent);
+									shape.strokeColor = points.rgba
+									pathListExtern.push(shape);
+								}
+								else if (points.doShape == "triangle")
+								{
+									shape = new paper.Path.RegularPolygon(points.shapePosition,  3, points.shapeEvent);
+									shape.fillColor = points.rgba
+									pathListExtern.push(shape);
+								}
+								
+								shape.opacity = points.opacity / 100;
+							}
+							view.draw();
 					};
 
 					//Continue à dessiner en temps reel
