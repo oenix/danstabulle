@@ -7,6 +7,28 @@ a {
   color: #00B7FF;
 }
 
+#writingHelper {
+	width:600px;
+	display: none;
+}
+
+	#writingHelper #writingHelperCategories {
+		list-style: none;
+		float: left;
+		width : 150px;
+		height: 300px;
+	}
+
+	#writingHelper #writingHelperMain {
+		float: left;
+		width : 350px;
+		height: 300px;
+	}
+
+		#writingHelper #writingHelperMain .writingHelperMainContent {
+			display: none;
+		}
+
 .ckeditor {
 	width: 600px;
 }

@@ -194,6 +194,30 @@ $(document).ready(function() {
 		sendChatMessage();
 	});
 	
+	/* Fancybox gestion */
+	
+	$('#scenarioStructure').fancybox();
+	
+	$('#scenarioStoryMain').show();
+	
+	$("#helperTrame").bind("click", function () {
+		$('#scenarioStoryMain').show();
+		$('#scenarioCaractersMain').hide();
+		$('#scenarioPlacesMain').hide();
+	});
+	
+	$("#helperPerso").bind("click", function () {
+		$('#scenarioStoryMain').hide();
+		$('#scenarioCaractersMain').show();
+		$('#scenarioPlacesMain').hide();
+	});
+	
+	$("#helperLieux").bind("click", function () {
+		$('#scenarioStoryMain').hide();
+		$('#scenarioCaractersMain').hide();
+		$('#scenarioPlacesMain').show();
+	});
+	
 	/* Permet d'envoyer un message en appuyant sur entrée */
 	
 	$("#chatSendMessageArea").keypress(function(event) {
