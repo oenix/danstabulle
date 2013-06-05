@@ -40,7 +40,7 @@ $(document).ready(function() {
 
 	var pseudo = GetURLParameter("pseudo");
 		
-	if (pseudo == undefined || pseudo == null) {
+	if (pseudo == undefined || pseudo == null || pseudo == "") {
 		pseudo = "oenix" + Math.floor(Math.random() * 201);
 	}
 
@@ -101,7 +101,8 @@ $(document).ready(function() {
 	/* Add an user to the users' list */
 
 	function addNewUser(newUser) {
-		$('#connectedUsersList').append("<li clientId='" + newUser.id + "'><a href='#' target='_blank'>" + newUser.pseudo + "</a></li>");
+		//$('#connectedUsersList').append("<li clientId='" + newUser.id + "'><a href='#' target='_blank'>" + newUser.pseudo + "</a></li>");
+		$('#connectedUsersList').append("<li><a href='#' target='_blank'>" + newUser.pseudo + "</a></li>");
 	}
 	
 	/* Update the content of the text editor */
@@ -126,8 +127,8 @@ $(document).ready(function() {
 	
 	socket.on('initPage', function (init) {
 	
-		for (var i = 0; i < init.clients.length; i++) {
-			addNewUser(init.clients[i]);
+		for (var i = 0; i < init.users.length; i++) {
+			addNewUser(init.users[i]);
 		}
 	
 		updateEditorText(init.text);
@@ -143,14 +144,14 @@ $(document).ready(function() {
 	
 	/* When an user disconnects, its nickname is deleted */
 	
-	socket.on('userDisconnection', function (user) {
-		$("#connectedUsersList li").each(function () {
-			if ($(this).attr("clientId") == user.id) {
-				$(this).remove();
+	socket.on('userDisconnection', function (pseudo) {
+		$("#connectedUsersList li a").each(function () {
+			if ($.trim($(this).html()) == pseudo) {
+				$(this).parent().remove();
 			}
 		});
 		
-		updateChatWithEvent(user.pseudo + " s'est déconnecté.");
+		updateChatWithEvent(pseudo + " s'est déconnecté.");
 	});
 	
 /* START OF Scenario chat management */
