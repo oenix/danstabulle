@@ -26,7 +26,7 @@ var rectangleForMe;
 
 var layer = [];
 var layerOpacity = [];
-var selectedLayer  = [];
+var selectedLayer = [];
 var activeLayer = 0;
 
 
@@ -56,14 +56,13 @@ function printLayers() {
         if (selectedLayer[i])
             checked = "checked='checked'";
         if (i == activeLayer) {
-            htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
+            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + ") 'draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
         } else {
-            htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
+            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + " )'draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
         }
     }
     document.getElementById("calques").innerHTML = htmlLayer;
     for (var i = 0; i < layer.length; i ++) {
-	console.log(layerOpacity[i]);
 	document.getElementById("layer" + i).selectedIndex = 100 - layerOpacity[i];
     }
 
@@ -84,6 +83,11 @@ function showLayer(nbLayer) {
         selectedLayer[nbLayer] = false;
         layer[nbLayer].visible = false;
     }
+}
+
+function selectLayer(nbLayer) {
+	layer[nbLayer].selected = true;
+	tool5.activate();
 }
 
 function newLayer() {

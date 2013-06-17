@@ -12,6 +12,7 @@ window.onload = function () {
     tool2 = new Tool(); // Select
     tool3 = new Tool(); // Draw for me
     tool4 = new Tool(); // Formes
+    tool5 = new Tool(); // Move Layers
 
 
     path_to_send = {
@@ -50,6 +51,19 @@ window.onload = function () {
         strokeWidth: 1.5
     };
 
+    tool5.onMouseDown = function(event) {
+	layer[activeLayer].selected = true;
+    }
+    
+    tool5.onMouseDrag = function(event) {
+	layer[activeLayer].position = layer[activeLayer].position.add(event.delta);
+    }
+    
+     tool5.onMouseUp = function(event) {
+	layer[activeLayer].selected = false;
+    }
+    
+    
     var start;
     tool4.onMouseDown = function (event) {
         start = event.point
@@ -527,9 +541,11 @@ if (selected == pathList[i])
             external_paths[artist] = false;
 
         }
-	for (var i = 0; i < layer.length; i++) {
-		layer[i].opacity = points.layerOpacity[i] / 100;
-		layerOpacity[i] = points.layerOpacity[i];
+	if (points.layerOpacity != null) {
+		for (var i = 0; i < layer.length; i++) {
+			layer[i].opacity = points.layerOpacity[i] / 100;
+			layerOpacity[i] = points.layerOpacity[i];
+		}
 	}
         if (points.remove >= 0) {
             pathListExtern[points.remove].remove();
