@@ -6,6 +6,7 @@ window.onload = function () {
     paper.setup('myCanvas');
     layer[activeLayer] = project.activeLayer;
     layerOpacity.push(100);
+    positionLayer.push(layer.position);
     selectedLayer[activeLayer] = true;
     printLayers();
     tool1 = new Tool(); // Pinceau
@@ -21,7 +22,8 @@ window.onload = function () {
         deleteLayer: -1,
         doShape: null,
         shapePosition: 0,
-        shapeEvent: 0
+        shapeEvent: 0,
+	positionLayer : []
     };
 
 
@@ -57,12 +59,17 @@ window.onload = function () {
     
     tool5.onMouseDrag = function(event) {
 	layer[activeLayer].position = layer[activeLayer].position.add(event.delta);
+	
     }
     
      tool5.onMouseUp = function(event) {
 	layer[activeLayer].selected = false;
+	positionLayer[activeLayer] = new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y);
+	path_to_send.positionLayer = positionLayer;
+	console.log(positionLayer[activeLayer].x);
+	console.log(positionLayer[activeLayer].y);
+	socket.emit('draw:end', uid, JSON.stringify(path_to_send));
     }
-    
     
     var start;
     tool4.onMouseDown = function (event) {
@@ -545,6 +552,17 @@ if (selected == pathList[i])
 		for (var i = 0; i < layer.length; i++) {
 			layer[i].opacity = points.layerOpacity[i] / 100;
 			layerOpacity[i] = points.layerOpacity[i];
+		}
+	}
+	if (points.positionLayer != null && positionLayer != points.positionLayer) {
+		for (var i = 0; i < layer.length; i++) {
+			if (points.positionLayer[i] != null) {
+				layer[i].position = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
+				console.log(points.positionLayer[i].x);
+				console.log(points.positionLayer[i].y);
+				positionLayer[i] = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
+				console.log("position : " + positionLayer[i]);
+			}
 		}
 	}
         if (points.remove >= 0) {

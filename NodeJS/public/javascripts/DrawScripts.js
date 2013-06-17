@@ -28,6 +28,7 @@ var layer = [];
 var layerOpacity = [];
 var selectedLayer = [];
 var activeLayer = 0;
+var positionLayer = [];
 
 
 
@@ -37,9 +38,6 @@ Array.prototype.unset = function(val){
 		this.splice(index,1)
 	}
 }
-
-
-
 
 function changeLayerOpacity(numOpacity, numLayer)
 {
@@ -95,11 +93,13 @@ function newLayer() {
     selectedLayer.push(true);
     layerOpacity.push(100);
     activeLayer = selectedLayer.length - 1;
+    positionLayer.push(new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y));
     printLayers();
 }
 
 function sendNewLayer() {
     path_to_send.newLayer = true;
+    path_to_send.positionLayer = positionLayer;
     socket.emit('draw:end', uid, JSON.stringify(path_to_send));
     path_to_send.newLayer = false;
 }
@@ -107,6 +107,9 @@ function sendNewLayer() {
 function deleteLayer(id) {
     layer[id].remove();
    // layerOpacity[id].remove();
+    //positionLayer[id].remove(); WHY THE FUCK DOES IT NOT WORK
+    layerOpacity.unset(layerOpacity[id]);
+    positionLayer.unset(positionLayer[id]);
     layer.unset(layer[id]);
     printLayers();
     path_to_send.deleteLayer = id;
