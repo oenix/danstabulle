@@ -29,6 +29,7 @@ var layerOpacity = [];
 var selectedLayer = [];
 var activeLayer = 0;
 var positionLayer = [];
+var fusionLayer = [];
 
 var selectLayerBounds;
 var hasDoubleClickedLayer = false;
@@ -55,9 +56,9 @@ function printLayers() {
         if (selectedLayer[i])
             checked = "checked='checked'";
         if (i == activeLayer) {
-            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + ") '  onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
+            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + ") '  onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + " Fusion : " + fusionMode(i) + "</li>";
         } else {
-            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + " )'  onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
+            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + " )'  onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + " Fusion : " + fusionMode(i) +"</li>";
         }
     }
     document.getElementById("calques").innerHTML = htmlLayer;
@@ -65,6 +66,20 @@ function printLayers() {
 	document.getElementById("layer" + i).selectedIndex = 100 - layerOpacity[i];
     }
 
+}
+
+function changeLayerFusion(mode, nbLayer) {
+		layer[nbLayer].blendMode = mode;
+}
+
+function fusionMode(layer) {
+		var fusionMode = "<select>";
+		fusionMode += "<option onclick='changeLayerFusion(\"normal\", " + layer + " )' value='0'>Normal</option>" 
+		+ 			   "<option onclick='changeLayerFusion(\"screen\", " + layer + ")' >Ecran</option>"
+	    +				"<option onclick='changeLayerFusion(\"multiply\", " + layer + ")' >Multiplier</option>"
+		+ 				"<option onclick='changeLayerFusion(\"overlay\", " + layer + ")' >Par dessus</option>"
+		+ "</select>";
+		return fusionMode;
 }
 
 function showSelected(nbLayer) {
