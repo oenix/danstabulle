@@ -29,6 +29,18 @@ var layerOpacity = [];
 var selectedLayer  = [];
 var activeLayer = 0;
 
+
+
+Array.prototype.unset = function(val){
+	var index = this.indexOf(val)
+	if(index > -1){
+		this.splice(index,1)
+	}
+}
+
+
+
+
 function changeLayerOpacity(numOpacity, numLayer)
 {
 	layerOpacity[numLayer] = numOpacity;
@@ -44,9 +56,9 @@ function printLayers() {
         if (selectedLayer[i])
             checked = "checked='checked'";
         if (i == activeLayer) {
-            htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> " + createSelectOptionForLayer(i) + "</li>";
+            htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
         } else {
-            htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a>" + createSelectOptionForLayer(i) + "</li>";
+            htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
         }
     }
     document.getElementById("calques").innerHTML = htmlLayer;
@@ -90,7 +102,7 @@ function sendNewLayer() {
 
 function deleteLayer(id) {
     layer[id].remove();
-    layerOpacity[id].remove();
+   // layerOpacity[id].remove();
     layer.unset(layer[id]);
     printLayers();
     path_to_send.deleteLayer = id;
@@ -173,16 +185,6 @@ function activateTool(tool) {
     else
         tool4.activate();
 }
-
-
-
-Array.prototype.unset = function(val){
-	var index = this.indexOf(val)
-	if(index > -1){
-		this.splice(index,1)
-	}
-}
-
 
 $(function(){
     var $select = $(".1-100");
