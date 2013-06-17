@@ -1,3 +1,181 @@
+var tool1, tool2, tool3, tool4;
+var path;
+var color;
+var size;
+var image;
+var opacity;
+var pathList = [];
+var currentElement = -1;
+var pathListExtern = [];
+var currentElementExtern = -1;
+var remove = -1;
+var selected, segment;
+//Rafraichissement en milliseconde;
+var rafraichissement = 1;
+// Initialise Socket.io
+var socket = io.connect('http://localhost:3000');
+
+var send_paths_timer;
+var timer_is_active = false;
+var path_to_send = {};
+var path_to_send2 = {};
+var drawForMe = [];
+
+
+var rectangleForMe;
+
+var layer = [];
+var layerOpacity = [];
+var selectedLayer  = [];
+var activeLayer = 0;
+
+function changeLayerOpacity(numOpacity, numLayer)
+{
+	layerOpacity[numLayer] = numOpacity;
+	layer[numLayer].opacity = numOpacity / 100;
+	path_to_send.layerOpacity = layerOpacity;
+	socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+}
+
+function printLayers() {
+    var htmlLayer = "";
+    for (var i = 0; i < layer.length; i++)  {
+        var checked = "";
+        if (selectedLayer[i])
+            checked = "checked='checked'";
+        if (i == activeLayer) {
+            htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> " + createSelectOptionForLayer(i) + "</li>";
+        } else {
+            htmlLayer = htmlLayer + "<li draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a>" + createSelectOptionForLayer(i) + "</li>";
+        }
+    }
+    document.getElementById("calques").innerHTML = htmlLayer;
+    for (var i = 0; i < layer.length; i ++) {
+	console.log(layerOpacity[i]);
+	document.getElementById("layer" + i).selectedIndex = 100 - layerOpacity[i];
+    }
+
+}
+
+function activateLayer(nbLayer) {
+    layer[nbLayer].activate();
+    activeLayer = nbLayer;
+    printLayers();
+}
+
+function showLayer(nbLayer) {
+
+    if (checked("visible" + nbLayer)) {
+        selectedLayer[nbLayer] = true;
+        layer[nbLayer].visible = true;
+    } else {
+        selectedLayer[nbLayer] = false;
+        layer[nbLayer].visible = false;
+    }
+}
+
+function newLayer() {
+    layer.push(new Layer());
+    selectedLayer.push(true);
+    layerOpacity.push(100);
+    activeLayer = selectedLayer.length - 1;
+    printLayers();
+}
+
+function sendNewLayer() {
+    path_to_send.newLayer = true;
+    socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+    path_to_send.newLayer = false;
+}
+
+function deleteLayer(id) {
+    layer[id].remove();
+    layerOpacity[id].remove();
+    layer.unset(layer[id]);
+    printLayers();
+    path_to_send.deleteLayer = id;
+    socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+    path_to_send.deleteLayer = -1;
+}
+
+function checked(id) {
+    checkbox = document.getElementById(id);
+    if (checkbox.checked) {
+        return true;
+    }
+    return false;
+}
+
+
+//Associer un Uid unique à chaque utilisateur
+var uid = (function () {
+    var S4 = function () {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    };
+    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+}());
+
+
+function undo() {
+    if (currentElement >= 0) {
+        pathList[currentElement].remove();
+        view.draw();
+        remove = currentElement;
+        currentElement--;
+        path_to_send = {
+            remove: remove
+        };
+        socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+        remove = -1;
+    }
+}
+
+function redo() {
+    if (currentElement < pathList.length - 1) {
+        project.activeLayer.addChild(pathList[currentElement + 1]);
+        view.draw();
+
+        add = currentElement;
+        currentElement++;
+        path_to_send = {
+            add: add
+        };
+        socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+        add = -2;
+
+    }
+}
+
+function autocomplete() {
+    var i = 0;
+    for (i = pathList.length - 1; i >= 0; i--) {
+
+
+        for (var j = 0; j < 15; j++) {
+            //      pathList[i].simplify();
+            var clone = pathList[i].clone();
+            //clone.smooth();
+            //clone.simplify();
+            clone.position = clone.position.add(new Point(clone.position.x + (60 * j + 1), 0));
+            //clone.simplify();
+        }
+    }
+    view.draw();
+}
+
+function activateTool(tool) {
+    if (tool == "tool1")
+        tool1.activate();
+    else if (tool == "tool2")
+        tool2.activate();
+    else if (tool == "tool3")
+        tool3.activate();
+    else
+        tool4.activate();
+}
+
+
+
 Array.prototype.unset = function(val){
 	var index = this.indexOf(val)
 	if(index > -1){
@@ -12,6 +190,15 @@ $(function(){
         $select.append($('<option></option>').val(i).html(i))
     }
 });
+
+function createSelectOptionForLayer(layer) {    
+    var select_option = "<select id =layer" + layer + ">";
+    for(i = 100; i >= 0; i--) { 
+       select_option += "<option onclick='changeLayerOpacity("+ i + ", " + layer + ")'  value=" + i + ">" + i + "</option>";
+    }
+    select_option += '</select>';
+    return select_option;
+}
 
 $(function() {
 
