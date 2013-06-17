@@ -15,7 +15,9 @@ window.onload = function () {
     tool4 = new Tool(); // Formes
     tool5 = new Tool(); // Move Layers
 
-
+    var raster;
+    var count = 0;
+    
     path_to_send = {
         activeLayer: 0,
         newLayer: false,
@@ -23,7 +25,7 @@ window.onload = function () {
         doShape: null,
         shapePosition: 0,
         shapeEvent: 0,
-	positionLayer : []
+	    positionLayer : []
     };
 
 
@@ -48,27 +50,80 @@ window.onload = function () {
     var movePath = false;
 
     var bulleStyle = {
-        fillColor: new RgbColor(255, 255, 255),
+		fillColor: "white",
         strokeColor: "black",
         strokeWidth: 1.5
     };
+	
+	
+	function handleImage(image) {
+       count = 0;
+   //    var size = image.bounds.size;
 
+    
+ 
+      raster = new Raster(image);
+    //  raster.remove();
+
+    // Transform the raster, so it fills the view:
+	if (raster.bounds > view.bounds)
+      raster.fitBounds(view.bounds, true);
+    }
+
+    function onDocumentDrag(event) {
+	   event.preventDefault();
+    }
+ 
+    function onDocumentDrop(event) {
+	
+       event.preventDefault();
+
+       var file = event.dataTransfer.files[0];
+       var reader = new FileReader();
+
+       reader.onload = function ( event ) {
+       var image = document.createElement('img');
+       image.onload = function () {
+            handleImage(image);
+            view.draw();
+        };
+        image.src = event.target.result;
+		//raster = new paper.Raster(image);
+    };
+    reader.readAsDataURL(file);
+}
+
+    DomEvent.add(document, {
+       drop: onDocumentDrop,
+       dragover: onDocumentDrag,
+       dragleave: onDocumentDrag
+   });
+    
+    
+    
     tool5.onMouseDown = function(event) {
 	layer[activeLayer].selected = true;
+	createLayerBorder(activeLayer);
     }
     
     tool5.onMouseDrag = function(event) {
-	layer[activeLayer].position = layer[activeLayer].position.add(event.delta);
-	
+    	if (event.modifiers.shift) {
+		   layer[activeLayer].bounds.width += event.delta.x;
+		    layer[activeLayer].bounds.height += event.delta.y;
+		   //add(new paper.Point(event.delta.x, event.delta.y));
+        }
+		else {
+		   layer[activeLayer].position = layer[activeLayer].position.add(event.delta);
+		}
     }
     
      tool5.onMouseUp = function(event) {
-	layer[activeLayer].selected = false;
-	positionLayer[activeLayer] = new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y);
-	path_to_send.positionLayer = positionLayer;
-	console.log(positionLayer[activeLayer].x);
-	console.log(positionLayer[activeLayer].y);
-	socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+		layer[activeLayer].selected = false;
+		positionLayer[activeLayer] = new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y);
+		path_to_send.positionLayer = positionLayer;
+		socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+		selectLayerBounds.remove();
+		hasDoubleClickedLayer = false;
     }
     
     var start;
@@ -558,10 +613,7 @@ if (selected == pathList[i])
 		for (var i = 0; i < layer.length; i++) {
 			if (points.positionLayer[i] != null) {
 				layer[i].position = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
-				console.log(points.positionLayer[i].x);
-				console.log(points.positionLayer[i].y);
 				positionLayer[i] = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
-				console.log("position : " + positionLayer[i]);
 			}
 		}
 	}
@@ -623,6 +675,7 @@ if (selected == pathList[i])
             layer[points.activeLayer].activate();
             external_paths[artist] = new Path();
             path = external_paths[artist];
+			path.strokeCap = 'round';
             var start_point = new Point(points.start.x, points.start.y);
             path.opacity = points.opacity / 100;
             path.strokeColor = points.rgba;
@@ -662,12 +715,12 @@ if (selected == pathList[i])
         return values;
     }
 
-
+}
 
 
     // DRAG AND DROP
 
-    var holder = document.getElementById('holder'),
+ /*   var holder = document.getElementById('holder'),
         tests = {
             filereader: typeof FileReader != 'undefined',
             dnd: 'draggable' in document.createElement('span'),
@@ -764,5 +817,5 @@ if (selected == pathList[i])
         };
     }
 
-}
+}*/
 //IMAGE DROP

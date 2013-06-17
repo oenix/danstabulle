@@ -30,7 +30,8 @@ var selectedLayer = [];
 var activeLayer = 0;
 var positionLayer = [];
 
-
+var selectLayerBounds;
+var hasDoubleClickedLayer = false;
 
 Array.prototype.unset = function(val){
 	var index = this.indexOf(val)
@@ -54,9 +55,9 @@ function printLayers() {
         if (selectedLayer[i])
             checked = "checked='checked'";
         if (i == activeLayer) {
-            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + ") 'draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
+            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + ") '  onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> <a class='selectedLayer' href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
         } else {
-            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + " )'draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
+            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + " )'  onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' draggable='true'>  <input type='checkbox' onclick='showLayer(" + i + ")' " + checked + "  id='visible" + i + "'> <a href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + "</li>";
         }
     }
     document.getElementById("calques").innerHTML = htmlLayer;
@@ -65,6 +66,22 @@ function printLayers() {
     }
 
 }
+
+function showSelected(nbLayer) {
+	createLayerBorder(nbLayer);
+	
+    layer[nbLayer].selected = true;
+}
+
+function showUnselected(nbLayer) {
+		if (!hasDoubleClickedLayer) {
+				if (selectLayerBounds != null) {
+						selectLayerBounds.remove();
+				}
+				  layer[nbLayer].selected = false;	
+		}
+}
+
 
 function activateLayer(nbLayer) {
     layer[nbLayer].activate();
@@ -84,8 +101,21 @@ function showLayer(nbLayer) {
 }
 
 function selectLayer(nbLayer) {
+    hasDoubleClickedLayer = true;
 	layer[nbLayer].selected = true;
+	layer[nbLayer].bounds.selected = true;
+	createLayerBorder(nbLayer);
 	tool5.activate();
+}
+
+function createLayerBorder(nbLayer) {
+	if (selectLayerBounds != null) {
+		selectLayerBounds.remove();
+	}
+    selectLayerBounds = new Path.Rectangle(layer[nbLayer].strokeBounds);
+    selectLayerBounds.strokeWidth = 0.25;
+	selectLayerBounds.strokeColor = 'black';
+	selectLayerBounds.fillColor = null;
 }
 
 function newLayer() {
@@ -106,8 +136,6 @@ function sendNewLayer() {
 
 function deleteLayer(id) {
     layer[id].remove();
-   // layerOpacity[id].remove();
-    //positionLayer[id].remove(); WHY THE FUCK DOES IT NOT WORK
     layerOpacity.unset(layerOpacity[id]);
     positionLayer.unset(positionLayer[id]);
     layer.unset(layer[id]);

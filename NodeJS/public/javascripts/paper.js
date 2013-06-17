@@ -43,6 +43,76 @@
  * Distributed under the BSD license.
  */
 
+var DomEvent = {
+	add: function(el, events) {
+		for (var type in events) {
+			var func = events[type];
+			if (el.addEventListener) {
+				el.addEventListener(type, func, false);
+			} else if (el.attachEvent) {
+				el.attachEvent('on' + type, func.bound = function() {
+					func.call(el, window.event);
+				});
+			}
+		}
+	},
+
+	remove: function(el, events) {
+		for (var type in events) {
+			var func = events[type];
+			if (el.removeEventListener) {
+				el.removeEventListener(type, func, false);
+			} else if (el.detachEvent) {
+				el.detachEvent('on' + type, func.bound);
+			}
+		}
+	},
+
+	getPoint: function(event) {
+		var pos = event.targetTouches
+				? event.targetTouches.length
+					? event.targetTouches[0]
+					: event.changedTouches[0]
+				: event;
+		return Point.create(
+			pos.pageX || pos.clientX + document.documentElement.scrollLeft,
+			pos.pageY || pos.clientY + document.documentElement.scrollTop
+		);
+	},
+
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+
+	getOffset: function(event, target) {
+		return DomEvent.getPoint(event).subtract(DomElement.getOffset(
+				target || DomEvent.getTarget(event)));
+	},
+
+	preventDefault: function(event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	},
+
+	stop: function(event) {
+		DomEvent.stopPropagation(event);
+		DomEvent.preventDefault(event);
+	}
+};
+
+
+
 var paper = new function() {
 
 var Base = new function() { 
@@ -1201,7 +1271,9 @@ var Rectangle = this.Rectangle = Base.extend({
 		return this.expand(this.width * hor - this.width,
 				this.height * (ver === undefined ? hor : ver) - this.height);
 	},
-
+	selected: {
+		
+	},
 	statics: {
 		create: function(x, y, width, height) {
 			return new Rectangle(Rectangle.dont).set(x, y, width, height);
