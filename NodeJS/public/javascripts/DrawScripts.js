@@ -117,6 +117,9 @@ function showLayer(nbLayer) {
 }
 
 function selectLayer(nbLayer) {
+		for (var i = 0; i < layer.length; i++) {
+				layer[i].selected = false;
+		}
     hasDoubleClickedLayer = true;
 	layer[nbLayer].selected = true;
 	layer[nbLayer].bounds.selected = true;
