@@ -26,7 +26,8 @@ window.onload = function () {
         shapePosition: 0,
         shapeEvent: 0,
 	    positionLayer : [],
-		raster : null
+		raster : null,
+		boundsLayer : null
     };
 
 
@@ -101,24 +102,34 @@ window.onload = function () {
     
     
     tool5.onMouseDown = function(event) {
-	layer[activeLayer].selected = true;
-	createLayerBorder(activeLayer);
+		layer[activeLayer].selected = true;
+		createLayerBorder(activeLayer);
     }
     
+	var shifted = false;
     tool5.onMouseDrag = function(event) {
     	if (event.modifiers.shift) {
 		   layer[activeLayer].bounds.width += event.delta.x;
 		    layer[activeLayer].bounds.height += event.delta.y;
 		   //add(new paper.Point(event.delta.x, event.delta.y));
+		   shifted = true;
         }
 		else {
 		   layer[activeLayer].position = layer[activeLayer].position.add(event.delta);
+		   shifted = false;
 		}
     }
     
      tool5.onMouseUp = function(event) {
 		layer[activeLayer].selected = false;
 		positionLayer[activeLayer] = new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y);
+		if (shifted) {
+				path_to_send.boundsLayer = new paper.Point(layer[activeLayer].bounds.width, layer[activeLayer].bounds.height);
+		}
+		else {
+				path_to_send.boundsLayer = null;
+		}
+		shifted = false;
 		path_to_send.positionLayer = positionLayer;
 		socket.emit('draw:end', uid, JSON.stringify(path_to_send));
 		selectLayerBounds.remove();
@@ -609,8 +620,14 @@ if (selected == pathList[i])
 	if (points.positionLayer != null && positionLayer != points.positionLayer) {
 		for (var i = 0; i < layer.length; i++) {
 			if (points.positionLayer[i] != null) {
-				layer[i].position = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
-				positionLayer[i] = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
+				if (points.boundsLayer != 0 && points.boundsLayer != null) {
+						layer[i].bounds.width = points.boundsLayer.x;
+						layer[i].bounds.height = points.boundsLayer.y;
+				}
+				else {
+						layer[i].position = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
+						positionLayer[i] = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
+				}
 			}
 		}
 	}
