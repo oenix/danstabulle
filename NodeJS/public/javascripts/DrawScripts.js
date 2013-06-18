@@ -83,9 +83,10 @@ function fusionMode(layer) {
 }
 
 function showSelected(nbLayer) {
-	createLayerBorder(nbLayer);
-	
-    layer[nbLayer].selected = true;
+    if (!hasDoubleClickedLayer) {
+		createLayerBorder(nbLayer);
+		 layer[nbLayer].selected = true;
+	}
 }
 
 function showUnselected(nbLayer) {
@@ -138,8 +139,8 @@ function newLayer() {
     selectedLayer.push(true);
     layerOpacity.push(100);
     activeLayer = selectedLayer.length - 1;
-    positionLayer.push(new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y));
     printLayers();
+    positionLayer.push(new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y));
 }
 
 function sendNewLayer() {
