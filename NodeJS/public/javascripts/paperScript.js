@@ -13,7 +13,7 @@ window.onload = function () {
     tool2 = new Tool(); // Select
     tool3 = new Tool(); // Draw for me
     tool4 = new Tool(); // Formes
-    tool5 = new Tool(); // Move Layers
+    tool5 = new Tool(); // Move/Resize Layers
 
     var raster;
     var count = 0;
@@ -58,12 +58,8 @@ window.onload = function () {
 	
 	function handleImage(image) {
        count = 0;
-   //    var size = image.bounds.size;
-
-    
- 
-      raster = new Raster(image);
-    //  raster.remove();
+	   newLayer();
+       raster = new Raster(image);
 
     // Transform the raster, so it fills the view:
 	if (raster.bounds > view.bounds)
@@ -348,8 +344,6 @@ if (selected == pathList[i])
             opacity: opacity,
             activeLayer: activeLayer
         };
-
-
     }
 
     tool1.onMouseDrag = function (event) {
@@ -639,7 +633,7 @@ if (selected == pathList[i])
             layer[points.deleteLayer].remove();
             layer.unset(layer[points.deleteLayer]);
         }
-	printLayers();
+		printLayers();
         if (points.doShape != null) {
 
             if (points.doShape == "square") {
@@ -672,6 +666,7 @@ if (selected == pathList[i])
         var path = external_paths[artist];
 
         if (!path) {
+				console.log(points.activeLayer)
             layer[points.activeLayer].activate();
             external_paths[artist] = new Path();
             path = external_paths[artist];
@@ -716,106 +711,3 @@ if (selected == pathList[i])
     }
 
 }
-
-
-    // DRAG AND DROP
-
- /*   var holder = document.getElementById('holder'),
-        tests = {
-            filereader: typeof FileReader != 'undefined',
-            dnd: 'draggable' in document.createElement('span'),
-            formdata: !! window.FormData,
-        },
-        support = {
-            filereader: document.getElementById('filereader'),
-            formdata: document.getElementById('formdata'),
-        },
-        acceptedTypes = {
-            'image/png': true,
-            'image/jpeg': true,
-            'image/gif': true
-        },
-        fileupload = document.getElementById('upload');
-
-    "filereader formdata".split(' ').forEach(function (api) {
-        if (tests[api] === false) {
-            support[api].className = 'fail';
-        } else {}
-    });
-
-    function readfiles(files) {
-        debugger;
-        var formData = tests.formdata ? new FormData() : null;
-        for (var i = 0; i < files.length; i++) {
-            if (tests.formdata) formData.append('file', files[i]);
-            previewfile(files[i]);
-        }
-        if (tests.formdata) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/devnull.php');
-            xhr.onload = function () {};
-
-            if (tests.progress) {
-                xhr.upload.onprogress = function (event) {
-                    if (event.lengthComputable) {
-                        var complete = (event.loaded / event.total * 100 | 0);
-                    }
-                }
-            }
-
-            xhr.send(formData);
-        }
-    }
-
-
-    function previewfile(file) {
-        if (tests.filereader === true && acceptedTypes[file.type] === true) {
-            var reader = new FileReader();
-            reader.onload = function (event) {
-                image = new Image();
-                image.src = event.target.result;
-                var raster1 = new Raster(image);
-
-                //      alert(image.src);
-                raster1.position = view.center;
-                //raster.scale(0.5);
-
-                //      hasRaster = true;
-                pathList.push(raster1);
-                currentElement++;
-                path_to_send.image = image.src;
-                path_to_send.hasRaster = true;
-                path_to_send.hasRaster = false;
-                view.draw();
-            };
-
-            reader.readAsDataURL(file);
-        } else {
-            holder.innerHTML += '<p>Uploaded ' + file.name + ' ' + (file.size ? (file.size / 1024 | 0) + 'K' : '');
-            console.log(file);
-        }
-    }
-
-    if (tests.dnd) {
-        holder.ondragover = function () {
-            this.className = 'hover';
-            return false;
-        };
-        holder.ondragend = function () {
-            this.className = '';
-            return false;
-        };
-        holder.ondrop = function (e) {
-            this.className = '';
-            e.preventDefault();
-            readfiles(e.dataTransfer.files);
-        }
-    } else {
-        fileupload.className = 'hidden';
-        fileupload.querySelector('input').onchange = function () {
-            readfiles(this.files);
-        };
-    }
-
-}*/
-//IMAGE DROP
