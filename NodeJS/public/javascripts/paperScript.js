@@ -25,7 +25,8 @@ window.onload = function () {
         doShape: null,
         shapePosition: 0,
         shapeEvent: 0,
-	    positionLayer : []
+	    positionLayer : [],
+		raster : null
     };
 
 
@@ -60,10 +61,12 @@ window.onload = function () {
        count = 0;
 	   newLayer();
        raster = new Raster(image);
-
-    // Transform the raster, so it fills the view:
-	if (raster.bounds > view.bounds)
-      raster.fitBounds(view.bounds, true);
+	   path_to_send.raster = image.src;
+	   socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+	   path_to_send.raster = null;
+      // Transform the raster, so it fills the view:
+	  if (raster.bounds > view.bounds)
+          raster.fitBounds(view.bounds, true);
     }
 
     function onDocumentDrag(event) {
@@ -656,6 +659,15 @@ if (selected == pathList[i])
 
             shape.opacity = points.opacity / 100;
         }
+		if (points.raster != null) {
+		    var llayer = activeLayer;
+            newLayer();
+			var image = new Image();
+			image.src = points.raster;
+			raster = new Raster(image);
+            activeLayer = llayer;
+			printLayers();
+		}
         view.draw();
     };
 
