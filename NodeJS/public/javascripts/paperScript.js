@@ -27,7 +27,10 @@ window.onload = function () {
         shapeEvent: 0,
 	    positionLayer : [],
 		raster : null,
-		boundsLayer : null
+		boundsLayer : null,
+		down : null,
+		up : null,
+		thisLayer : null
     };
 
 
@@ -124,13 +127,17 @@ window.onload = function () {
 		layer[activeLayer].selected = false;
 		positionLayer[activeLayer] = new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y);
 		if (shifted) {
-				path_to_send.boundsLayer = new paper.Point(layer[activeLayer].bounds.width, layer[activeLayer].bounds.height);
+				path_to_send.boundsLayer = new paper.Rectangle(size ,size,
+															   layer[activeLayer].bounds.width, layer[activeLayer].bounds.height);
+				path_to_send.thisLayer = activeLayer;
 		}
 		else {
 				path_to_send.boundsLayer = null;
 		}
 		shifted = false;
 		path_to_send.positionLayer = positionLayer;
+		console.log("send" + layer[activeLayer].bounds.width);
+		console.log(layer[activeLayer].bounds.height);
 		socket.emit('draw:end', uid, JSON.stringify(path_to_send));
 		selectLayerBounds.remove();
 		hasDoubleClickedLayer = false;
@@ -620,9 +627,9 @@ if (selected == pathList[i])
 	if (points.positionLayer != null && positionLayer != points.positionLayer) {
 		for (var i = 0; i < layer.length; i++) {
 			if (points.positionLayer[i] != null) {
-				if (points.boundsLayer != 0 && points.boundsLayer != null) {
-						layer[i].bounds.width = points.boundsLayer.x;
-						layer[i].bounds.height = points.boundsLayer.y;
+				if (points.boundsLayer != 0 && points.boundsLayer != null && points.thisLayer != null) {
+						layer[points.thisLayer].bounds.width = points.boundsLayer.width - points.boundsLayer.x;
+						layer[points.thisLayer].bounds.height = points.boundsLayer.height - points.boundsLayer.y;
 				}
 				else {
 						layer[i].position = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
@@ -685,6 +692,18 @@ if (selected == pathList[i])
             activeLayer = llayer;
 			printLayers();
 		}
+		if (points.up != null) {
+				layer[points.up].insertBelow(layer[points.up - 1]);
+				var l = layer[points.up];
+				layer[points.up] = layer[points.up - 1];
+				layer[points.up - 1] = l;
+		}
+		else if (points.down != null) {
+				layer[points.down].insertAbove(layer[points.down + 1]);
+				var l = layer[points.down];
+				layer[points.down] = layer[points.down + 1];
+				layer[points.down + 1] = l;
+		}
         view.draw();
     };
 
@@ -695,7 +714,6 @@ if (selected == pathList[i])
         var path = external_paths[artist];
 
         if (!path) {
-				console.log(points.activeLayer)
             layer[points.activeLayer].activate();
             external_paths[artist] = new Path();
             path = external_paths[artist];
