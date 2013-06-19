@@ -231,8 +231,7 @@ window.onload = function () {
             }, rafraichissement);
 
         }
-
-        timer_is_active = true;;
+        timer_is_active = true;
     }
 
     tool3.onMouseUp = function (event) {
@@ -254,10 +253,42 @@ window.onload = function () {
         }
     }
 
+	var haveToResize;
+	var toResize;
+	var fromResize;
     view.onFrame = function (event) {
         for (var i = 0; i < drawForMe.length; i += 2) {
             drawForMe[i].strokeColor.hue += 0.1;
         }
+		if (layer[fromResize] != null) {
+				var aug = 0;
+				
+				if (Math.abs(toResize.x - layer[fromResize].bounds.width)  < 10) {
+						layer[fromResize].bounds.height = toResize.y;
+						layer[fromResize].bounds.width = toResize.x;
+				}
+				if (Math.abs(toResize.x - layer[fromResize].bounds.width)  > 200)
+						aug = 20;
+				if (Math.abs(toResize.x - layer[fromResize].bounds.width)  > 100)
+						aug = 10;
+				else
+						aug = 5;
+				if (layer[fromResize].bounds.width < toResize.x) {
+						layer[fromResize].bounds.width += aug;
+				}
+				if (layer[fromResize].bounds.height < toResize.y) {
+						layer[fromResize].bounds.height += aug;
+				}
+					if (layer[fromResize].bounds.width > toResize.x) {
+						layer[fromResize].bounds.width -= aug;
+				}
+				if (layer[fromResize].bounds.height > toResize.y) {
+						layer[fromResize].bounds.height -= aug;
+				}
+		}
+			//	haveToResize = false;
+		//}
+		
     }
     tool2.onMouseDown = function (event) {
         var hitResult = paper.project.hitTest(event.point);
@@ -628,8 +659,11 @@ if (selected == pathList[i])
 		for (var i = 0; i < layer.length; i++) {
 			if (points.positionLayer[i] != null) {
 				if (points.boundsLayer != 0 && points.boundsLayer != null && points.thisLayer != null) {
-						layer[points.thisLayer].bounds.width = points.boundsLayer.width - points.boundsLayer.x;
-						layer[points.thisLayer].bounds.height = points.boundsLayer.height - points.boundsLayer.y;
+						haveToResize = true;
+						toResize = new paper.Point(points.boundsLayer.width - points.boundsLayer.x, points.boundsLayer.height - points.boundsLayer.y);
+						fromResize = points.thisLayer;
+				/*		layer[points.thisLayer].bounds.width = points.boundsLayer.width - points.boundsLayer.x;
+						layer[points.thisLayer].bounds.height = points.boundsLayer.height - points.boundsLayer.y;*/
 				}
 				else {
 						layer[i].position = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
