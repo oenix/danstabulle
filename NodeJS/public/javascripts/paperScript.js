@@ -130,18 +130,19 @@ window.onload = function () {
 		if (shifted) {
 				path_to_send.boundsLayer = new paper.Rectangle(size ,size,
 															   layer[activeLayer].bounds.width, layer[activeLayer].bounds.height);
-				path_to_send.thisLayer = activeLayer;
 		}
 		else {
 				path_to_send.boundsLayer = null;
 		}
 		shifted = false;
+		path_to_send.thisLayer = activeLayer;
 		path_to_send.positionLayer = positionLayer;
 		console.log("send" + layer[activeLayer].bounds.width);
 		console.log(layer[activeLayer].bounds.height);
 		socket.emit('draw:end', uid, JSON.stringify(path_to_send));
 		selectLayerBounds.remove();
 		hasDoubleClickedLayer = false;
+		thisLayer = null;
     }
     
     var start;
@@ -261,12 +262,13 @@ window.onload = function () {
         for (var i = 0; i < drawForMe.length; i += 2) {
             drawForMe[i].strokeColor.hue += 0.1;
         }
-		if (layer[fromResize] != null) {
+		if (layer[fromResize] != null && haveToResize) {
 				var aug = 0;
 				
 				if (Math.abs(toResize.x - layer[fromResize].bounds.width)  < 10) {
 						layer[fromResize].bounds.height = toResize.y;
 						layer[fromResize].bounds.width = toResize.x;
+						haveToResize = false;
 				}
 				if (Math.abs(toResize.x - layer[fromResize].bounds.width)  > 200)
 						aug = 20;
@@ -287,8 +289,6 @@ window.onload = function () {
 						layer[fromResize].bounds.height -= aug;
 				}
 		}
-			//	haveToResize = false;
-		//}
 		
     }
     tool2.onMouseDown = function (event) {
@@ -665,21 +665,23 @@ if (selected == pathList[i])
 			layerOpacity[i] = points.layerOpacity[i];
 		}
 	}
-	if (points.positionLayer != null && positionLayer != points.positionLayer) {
-		for (var i = 0; i < layer.length; i++) {
-			if (points.positionLayer[i] != null) {
-				if (points.boundsLayer != 0 && points.boundsLayer != null && points.thisLayer != null) {
+	if (points.positionLayer != null && points.thisLayer != null) {
+			if (points.positionLayer[points.thisLayer] != null) {
+				
+				if (points.boundsLayer != 0 && points.boundsLayer != null) {
 						haveToResize = true;
 						toResize = new paper.Point(points.boundsLayer.width - points.boundsLayer.x, points.boundsLayer.height - points.boundsLayer.y);
 						fromResize = points.thisLayer;
+						
 				/*		layer[points.thisLayer].bounds.width = points.boundsLayer.width - points.boundsLayer.x;
 						layer[points.thisLayer].bounds.height = points.boundsLayer.height - points.boundsLayer.y;*/
 				}
 				else {
-						layer[i].position = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
-						positionLayer[i] = new paper.Point(points.positionLayer[i].x, points.positionLayer[i].y);
+						
+						layer[points.thisLayer].position = new paper.Point(points.positionLayer[points.thisLayer].x, points.positionLayer[points.thisLayer].y);
+						positionLayer[points.thisLayer] = new paper.Point(points.positionLayer[points.thisLayer].x, points.positionLayer[points.thisLayer].y);
+		               
 				}
-			}
 		}
 	}
         if (points.remove >= 0) {

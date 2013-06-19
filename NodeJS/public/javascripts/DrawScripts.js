@@ -105,7 +105,7 @@ function layerUp(nbLayer) {
 }
 
 function layerDown(nbLayer) {
-		if (nbLayer < layer.length) {
+		if (nbLayer < layer.length - 1) {
 				layer[nbLayer].insertAbove(layer[nbLayer + 1]);
 				var l = layer[nbLayer];
 				layer[nbLayer] = layer[nbLayer + 1];
