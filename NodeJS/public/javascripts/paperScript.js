@@ -40,6 +40,7 @@ window.onload = function () {
         text.content = prompt(question, "");
         if (text.content == "null") {
             text.content = "";
+			text.remove();
             return null;
         }
         text.fillColor = 'black';
@@ -443,15 +444,24 @@ if (selected == pathList[i])
                 path.simplify(20);
                 path.opacity = 1;
                 texte = texteBulle.content;
+				
+				console.log(texteBulle.position);
             }
-        } else {
+			else {
+				  if (checked("smooth")) {
+				      path.simplify();
+				     path_to_send.smooth = true;
+				  }
+					else
+				    path_to_send.smooth = false;
+        }
+        }
+		else {
             if (checked("smooth")) {
                 path.simplify();
                 path_to_send.smooth = true;
             } else
                 path_to_send.smooth = false;
-
-
         }
 
         path_to_send.end = event.point;
