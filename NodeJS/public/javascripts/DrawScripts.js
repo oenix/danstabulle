@@ -72,7 +72,7 @@ function printLayers() {
     }
     document.getElementById("calques").innerHTML = htmlLayer;
     for (var i = 0; i < layer.length; i ++) {
-	document.getElementById("layer" + i).selectedIndex = 100 - layerOpacity[i];
+		document.getElementById("layer" + i).selectedIndex = 100 - layerOpacity[i];
     }
 
 }

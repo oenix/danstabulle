@@ -13,6 +13,7 @@
 	<script type='text/javascript' src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/javascripts/paper.js"></script>
 	<script type='text/javascript' src="/javascripts/paperScript.js"></script>
+		<script type='text/javascript' src="/javascripts/harmonisation.js"></script>
 	<script type="text/javascript" src="javascripts/zepto.js"></script>
 <script src="javascripts/drawScripts.js"></script>
     </head>
@@ -83,15 +84,15 @@
 	<a href="javascript:activateTool('tool3');">Draw For Me</a> /
 	<a href="javascript:activateTool('tool4');">Forme</a>
   <select id='color'>
-    <option value='#000000'> Noir</option>
-    <option value='#ffffff'> Blanc</option>
-    <option value='#fc3436'> Rouge</option>
-    <option value='#cd3c9f'> Violet</option>
-    <option value='#36bfde'> Bleu</option>
-    <option value='#b0c930'> Vert</option>
-    <option value='#7d4e32'> Marron</option>
-    <option value='#fc6222'> Orange</option>
-    <option value='#f9e422'> Jaune</option>
+    <option id="ColorNoir" value='#000000'> Noir</option>
+    <option id="ColorBlanc" value='#ffffff'> Blanc</option>
+    <option id="ColorRouge" value='#fc3436'> Rouge</option>
+    <option id="ColorViolet" value='#cd3c9f'> Violet</option>
+    <option id="ColorBleu" value='#36bfde'> Bleu</option>
+    <option id="ColorVert" value='#b0c930'> Vert</option>
+    <option id="ColorMarron" value='#7d4e32'> Marron</option>
+    <option id="ColorOrange" value='#fc6222'> Orange</option>
+    <option id="ColorJaune" value='#f9e422'> Jaune</option>
   </select>
     <select id='size' placeholder="Taille">
     <option value='1'> 1</option>
@@ -142,12 +143,12 @@ function addLayer()
 			<div id="log"></div>
 			</section>
 			<section class="palette" id="container ombre " class="span8">
+				<h1>Harmonisation</h2>
 				<h2>Palette</h2>
-				<form>
-						<input type="text" class="input-medium" placeholder="Nom">
-						#<input type="text" class="input-medium" placeholder="Hexa">
-						<button class="btn btn-small btn-success" type="submit">Ajouter à la palette</button>
-				</form>
+						<input type="text" id="colorName" class="input-medium" placeholder="Nom">
+						#<input type="text" id="colorHexa" class="input-medium" placeholder="Hexa" maxlength="6" >
+						<button class="btn btn-small btn-success" onClick="addColor()" >Ajouter à la palette</button>
+						<button class="btn btn-small btn-danger" onClick="delColor()">Supprimer de la palette</button>
 				<div id="log"></div>
 				</section>
 			</div>
