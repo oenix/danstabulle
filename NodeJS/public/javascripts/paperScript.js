@@ -67,6 +67,7 @@ window.onload = function () {
 	   newLayer();
        raster = new Raster(image);
 	   path_to_send.raster = image.src;
+	   addToPathList(raster);
 	   socket.emit('draw:end', uid, JSON.stringify(path_to_send));
 	   path_to_send.raster = null;
       // Transform the raster, so it fills the view:
@@ -77,7 +78,12 @@ window.onload = function () {
     function onDocumentDrag(event) {
 	   event.preventDefault();
     }
- 
+ 	
+	function addToPathList(item) {
+		pathList.push(item);
+		currentElement++;
+	}
+
     function onDocumentDrop(event) {
 	
        event.preventDefault();
@@ -354,7 +360,6 @@ if (selected == pathList[i])
             path: [],
             image: 0,
             size: size,
-            hasRaster: false,
             opacity: opacity,
             remove: -1,
             add: -2,
@@ -364,7 +369,7 @@ if (selected == pathList[i])
             updatePath: null,
             drawForMe: -1,
             activeLayer: activeLayer,
-	    layerOpacity : layerOpacity
+	    	layerOpacity : layerOpacity
         };
         var hitResult = paper.project.hitTest(event.point);
         if (hitResult) {
@@ -713,6 +718,8 @@ if (selected == pathList[i])
 			var image = new Image();
 			image.src = points.raster;
 			raster = new Raster(image);
+			pathListExtern.push(raster);
+			currentElementExtern ++;
             activeLayer = llayer;
 			printLayers();
 		}
@@ -728,12 +735,14 @@ if (selected == pathList[i])
 				layer[points.down] = layer[points.down + 1];
 				layer[points.down + 1] = l;
 		}
-		
 		if (points.positionLayer != null && points.thisLayer != null) {
 				if (points.positionLayer[points.thisLayer] != null) {
 					if (points.boundsLayer != 0 && points.boundsLayer != null) {
 							haveToResize = true;
-							toResize = new paper.Point(points.boundsLayer.width - points.boundsLayer.x, points.boundsLayer.height - points.boundsLayer.y);
+							if (points.boundsLayer.x != null)
+								toResize = new paper.Point(points.boundsLayer.width - points.boundsLayer.x, points.boundsLayer.height - points.boundsLayer.y);
+							else
+									toResize = new paper.Point(points.boundsLayer.width, points.boundsLayer.height);
 							fromResize = points.thisLayer;
 					}
 					else {
