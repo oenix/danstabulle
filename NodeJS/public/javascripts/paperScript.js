@@ -128,8 +128,7 @@ window.onload = function () {
 		layer[activeLayer].selected = false;
 		positionLayer[activeLayer] = new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y);
 		if (shifted) {
-				path_to_send.boundsLayer = new paper.Rectangle(size ,size,
-															   layer[activeLayer].bounds.width, layer[activeLayer].bounds.height);
+				path_to_send.boundsLayer = new paper.Rectangle(size ,size,														  layer[activeLayer].bounds.width,layer[activeLayer].bounds.height);
 		}
 		else {
 				path_to_send.boundsLayer = null;
@@ -137,8 +136,6 @@ window.onload = function () {
 		shifted = false;
 		path_to_send.thisLayer = activeLayer;
 		path_to_send.positionLayer = positionLayer;
-		console.log("send" + layer[activeLayer].bounds.width);
-		console.log(layer[activeLayer].bounds.height);
 		socket.emit('draw:end', uid, JSON.stringify(path_to_send));
 		selectLayerBounds.remove();
 		hasDoubleClickedLayer = false;
@@ -665,25 +662,6 @@ if (selected == pathList[i])
 			layerOpacity[i] = points.layerOpacity[i];
 		}
 	}
-	if (points.positionLayer != null && points.thisLayer != null) {
-			if (points.positionLayer[points.thisLayer] != null) {
-				
-				if (points.boundsLayer != 0 && points.boundsLayer != null) {
-						haveToResize = true;
-						toResize = new paper.Point(points.boundsLayer.width - points.boundsLayer.x, points.boundsLayer.height - points.boundsLayer.y);
-						fromResize = points.thisLayer;
-						
-				/*		layer[points.thisLayer].bounds.width = points.boundsLayer.width - points.boundsLayer.x;
-						layer[points.thisLayer].bounds.height = points.boundsLayer.height - points.boundsLayer.y;*/
-				}
-				else {
-						
-						layer[points.thisLayer].position = new paper.Point(points.positionLayer[points.thisLayer].x, points.positionLayer[points.thisLayer].y);
-						positionLayer[points.thisLayer] = new paper.Point(points.positionLayer[points.thisLayer].x, points.positionLayer[points.thisLayer].y);
-		               
-				}
-		}
-	}
         if (points.remove >= 0) {
             pathListExtern[points.remove].remove();
         }
@@ -749,6 +727,22 @@ if (selected == pathList[i])
 				var l = layer[points.down];
 				layer[points.down] = layer[points.down + 1];
 				layer[points.down + 1] = l;
+		}
+		
+		if (points.positionLayer != null && points.thisLayer != null) {
+				if (points.positionLayer[points.thisLayer] != null) {
+					if (points.boundsLayer != 0 && points.boundsLayer != null) {
+							haveToResize = true;
+							toResize = new paper.Point(points.boundsLayer.width - points.boundsLayer.x, points.boundsLayer.height - points.boundsLayer.y);
+							fromResize = points.thisLayer;
+					}
+					else {
+
+							layer[points.thisLayer].position = new paper.Point(points.positionLayer[points.thisLayer].x, points.positionLayer[points.thisLayer].y);
+							positionLayer[points.thisLayer] = new paper.Point(points.positionLayer[points.thisLayer].x, points.positionLayer[points.thisLayer].y);
+
+					}
+			}
 		}
         view.draw();
     };

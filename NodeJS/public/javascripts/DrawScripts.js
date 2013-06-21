@@ -99,6 +99,7 @@ function layerUp(nbLayer) {
 				layer[nbLayer] = layer[nbLayer - 1];
 				layer[nbLayer - 1] = l;
 				path_to_send.up = nbLayer;
+				path_to_send.positionLayer = null;
 				socket.emit('draw:end', uid, JSON.stringify(path_to_send));
 				path_to_send.up = null;
 		}
@@ -111,6 +112,7 @@ function layerDown(nbLayer) {
 				layer[nbLayer] = layer[nbLayer + 1];
 				layer[nbLayer + 1] = l;
 				path_to_send.down = nbLayer;
+				path_to_send.positionLayer = null;
 				socket.emit('draw:end', uid, JSON.stringify(path_to_send));
 				path_to_send.down = null;
 		}
