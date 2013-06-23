@@ -1,5 +1,11 @@
 # Mac Files
 .DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
 
 # Bootstrap
 Symfony/app/bootstrap*
