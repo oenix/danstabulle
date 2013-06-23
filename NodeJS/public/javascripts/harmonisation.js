@@ -2,8 +2,8 @@ function addColor() {
 	var colors;
 	if(isHex(document.getElementById("colorHexa").value))
 	{
-		colors = "<option id='Color"+ document.getElementById("colorHexa").value +"'' value='#"+  document.getElementById("colorHexa").value  +"'\
-		style='background-color:#" + document.getElementById("colorHexa").value + ";' onClick='selectColor()'></option>";
+		colors = "<option id='Color"+ document.getElementById("colorHexa").value.toUpperCase() +"'' value='#"+  document.getElementById("colorHexa").value.toUpperCase()  +"'\
+		style='background-color:#" + document.getElementById("colorHexa").value.toUpperCase() + ";' onClick='selectColor()'></option>";
 		document.getElementById("color").innerHTML += colors;
 		document.getElementById("colorHexa").value = '';
 	}
@@ -25,7 +25,8 @@ function hexToB(h) {return parseInt((cutHex(h)).substring(4,6),16)}
 function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
 
 function delColor() {
-		var option = document.getElementById("colorHexa").value.toLowerCase();
+		var option = document.getElementById("colorHexa").value;
+		console.log(option);
 		if(document.getElementById("Color" + option) != null)
 		{
 			document.getElementById("color").removeChild(document.getElementById("Color" + option));
@@ -45,5 +46,5 @@ function selectColor() {
 	//selectedColor;
 	document.getElementById("colorHexa").style.backgroundColor = selectedColor;
 	selectedColor = selectedColor.substring(1);
-	document.getElementById("colorHexa").value = selectedColor.toUpperCase();
+	document.getElementById("colorHexa").value = selectedColor;
 }
