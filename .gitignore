@@ -16,6 +16,7 @@ Symfony/app/logs/*
 #NodeJS Files
 src/NodeJS/node_modules/*
 NodeJS/node_modules/*
+NodeJS/public/javascripts/colors.dtb
 
 #Config Files
 Symfony/app/config/parameters.yml
