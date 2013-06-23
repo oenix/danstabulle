@@ -1,5 +1,8 @@
 /* Generic and useful functions */
 var paletteFile ="public/javascripts/colors.dtb";
+var defaultPalette = ["#000000", "#FFFFFF","#FC3436","#CD3C9F","#36BFDE","#B0C930","#7D4E32","#FC6222", "#F9E422","endBuffer"];
+
+
 function htmlEscape(str) {
     return String(str)
             .replace(/&/g, '&amp;')
@@ -321,12 +324,20 @@ io.sockets.on('connection', function (socket) {
 	});
 	
 	socket.on('loadPalette:end', function (uid){
+		
 		var fs = require('fs');
 		var colors = [];
-		data = fs.readFileSync(paletteFile);
-		data.toString().split('\n').forEach(function(line) {
-		colors.push(line);
+		
+		if (fs.existsSync(paletteFile)) {
+		    data = fs.readFileSync(paletteFile);
+			data.toString().split('\n').forEach(function(line) {
+			colors.push(line);
 		});
+		}
+		else {
+			colors = defaultPalette;
+			console.log(colors);
+		}
 		io.sockets.emit('loadColors:end', uid, JSON.stringify(colors));
 	});
 	

@@ -26,7 +26,6 @@ var loadColors = function (colors, artist) {
 		colors[i] = colors[i].slice(1);
 		addColor += "<option id='Color"+ colors[i] +"'' value='#"+  colors[i]  +"' style='background-color:#" + colors[i] + ";' onClick='selectColor()'></option>";
 	}
-	console.log(addColor);
 	document.getElementById("color").innerHTML = addColor;
 }
 
