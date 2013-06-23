@@ -15,6 +15,7 @@
 	<script type='text/javascript' src="/javascripts/paperScript.js"></script>
 		<script type='text/javascript' src="/javascripts/harmonisation.js"></script>
 	<script type="text/javascript" src="javascripts/zepto.js"></script>
+	<script type="text/javascript" src="javascripts/jscolor/jscolor.js"></script>
 <script src="javascripts/drawScripts.js"></script>
     </head>
     <body>
@@ -146,7 +147,7 @@ function addLayer()
 				<h1>Harmonisation</h2>
 				<h2>Palette</h2>
 						<input type="text" id="colorName" class="input-medium" placeholder="Nom">
-						#<input type="text" id="colorHexa" class="input-medium" placeholder="Hexa" maxlength="6" >
+						#<input type="text" id="colorHexa" class="input-medium color" placeholder="Hexa" maxlength="6" >
 						<button class="btn btn-small btn-success" onClick="addColor()" >Ajouter à la palette</button>
 						<button class="btn btn-small btn-danger" onClick="delColor()">Supprimer de la palette</button>
 				<div id="log"></div>
