@@ -35,8 +35,7 @@
 				  <li><a href="#">Blog</a></li>
 				  <li><a href="#">Shop</a></li>
                   <li><div class="input-append searchform">
-																		<input class="span2 recherche" id="appendedInput search-query" type="text" data-provide="typeahead" data-items="1">
-
+				  <input class="span2 recherche" id="appendedInput search-query" type="text" data-provide="typeahead" data-items="1">=
 									<span class="add-on"><i class="icon-search"></i></span>
 								</div>
                   </li>
@@ -77,8 +76,9 @@
 </div>
 <section id="Contenu" class="span12">
 
-  <p> Dessiner</p>
-  <p><a id="save" href="#"> Sauvegarder</a></p>
+  <p><a id="save" href="#"> Sauvegarder</a> / 
+  <a id="saveLayer" href="#"> Sauvegarder le calque Actif</a> /
+  <a id="saveVisibleLayer" href="#"> Sauvegarder les calques visibles</a></p>
   
 	<a href="javascript:activateTool('tool1');" id="pinceau">Pinceau</a> /
     <a href="javascript:activateTool('tool2');">Select</a> /
@@ -143,14 +143,39 @@ function addLayer()
 			</ul>
 			<div id="log"></div>
 			</section>
-			<section class="palette" id="container ombre " class="span8">
 				<h1>Harmonisation</h2>
+			<section class="palette" id="container ombre " class="span8">
+			
 				<h2>Palette</h2>
 						#<input type="text" id="colorHexa" class="input-medium color {required:false}" placeholder="Hexa" maxlength="6" >
 						<button class="btn btn-small btn-success" onClick="addColor()" >Ajouter à la palette</button>
 						<button class="btn btn-small btn-danger" onClick="delColor()">Supprimer de la palette</button>
 				<div id="log"></div>
-				</section>
+			</section>
+			<section class="Ressources" id="container ombre " class="span12">
+			<h2>Ressources</h2>
+				<div class="span4">
+						<div id="holder">
+						<canvas id="ressource1" width="306" height="212"></canvas>
+						</div>
+						<button class="btn btn-small btn-success" onClick="addColor()" >Charger</button>
+						<button class="btn btn-small btn-danger" onClick="delColor()">Supprimer</button>
+				</div>
+				<div class="span4">
+						<div id="holder">
+						<canvas id="ressource1" width="306" height="212"></canvas>
+						</div>
+						<button class="btn btn-small btn-success" onClick="addColor()" >Charger</button>
+						<button class="btn btn-small btn-danger" onClick="delColor()">Supprimer</button>
+				</div>
+				<div class="span4">
+						<div id="holder">
+						<canvas id="ressource1" width="306" height="212"></canvas>
+						</div>
+						<button class="btn btn-small btn-success" onClick="addColor()" >Charger</button>
+						<button class="btn btn-small btn-danger" onClick="delColor()">Supprimer</button>
+				</div>
+			</section>
 			</div>
 		
 			
