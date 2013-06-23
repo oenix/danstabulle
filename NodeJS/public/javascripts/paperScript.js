@@ -528,12 +528,8 @@ if (selected == pathList[i])
 
         if (artist !== uid && data) {
             syncHarmonisation(JSON.parse(data), artist);
-
         }
-
     });
-
-
 
 
     var $user_count = $('#userCount');

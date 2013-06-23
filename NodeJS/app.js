@@ -1,5 +1,5 @@
 /* Generic and useful functions */
-
+var paletteFile ="public/javascripts/colors.dtb";
 function htmlEscape(str) {
     return String(str)
             .replace(/&/g, '&amp;')
@@ -318,6 +318,34 @@ io.sockets.on('connection', function (socket) {
     
 		io.sockets.emit('harmonisation:end', uid, co_ordinates);
 
+	});
+	
+	socket.on('loadPalette:end', function (uid){
+		var fs = require('fs');
+		var colors = [];
+		data = fs.readFileSync(paletteFile);
+		data.toString().split('\n').forEach(function(line) {
+		colors.push(line);
+		});
+		io.sockets.emit('loadColors:end', uid, JSON.stringify(colors));
+	});
+	
+	socket.on('savePalette:end', function (uid, colors) {
+		
+		var fs = require('fs');
+
+		fs.writeFile(paletteFile, colors, function(err) {
+		if(err) {
+			fs.createWriteStream(paletteFile);
+			fs.writeFile(paletteFile, colors, function(err) {
+			  if(err) 
+				Console.log("Write Error");
+			});
+		} else {
+			console.log("The file was saved!");
+		}
+		});
+	
 	});
 
 });

@@ -34,6 +34,9 @@ var fusionLayer = [];
 var selectLayerBounds;
 var hasDoubleClickedLayer = false;
 
+
+socket.emit('loadPalette:end', uid);
+
 Array.prototype.unset = function(val){
 	var index = this.indexOf(val)
 	if(index > -1){

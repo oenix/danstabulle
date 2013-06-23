@@ -14,9 +14,29 @@ function addColor() {
 		document.getElementById("colorHexa").value = '';
 		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
 	    harmo.color = null;
+		saveColor();
 	}
 	else
 		alert("Couleur non valide");
+}
+
+var loadColors = function (colors, artist) {
+	var addColor = "";
+	for (var i = 0; i < colors.length - 1; i++) {
+		colors[i] = colors[i].slice(1);
+		addColor += "<option id='Color"+ colors[i] +"'' value='#"+  colors[i]  +"' style='background-color:#" + colors[i] + ";' onClick='selectColor()'></option>";
+	}
+	console.log(addColor);
+	document.getElementById("color").innerHTML = addColor;
+}
+
+function saveColor() {
+	var colors = "";
+	var nbColors = document.getElementById("color" ).options.length
+	for (var i = 0; i < nbColors; i++) {
+		colors += document.getElementById("color" ).options[i].value + '\n';
+	}
+	socket.emit('savePalette:end', uid, colors);
 }
 
 function isHex(val){
@@ -33,18 +53,18 @@ function hexToB(h) {return parseInt((cutHex(h)).substring(4,6),16)}
 function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
 
 function delColor() {
-		var option = document.getElementById("colorHexa").value;
-		console.log(option);
-		if(document.getElementById("Color" + option) != null)
-		{
-			document.getElementById("color").removeChild(document.getElementById("Color" + option));
-			selectColor();
-			harmo.delColor = option;
-			socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
-		}
-		else
-			alert("Couleur non valide");
-		harmo.delColor = null;
+	var option = document.getElementById("colorHexa").value;
+	if(document.getElementById("Color" + option) != null)
+	{
+		document.getElementById("color").removeChild(document.getElementById("Color" + option));
+		selectColor();
+		harmo.delColor = option;
+		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
+		saveColor();
+	}
+	else
+		alert("Couleur non valide");
+	harmo.delColor = null;
 }
 
 function selectColor() {
@@ -61,6 +81,13 @@ function selectColor() {
 
 //EXTERN
 
+
+socket.on('loadColors:end', function (artist, data) {
+
+        if (artist !== uid && data) {
+            loadColors(JSON.parse(data), artist);
+        }
+    });
 
 var syncHarmonisation = function (points, artist){
 	if (points.color != null) {
