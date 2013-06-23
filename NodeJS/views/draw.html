@@ -13,10 +13,10 @@
 	<script type='text/javascript' src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/javascripts/paper.js"></script>
 	<script type='text/javascript' src="/javascripts/paperScript.js"></script>
-		<script type='text/javascript' src="/javascripts/harmonisation.js"></script>
+	<script type='text/javascript' src="/javascripts/harmonisation.js"></script>
 	<script type="text/javascript" src="javascripts/zepto.js"></script>
 	<script type="text/javascript" src="javascripts/jscolor/jscolor.js"></script>
-<script src="javascripts/drawScripts.js"></script>
+	<script src="javascripts/drawScripts.js"></script>
     </head>
     <body>
       <div class="container ombre blanc">
@@ -84,16 +84,16 @@
     <a href="javascript:activateTool('tool2');">Select</a> /
 	<a href="javascript:activateTool('tool3');">Draw For Me</a> /
 	<a href="javascript:activateTool('tool4');">Forme</a>
-  <select id='color'>
-    <option id="ColorNoir" value='#000000'> Noir</option>
-    <option id="ColorBlanc" value='#ffffff'> Blanc</option>
-    <option id="ColorRouge" value='#fc3436'> Rouge</option>
-    <option id="ColorViolet" value='#cd3c9f'> Violet</option>
-    <option id="ColorBleu" value='#36bfde'> Bleu</option>
-    <option id="ColorVert" value='#b0c930'> Vert</option>
-    <option id="ColorMarron" value='#7d4e32'> Marron</option>
-    <option id="ColorOrange" value='#fc6222'> Orange</option>
-    <option id="ColorJaune" value='#f9e422'> Jaune</option>
+  <select id='color' style="background-color:#000000;">
+    <option id="Color000000" value='#000000' style="background-color:#000000;" onClick="selectColor()"></option>
+    <option id="Color000000" value='#ffffff' style="background-color:#ffffff;" onClick="selectColor()"></option>
+    <option id="Colorfc3436" value='#fc3436' style="background-color:#fc3436;" onClick="selectColor()"></option>
+    <option id="Colorcd3c9f" value='#cd3c9f' style="background-color:#cd3c9f;" onClick="selectColor()"></option>
+    <option id="Color36bfde" value='#36bfde' style="background-color:#36bfde;" onClick="selectColor()"></option>
+    <option id="Colorb0c930" value='#b0c930' style="background-color:#b0c930;" onClick="selectColor()"></option>
+    <option id="Color7d4e32" value='#7d4e32' style="background-color:#7d4e32;" onClick="selectColor()"></option>
+    <option id="Colorfc6222" value='#fc6222' style="background-color:#fc6222;" onClick="selectColor()"></option>
+    <option id="Colorf9e422" value='#f9e422' style="background-color:#f9e422;" onClick="selectColor()"></option>
   </select>
     <select id='size' placeholder="Taille">
     <option value='1'> 1</option>
@@ -146,8 +146,7 @@ function addLayer()
 			<section class="palette" id="container ombre " class="span8">
 				<h1>Harmonisation</h2>
 				<h2>Palette</h2>
-						<input type="text" id="colorName" class="input-medium" placeholder="Nom">
-						#<input type="text" id="colorHexa" class="input-medium color" placeholder="Hexa" maxlength="6" >
+						#<input type="text" id="colorHexa" class="input-medium color {required:false}" placeholder="Hexa" maxlength="6" >
 						<button class="btn btn-small btn-success" onClick="addColor()" >Ajouter à la palette</button>
 						<button class="btn btn-small btn-danger" onClick="delColor()">Supprimer de la palette</button>
 				<div id="log"></div>

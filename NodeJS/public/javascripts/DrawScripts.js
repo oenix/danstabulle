@@ -41,6 +41,20 @@ Array.prototype.unset = function(val){
 	}
 }
 
+function getSelectValue(selectId) {
+        var elmt = document.getElementById(selectId);
+        if (elmt.multiple == false) {
+            return elmt.options[elmt.selectedIndex].value;
+        }
+        var values = new Array();
+        for (var i = 0; i < elmt.options.length; i++) {
+            if (elmt.options[i].selected == true) {
+                values[values.length] = elmt.options[i].value;
+            }
+        }
+        return values;
+    }
+
 function changeLayerOpacity(numOpacity, numLayer)
 {
 	layerOpacity[numLayer] = numOpacity;
