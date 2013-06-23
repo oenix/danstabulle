@@ -1,11 +1,19 @@
+var harmo = {
+	color : null,
+	delColor : null
+};
+
 function addColor() {
+	harmo.color = null;
 	var colors;
 	if(isHex(document.getElementById("colorHexa").value))
 	{
-		colors = "<option id='Color"+ document.getElementById("colorHexa").value.toUpperCase() +"'' value='#"+  document.getElementById("colorHexa").value.toUpperCase()  +"'\
-		style='background-color:#" + document.getElementById("colorHexa").value.toUpperCase() + ";' onClick='selectColor()'></option>";
+		harmo.color = document.getElementById("colorHexa").value.toUpperCase();
+		colors = "<option id='Color"+ harmo.color +"'' value='#"+  harmo.color  +"' style='background-color:#" + harmo.color + ";' onClick='selectColor()'></option>";
 		document.getElementById("color").innerHTML += colors;
 		document.getElementById("colorHexa").value = '';
+		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
+	    harmo.color = null;
 	}
 	else
 		alert("Couleur non valide");
@@ -31,9 +39,12 @@ function delColor() {
 		{
 			document.getElementById("color").removeChild(document.getElementById("Color" + option));
 			selectColor();
+			harmo.delColor = option;
+			socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
 		}
 		else
 			alert("Couleur non valide");
+		harmo.delColor = null;
 }
 
 function selectColor() {
@@ -43,8 +54,29 @@ function selectColor() {
 	var B = hexToB(selectedColor)
 	
 	document.getElementById("color").style.backgroundColor = "rgba(" + R + "," + G + "," + B + "," + getSelectValue('opacity') / 100 + ")";
-	//selectedColor;
 	document.getElementById("colorHexa").style.backgroundColor = selectedColor;
 	selectedColor = selectedColor.substring(1);
 	document.getElementById("colorHexa").value = selectedColor;
+}
+
+//EXTERN
+
+
+var syncHarmonisation = function (points, artist){
+	if (points.color != null) {
+		addExternColor(points.color);
+	}
+	else if (points.delColor != null) {
+		deleteExternColor(points.delColor);
+	}
+}
+
+function addExternColor(color) {
+		var colors = "<option id='Color"+ color +"'' value='#"+ color +" 'style='background-color:#" + color + ";' onClick='selectColor()'></option>";
+		document.getElementById("color").innerHTML += colors;
+}
+
+function deleteExternColor(color) {
+		document.getElementById("color").removeChild(document.getElementById("Color" + color));
+		selectColor();
 }

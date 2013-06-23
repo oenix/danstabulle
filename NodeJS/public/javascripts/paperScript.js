@@ -524,6 +524,14 @@ if (selected == pathList[i])
         }
 
     });
+    socket.on('harmonisation:end', function (artist, data) {
+
+        if (artist !== uid && data) {
+            syncHarmonisation(JSON.parse(data), artist);
+
+        }
+
+    });
 
 
 

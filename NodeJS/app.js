@@ -313,5 +313,11 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.emit('drawForMe:end', uid, co_ordinates);
 
 	});
+	
+	socket.on('harmonisation:end', function (uid, co_ordinates) {
+    
+		io.sockets.emit('harmonisation:end', uid, co_ordinates);
+
+	});
 
 });
