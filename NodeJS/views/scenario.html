@@ -10,10 +10,10 @@
 	<link href="fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
 
 	<script type="text/javascript" src="/javascripts/jquery.js"></script>
-	<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
    	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/javascripts/scenario.js"></script>
 	<script type="text/javascript" src="/tiny_mce/tiny_mce.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.jeditable.mini.js"></script>
 	<script type="text/javascript" src="/fancybox/jquery.fancybox.js"></script>
 	
   </head>
@@ -90,7 +90,7 @@
 				<div id=writingHelperMain">
 					<div class="writingHelperMainContent" id="scenarioStoryMain">
 						<h3>Rappel de la trame</h3>
-						<p>
+						<p class="editable ">
 							Marvin sauve le monde au 42ème jour.
 						</p>
 					</div>
@@ -98,18 +98,18 @@
 						<h3>Rappel des personnages</h3>
 						<dl> 
 							<dt>Marvin</dt> 
-							<dd>Le gentil</dd> 
+							<dd class="editable">Le gentil</dd> 
 							<dt>Carmouze</dt> 
-							<dd>Le méchant</dd> 
+							<dd class="editable">Le méchant</dd> 
 						</dl>
 					</div>
 					<div class="writingHelperMainContent" id="scenarioPlacesMain">
 						<h3>Rappel de la trame</h3>
 						<dl> 
 							<dt>Epita</dt> 
-							<dd>Endroit scolaire</dd> 
+							<dd class="editable">Endroit scolaire</dd> 
 							<dt>Bar</dt> 
-							<dd>Endroit bien</dd> 
+							<dd class="editable">Endroit bien</dd> 
 						</dl>
 					</div>
 				</div>

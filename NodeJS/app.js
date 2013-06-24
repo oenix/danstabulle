@@ -195,8 +195,6 @@ io.sockets.on('connection', function (socket) {
 			/* Cherche à savoir si l'utilisateur est déjà connecté sur ce scénario */
 			indexPseudo = getPseudoIndex(scenarioIndex, infos.pseudo);
 			
-			console.log("INDEX PSEUDO = " + indexPseudo);
-			
 			if (indexPseudo == -1) // ça n'est pas le cas
 			{
 				editingScenarios[scenarioIndex].connectedUsers.push({pseudo: infos.pseudo, cpt: 1});
@@ -215,7 +213,7 @@ io.sockets.on('connection', function (socket) {
 		/* On donne au nouvel utilisateur les informations nécessaires pour initialiser la page */
 		socket.emit('initPage', {text: editingScenarios[scenarioIndex].currentText, users: editingScenarios[scenarioIndex].connectedUsers});
 		
-		console.log('New user with pseudo : ' + infos.pseudo + " and ID : " + socketId);
+		console.log('New user with pseudo : ' + infos.pseudo + "in room " + + "and ID : " + socketId);
 	});
 	
     socket.on('newTextVersion', function (infos) {
@@ -238,8 +236,6 @@ io.sockets.on('connection', function (socket) {
 	socket.on('disconnect', function() {
 	
 		infos = getInfosFromSocket(socket.id);
-		
-		console.log("KLDSFKDLSKFLDSKFLDSKFDLSKFLKDKSLFKDSLFKDSLFKDKSLF : " + infos.scenarioIndex);
 		
 		/* Is scenario disconnection */
 		if (infos.scenarioIndex != -1)
@@ -309,6 +305,8 @@ io.sockets.on('connection', function (socket) {
 	socket.on('newDrawingUser', function (infos)
 	{
 		newUser = {id: socketId, pseudo: infos.pseudo};
+		
+		console.log("LALALALALKLFKDSLFKDSLFLDSKFKLKFLSKFLDSKFS");
 		
 		/* On reçoit la room correspondant au scénario */
 		socket.join("d" + infos.id);

@@ -96,7 +96,7 @@ $(document).ready(function() {
 	
 	/* Tell the server the new user's connection */
 
-	socket.emit('newUserConnection', {id: scenarioId, pseudo: pseudo});
+	socket.emit('newUserConnection', {scenarioId: scenarioId, pseudo: pseudo});
 
 	/* Add an user to the users' list */
 
@@ -108,6 +108,40 @@ $(document).ready(function() {
   
 	function updateEditorText(text) {
 		tinyMCE.activeEditor.setContent(text);
+	};
+	
+	/* Send the content of the scenario framework to the server */
+  
+	function sendScenarioFramework() {
+	
+		summary = $("#scenarioStoryMain p").html();
+		
+		places = [];
+		characters = [];
+
+		$("#scenarioPlacesMain dt").each(function (index)
+		{
+			places.push({name: $(this).html(), description: ""});
+		});
+		
+		$("#scenarioPlacesMain dd").each(function (index)
+		{
+			places[index].description = $(this).html();
+		});
+		
+		$("#scenarioCaractersMain dt").each(function (index)
+		{
+			characters.push({name: $(this).html(), description: ""});
+		});
+		
+		$("#scenarioCaractersMain dd").each(function (index)
+		{
+			characters[index].description = $(this).html();
+		});
+	
+		scenarioFramework = {summary: summary, places: places, characters: characters};
+		
+		socket.emit('sendScenarioFramework', {scenarioId: scenarioId, framework: scenarioFramework});
 	};
 	
 	/* Send the new text to the server for broadcasting */
@@ -231,5 +265,22 @@ $(document).ready(function() {
 		$('#scenarioCaractersMain').hide();
 		$('#scenarioPlacesMain').show();
 	});
+	
+	/* jsEditable management */
+	
+	function editableCallback (v, s)
+	{
+		return v;
+	}
 
+	 $('.editable').editable(editableCallback, { 
+     type     : 'textarea',
+	 width : 400,
+	 height : 60,
+	 tooltip   : "Cliquez pour éditer !",
+	 onblur : "submit",
+	 callback : function (v, s) {
+		sendScenarioFramework();
+	}
+ });
 });
