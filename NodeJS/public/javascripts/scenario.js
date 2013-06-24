@@ -96,12 +96,11 @@ $(document).ready(function() {
 	
 	/* Tell the server the new user's connection */
 
-	socket.emit('newUserConnection', {scenarioId: scenarioId, pseudo: pseudo});
+	socket.emit('newUserConnection', {id: scenarioId, pseudo: pseudo});
 
 	/* Add an user to the users' list */
 
 	function addNewUser(newUser) {
-		//$('#connectedUsersList').append("<li clientId='" + newUser.id + "'><a href='#' target='_blank'>" + newUser.pseudo + "</a></li>");
 		$('#connectedUsersList').append("<li><a href='#' target='_blank'>" + newUser.pseudo + "</a></li>");
 	}
 	
@@ -176,7 +175,7 @@ $(document).ready(function() {
 		messageContent = htmlEscape($("#chatSendMessageArea").val());
 	
 		if (messageContent != ""){
-			socket.emit('sendChatMessageToServer', pseudo, messageContent, scenarioId);
+			socket.emit('sendChatMessageToServer', pseudo, messageContent, true, scenarioId);
 		
 			updateChatWithMessage({user: pseudo, content: messageContent});
 		
@@ -194,6 +193,21 @@ $(document).ready(function() {
 		sendChatMessage();
 	});
 	
+	/* Permet d'envoyer un message en appuyant sur entrée */
+	
+	$("#chatSendMessageArea").keypress(function(event) {
+		if ( event.which == 13 ) {
+			event.preventDefault();
+			sendChatMessage();
+		}
+	});
+	  
+	socket.on('updateEditorText', function (text) {
+			updateEditorText(text);
+	});
+	
+/* END OF Scenario chat management */
+
 	/* Fancybox gestion */
 	
 	$('#scenarioStructure').fancybox();
@@ -217,20 +231,5 @@ $(document).ready(function() {
 		$('#scenarioCaractersMain').hide();
 		$('#scenarioPlacesMain').show();
 	});
-	
-	/* Permet d'envoyer un message en appuyant sur entrée */
-	
-	$("#chatSendMessageArea").keypress(function(event) {
-		if ( event.which == 13 ) {
-			event.preventDefault();
-			sendChatMessage();
-		}
-	});
-	  
-	socket.on('updateEditorText', function (text) {
-			updateEditorText(text);
-	});
-	
-/* END OF Scenario chat management */
 
 });

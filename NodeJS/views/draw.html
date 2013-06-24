@@ -6,17 +6,18 @@
    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="/stylesheets/danstabulle.css" rel="stylesheet" media="screen">
 	<link href="/stylesheets/style.css" rel="stylesheet" media="screen">
+	<link href="/stylesheets/chat.css" rel="stylesheet" media="screen">
 	
-<script type="text/javascript" src="javascripts/jquery.js"></script>
-
-
+	<script type="text/javascript" src="javascripts/jquery.js"></script>
+	<script type="text/javascript" src="/javascripts/drawChat.js"></script>
 	<script type='text/javascript' src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/javascripts/paper.js"></script>
-	<script src="javascripts/drawScripts.js"></script>
+	<script type="text/javascript" src="javascripts/drawScripts.js"></script>
 	<script type='text/javascript' src="/javascripts/paperScript.js"></script>
 	<script type='text/javascript' src="/javascripts/harmonisation.js"></script>
 	<script type="text/javascript" src="javascripts/zepto.js"></script>
 	<script type="text/javascript" src="javascripts/jscolor/jscolor.js"></script>
+
     </head>
     <body>
       <div class="container ombre blanc">
@@ -164,8 +165,31 @@ function addLayer()
 						<button class='btn btn-small btn-danger' onClick='deleteRessource(0)'>Supprimer</button>-->
 				</div>
 			</section>
+			
+				<div id="chatDiv">
+
+					<div id="connectedUsers">
+					
+						<h2 class="nav-header">Utilisateurs en ligne</h2>
+						
+						<ul id="connectedUsersList" class="nav nav-list">			
+						</ul>
+						
+					</div>
+				
+					<ul id="chatMessages">
+					</ul>
+					
+					<form id="chatSendMessageForm">
+						<textarea id="chatSendMessageArea" maxlength = '1000'></textarea>
+						<input type="button" id="chatSendMessageButton" value="Envoyer" class="btn" style="padding-right: 12px;">
+					</form>
+					
+				</div>
+			
 			</div>
 		
+			
 			
 		</div>
       <div class="container ombre footer">
@@ -176,10 +200,5 @@ function addLayer()
               </footer>
             </center>
 		</div>
-		
-	
-      <script src="js/bootstrap.min.js"></script>
-	  <script src="js/danstabulle.js"></script>
-
     </body>
   </html>
