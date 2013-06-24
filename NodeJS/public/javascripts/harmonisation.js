@@ -3,6 +3,8 @@ var harmo = {
 	delColor : null
 };
 
+var nbRessources = 0;
+
 function addColor() {
 	harmo.color = null;
 	var colors;
@@ -76,6 +78,31 @@ function selectColor() {
 	document.getElementById("colorHexa").style.backgroundColor = selectedColor;
 	selectedColor = selectedColor.substring(1);
 	document.getElementById("colorHexa").value = selectedColor;
+}
+
+function createRessource(save) {	
+	if (save == 1) {
+		for (var i = 0; i < layer.length; i++) {
+			if (i != activeLayer)
+				layer[i].visible = false;
+			else
+				layer[i].visible = true;
+		}
+	}
+	
+	var canvasToSave = document.getElementById("myCanvas");
+	var dataURL = canvasToSave.toDataURL();
+	
+	var createdCanvas = "<div class='span4'>\
+					<div id='holder'>\
+					<img id='ressource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
+					</div>\
+					<button class='btn btn-small btn-success' onClick='loadRessource("+ nbRessources +")' >Charger</button>\
+					<button class='btn btn-small btn-danger' onClick='deleteRessource("+ nbRessources +")'>Supprimer</button>\
+			</div>";
+
+	document.getElementById("ressources").innerHTML += createdCanvas;
+	nbRessources += 1;
 }
 
 //EXTERN
