@@ -66,13 +66,14 @@ window.onload = function () {
        count = 0;
 	   newLayer();
        raster = new Raster(image);
+       raster.position = view.center;
 	   path_to_send.raster = image.src;
 	   addToPathList(raster);
 	   socket.emit('draw:end', uid, JSON.stringify(path_to_send));
 	   path_to_send.raster = null;
       // Transform the raster, so it fills the view:
-	  if (raster.bounds > view.bounds)
-          raster.fitBounds(view.bounds, true);
+	//  if (raster.bounds > view.bounds)
+	 //   raster.fitBounds(view.bounds, true);
     }
 
     function onDocumentDrag(event) {
@@ -352,8 +353,8 @@ if (selected == pathList[i])
     tool1.onMouseDown = function (event) {
         color = getSelectValue('color');
         size = getSelectValue('size');
-        opacity = getSelectValue('opacity')
-
+        opacity = getSelectValue('opacity');
+	
         path_to_send = {
             rgba: color,
             start: event.point,
