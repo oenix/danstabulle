@@ -88,8 +88,24 @@ function createRessource(save) {
 			else
 				layer[i].visible = true;
 		}
+		setTimeout(saveRessources, 100);
+		setTimeout(function() {
+			for (var i = 0; i < layer.length; i++) {
+			if (selectedLayer[i])
+				layer[i].visible = true;
+			else
+				layer[i].visible = false;
+		}},100);
+	}
+	else if (save == 2) {
+		saveRessources();
 	}
 	
+}
+
+
+function saveRessources(arg) {
+		
 	var canvasToSave = document.getElementById("myCanvas");
 	var dataURL = canvasToSave.toDataURL();
 	
