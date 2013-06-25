@@ -104,22 +104,45 @@ function createRessource(save) {
 }
 
 
-function saveRessources(arg) {
+function saveRessources() {
 		
 	var canvasToSave = document.getElementById("myCanvas");
 	var dataURL = canvasToSave.toDataURL();
 	
-	var createdCanvas = "<div class='span4'>\
+	var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
 					<div id='holder'>\
-					<img id='ressource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
+					<img id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
 					</div>\
-					<button class='btn btn-small btn-success' onClick='loadRessource("+ nbRessources +")' >Charger</button>\
-					<button class='btn btn-small btn-danger' onClick='deleteRessource("+ nbRessources +")'>Supprimer</button>\
+					<button class='btn btn-small btn-success' onClick='loadRessource(\"imageRessource"+ nbRessources +"\")'>Charger</button>\
+					<button class='btn btn-small btn-danger' onClick='deleteRessource(\"ressource"+ nbRessources +"\")'>Supprimer</button>\
 			</div>";
 
 	document.getElementById("ressources").innerHTML += createdCanvas;
 	nbRessources += 1;
 }
+
+function deleteRessource(id) {
+	console.log(id);
+	var element = document.getElementById(id)
+	if (confirm("Etes vous sur de vouloir supprimmer cette ressource ?")) {
+		element.parentNode.removeChild(element);
+	}
+}
+
+function loadRessource(id) {
+	var src = document.getElementById(id).src;
+	var llayer = activeLayer;
+	newLayer();
+	var image = new Image();
+	image.src = src;
+	raster = new Raster(image);
+	raster.position = view.center;
+	pathList.push(raster);
+	currentElement ++;
+	activeLayer = llayer;
+	printLayers();
+}
+
 
 //EXTERN
 
