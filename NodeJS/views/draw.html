@@ -119,23 +119,58 @@
 <input type="checkbox" id="smooth"> Lisser
 <a href="javascript:autocomplete()">Autocompleter</a>
 <script>
+  
+setTimeout(chat,200);
+
 function addLayer()
 {
      newLayer();
      sendNewLayer();
 }
+function chat()
+{
+        if(document.getElementById("chatDiv").style.visibility=="hidden")
+        {
+	       document.getElementById("chatDiv").style.visibility = "visible";
+		document.getElementById("chatDiv").style.display ="inline";
+		document.getElementById("myCanvas").width = 676;
+		console.log("caca");
+        }
+        else
+        {
+                document.getElementById("chatDiv").style.visibility="hidden";
+		document.getElementById("chatDiv").style.display ="none";
+		document.getElementById("myCanvas").width = 960;
+        }
+}
 </script>
-<a href="javascript:addLayer()" id="newLayer">Nouveau Calque</a>
-  <div id="holder">
-  
-    <canvas id="myCanvas" width="920" height="640"></canvas>
+<a href="javascript:addLayer()" id="newLayer">Nouveau Calque</a> /
+<a href="javascript:chat()" id="newLayer">Chat</a>
+
+
+  <div class="span12">
+    <p></p>
   </div>
-  <p id="upload" class="hidden">
-    <label>Le drag and drop n'est pas supporté par votre navigateur</label>
-	</p>
-  <p id="filereader"></p>
-  <p id="formdata"></p>
-  <p id="progress"></p>
+  <div id="holder" class="span6 pull-left">
+  
+    <canvas id="myCanvas" width="940" height="640"></canvas>
+  </div>
+    <div id="chatDiv" class="span2 pull-right">
+				<div id="chatDiv">
+					<div id="connectedUsers">
+						<h2 class="nav-header">Utilisateurs en ligne</h2>
+						<ul id="connectedUsersList" class="nav nav-list">			
+						</ul>
+					</div>
+					<ul id="chatMessages">
+					</ul>
+					<form id="chatSendMessageForm">
+						<textarea id="chatSendMessageArea" maxlength = '1000'></textarea>
+						<input type="button" id="chatSendMessageButton" value="Envoyer" class="btn" style="padding-right: 12px;">
+					</form>
+			</div>
+
+   </div>
   
         </section>
 		<section class="calques" id="container ombre " class="span8">
@@ -156,36 +191,12 @@ function addLayer()
 			</section>
 			<section class="Ressources" id="ressources" class="span12">
 			<h2>Ressources</h2>
-				<!--	<div class='span4'>
-						<div id='holder'>
-						<img id="ressource0" width='306' height='212'/>
-						<canvas id='ressource0' width='306' height='212'></canvas>
-						</div>
-						<button class='btn btn-small btn-success' onClick='loadRessource(0)' >Charger</button>
-						<button class='btn btn-small btn-danger' onClick='deleteRessource(0)'>Supprimer</button>-->
-				</div>
-			</section>
 			
-				<div id="chatDiv">
-
-					<div id="connectedUsers">
-					
-						<h2 class="nav-header">Utilisateurs en ligne</h2>
-						
-						<ul id="connectedUsersList" class="nav nav-list">			
-						</ul>
-						
-					</div>
-				
-					<ul id="chatMessages">
-					</ul>
-					
-					<form id="chatSendMessageForm">
-						<textarea id="chatSendMessageArea" maxlength = '1000'></textarea>
-						<input type="button" id="chatSendMessageButton" value="Envoyer" class="btn" style="padding-right: 12px;">
-					</form>
-					
-				</div>
+			</section>
+			<section class="Versionning" id="versionning" class="span12">
+			<h2>Versionning</h2>
+			
+			</section>
 			
 			</div>
 		
