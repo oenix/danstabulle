@@ -141,8 +141,29 @@ $(document).ready(function() {
 	
 		scenarioFramework = {summary: summary, places: places, characters: characters};
 		
-		socket.emit('sendScenarioFramework', {scenarioId: scenarioId, framework: scenarioFramework});
+		socket.emit('sendScenarioFramework', scenarioId, scenarioFramework);
 	};
+	
+	function updateScenarioFramework(framework)
+	{
+		$("#scenarioStoryMain p").html(framework.summary);
+	
+		$("#scenarioPlacesMain dl").html("");
+		
+		for (var i = 0; i < framework.places.length; i++)
+		{
+			$("#scenarioPlacesMain dl").append("<dt class=\"editable\">" + framework.places[i].name + "</dt>");
+			$("#scenarioPlacesMain dl").append("<dd class=\"editable\">" + framework.places[i].description + "</dd>");
+		}
+		
+		$("#scenarioCaractersMain dl").html("");
+
+		for (var i = 0; i < framework.characters.length; i++)
+		{
+			$("#scenarioCaractersMain dl").append("<dt class=\"editable\">" + framework.characters[i].name + "</dt>");
+			$("#scenarioCaractersMain dl").append("<dd class=\"editable\">" + framework.characters[i].description + "</dd>");
+		}
+	}
 	
 	/* Send the new text to the server for broadcasting */
 	
@@ -165,6 +186,7 @@ $(document).ready(function() {
 		}
 	
 		updateEditorText(init.text);
+		updateScenarioFramework(init.framework);
 	});
 	
 	/* Update users' list when someone connects */
@@ -173,6 +195,10 @@ $(document).ready(function() {
 		addNewUser(newUser);
 		
 		updateChatWithEvent(newUser.pseudo + " s'est connecté.");
+	});
+	
+	socket.on("updateScenarioFramework", function (framework) {
+		updateScenarioFramework(framework);
 	});
 	
 	/* When an user disconnects, its nickname is deleted */

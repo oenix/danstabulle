@@ -182,7 +182,18 @@ io.sockets.on('connection', function (socket) {
 				connectedClients: [newUser],
 				connectedUsers : [{pseudo: infos.pseudo, cpt: 1}],
 				active_connections: 1, 
-				currentText: ""});
+				currentText: "",
+				currentFramework: {
+									summary: "Résumé de l'histoire", 
+									places: [
+											{name: "lieu1", description:"description"},
+											{name: "lieu2", description:"description"}
+									],
+									characters: [
+											{name: "perso1", description:"description"},
+											{name: "perso2", description:"description"}
+									]
+				}});
 				
 			scenarioIndex = editingScenarios.length - 1;
 		} else { // If some people were already on this scenario
@@ -211,7 +222,7 @@ io.sockets.on('connection', function (socket) {
 		}
 		
 		/* On donne au nouvel utilisateur les informations nécessaires pour initialiser la page */
-		socket.emit('initPage', {text: editingScenarios[scenarioIndex].currentText, users: editingScenarios[scenarioIndex].connectedUsers});
+		socket.emit('initPage', {text: editingScenarios[scenarioIndex].currentText, framework: editingScenarios[scenarioIndex].currentFramework, users: editingScenarios[scenarioIndex].connectedUsers});
 		
 		console.log('New user with pseudo : ' + infos.pseudo + "in room " + + "and ID : " + socketId);
 	});
@@ -223,8 +234,6 @@ io.sockets.on('connection', function (socket) {
 
 		editingScenarios[scenarioIndex].currentText = infos.newText;
 		
-		console.log('Sending text ' + infos.newText);
-		
 		/* On broadcast le nouveau texte à tous les utilisateurs dans cette room / scénario */
 		socket.broadcast.to("s" + infos.scenarioId).emit('updateEditorText', infos.newText);
     });
@@ -232,6 +241,16 @@ io.sockets.on('connection', function (socket) {
 	socket.on('saveEditorText', function (infos) {
 		//saveScenarioDatabase(infos.text);
     });
+	
+	socket.on('sendScenarioFramework', function (scenarioId, framework)
+	{
+		/* Get the scenario index in the editing ones' list */
+		scenarioIndex = getEditingScenarioIndex(scenarioId);
+
+		editingScenarios[scenarioIndex].currentFramework = framework;
+	
+		socket.broadcast.to("s" + scenarioId).emit('updateScenarioFramework', framework);
+	});
 	
 	socket.on('disconnect', function() {
 	
