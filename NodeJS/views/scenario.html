@@ -5,18 +5,18 @@
     <title>DansTaBulle</title>
     <link href="stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="stylesheets/danstabulle.css" rel="stylesheet" media="screen">
-	<link href="stylesheets/scenario.css" rel="stylesheet" >
+	<link href="stylesheets/scenario.css" rel="stylesheet" media="screen">
+	<link href="stylesheets/chat.css" rel="stylesheet" media="screen">
+	<link href="fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
+
 	<script type="text/javascript" src="/javascripts/jquery.js"></script>
-	<script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
    	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/javascripts/scenario.js"></script>
-	<!--<script type="text/javascript" src="/tinymce/tinymce.min.js"></script>-->
-		<script type="text/javascript" src="/tiny_mce/tiny_mce.js"></script>
-
-	<script type="text/javascript">
-
-	</script>
-    </head>
+	<script type="text/javascript" src="/tiny_mce/tiny_mce.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.jeditable.mini.js"></script>
+	<script type="text/javascript" src="/fancybox/jquery.fancybox.js"></script>
+	
+  </head>
     <body>
       <div class="container ombre blanc">
 
@@ -77,7 +77,43 @@
 		
 		<section id="Contenu" class="span12">
         
-			<h1>Scénario</h1>
+			<h1>Scénario</h1> 
+			
+			<a id="scenarioStructure" href="#writingHelper" title="Structure du scénario">Rappels sur le scénario</a>
+			
+			<div id="writingHelper" class="tabbable tabs-left">
+				<ul id="writingHelperCategories" class="nav nav-tabs">
+					<li class="writingHelperCategory dropdown"><a id="helperTrame" data-toggle="tab" href="#scenarioStoryMain">Trame</a></li>
+					<li class="writingHelperCategory dropdown"><a id="helperPerso" data-toggle="tab" href="#scenarioCaractersMain">Personnages</a></li>
+					<li class="writingHelperCategory dropdown"><a id="helperLieux" data-toggle="tab" href="#scenarioPlacesMain">Lieux</a></li>
+				</ul>
+				<div id=writingHelperMain" class="tab-content">
+					<div id="scenarioStoryMain" class="writingHelperMainContent">
+						<h3>Rappel de la trame</h3>
+						<p class="editable ">
+							Marvin sauve le monde au 42ème jour.
+						</p>
+					</div>
+					<div id="scenarioCaractersMain" class="writingHelperMainContent">
+						<h3>Rappel des personnages</h3>
+						<dl> 
+							<dt>Marvin</dt> 
+							<dd class="editable">Le gentil</dd> 
+							<dt>Carmouze</dt> 
+							<dd class="editable">Le méchant</dd> 
+						</dl>
+					</div>
+					<div id="scenarioPlacesMain" class="writingHelperMainContent">
+						<h3>Rappel des lieux</h3>
+						<dl> 
+							<dt>Epita</dt> 
+							<dd class="editable">Endroit scolaire</dd> 
+							<dt>Bar</dt> 
+							<dd class="editable">Endroit bien</dd> 
+						</dl>
+					</div>
+				</div>
+			</div>
 		
 			<hr>
 	

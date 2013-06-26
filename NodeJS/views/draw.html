@@ -6,15 +6,18 @@
    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="/stylesheets/danstabulle.css" rel="stylesheet" media="screen">
 	<link href="/stylesheets/style.css" rel="stylesheet" media="screen">
+	<link href="/stylesheets/chat.css" rel="stylesheet" media="screen">
 	
-<script type="text/javascript" src="javascripts/jquery.js"></script>
-
-
+	<script type="text/javascript" src="javascripts/jquery.js"></script>
+	<script type="text/javascript" src="/javascripts/drawChat.js"></script>
 	<script type='text/javascript' src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/javascripts/paper.js"></script>
+	<script type="text/javascript" src="javascripts/drawScripts.js"></script>
 	<script type='text/javascript' src="/javascripts/paperScript.js"></script>
+	<script type='text/javascript' src="/javascripts/harmonisation.js"></script>
 	<script type="text/javascript" src="javascripts/zepto.js"></script>
-<script src="javascripts/drawScripts.js"></script>
+	<script type="text/javascript" src="javascripts/jscolor/jscolor.js"></script>
+
     </head>
     <body>
       <div class="container ombre blanc">
@@ -33,8 +36,7 @@
 				  <li><a href="#">Blog</a></li>
 				  <li><a href="#">Shop</a></li>
                   <li><div class="input-append searchform">
-																		<input class="span2 recherche" id="appendedInput search-query" type="text" data-provide="typeahead" data-items="1">
-
+				  <input class="span2 recherche" id="appendedInput search-query" type="text" data-provide="typeahead" data-items="1">=
 									<span class="add-on"><i class="icon-search"></i></span>
 								</div>
                   </li>
@@ -75,22 +77,25 @@
 </div>
 <section id="Contenu" class="span12">
 
-  <p> Dessiner</p>
-  <p><a id="save" href="#"> Sauvegarder</a></p>
+  <p><a id="saveAll" href="javascript:createRessource(0)"> Sauvegarder</a> / 
+  <a id="saveLayer" href="javascript:createRessource(1)"> Sauvegarder le calque Actif</a> /
+  <a id="saveVisibleLayer" href="javascript:createRessource(2)"> Sauvegarder les calques visibles</a> /
+  <a id="save" href=""> Telecharger</a></p>
   
 	<a href="javascript:activateTool('tool1');" id="pinceau">Pinceau</a> /
     <a href="javascript:activateTool('tool2');">Select</a> /
-	<a href="javascript:activateTool('tool3');">Draw For Me</a>
-  <select id='color'>
-    <option value='#000000'> Noir</option>
-    <option value='#ffffff'> Blanc</option>
-    <option value='#fc3436'> Rouge</option>
-    <option value='#cd3c9f'> Violet</option>
-    <option value='#36bfde'> Bleu</option>
-    <option value='#b0c930'> Vert</option>
-    <option value='#7d4e32'> Marron</option>
-    <option value='#fc6222'> Orange</option>
-    <option value='#f9e422'> Jaune</option>
+	<a href="javascript:activateTool('tool3');">Draw For Me</a> /
+	<a href="javascript:activateTool('tool4');">Forme</a>
+  <select id='color' style="background-color:#000000;">
+    <option id="Color000000" value='#000000' style="background-color:#000000;" onClick="selectColor()"></option>
+    <option id="ColorFFFFFF" value='#FFFFFF' style="background-color:#FFFFFF;" onClick="selectColor()"></option>
+    <option id="ColorFC3436" value='#FC3436' style="background-color:#FC3436;" onClick="selectColor()"></option>
+    <option id="ColorCD3C9F" value='#CD3C9F' style="background-color:#CD3C9F;" onClick="selectColor()"></option>
+    <option id="Color36BFDE" value='#36BFDE' style="background-color:#36BFDE;" onClick="selectColor()"></option>
+    <option id="ColorB0C930" value='#B0C930' style="background-color:#B0C930;" onClick="selectColor()"></option>
+    <option id="Color7D4E32" value='#7D4E32' style="background-color:#7D4E32;" onClick="selectColor()"></option>
+    <option id="ColorFC6222" value='#FC6222' style="background-color:#FC6222;" onClick="selectColor()"></option>
+    <option id="ColorF9E422" value='#F9E422' style="background-color:#F9E422;" onClick="selectColor()"></option>
   </select>
     <select id='size' placeholder="Taille">
     <option value='1'> 1</option>
@@ -100,37 +105,107 @@
     <option value='50'> 50</option>
     <option value='100'> 100</option>
   </select>
-  <select id="opacity" class="1-100" placeholder="opacité">opacité</select>
+  <select id="opacity" class="1-100" placeholder="opacité" onClick="selectColor()">opacité</select>
   
+</select>
+  <select id='shape' placeholder="Forme">
+  <option value='square'> Carré</option>
+  <option value='circle'> Rond</option>
+  <option value='arc'> Arcs</option>
+<option value='triangle'> Triangle</option>
+</select>
   <a href="javascript:undo()">undo</a>
   <a href="javascript:redo()">Redo</a>
 <input type="checkbox" id="smooth"> Lisser
 <a href="javascript:autocomplete()">Autocompleter</a>
-
-<a href="javascript:newLayer()" id="newLayer">Nouveau Calque</a>
-  <div id="holder">
+<script>
   
-    <canvas id="myCanvas" width="920" height="640"></canvas>
+setTimeout(chat,200);
+
+function addLayer()
+{
+     newLayer();
+     sendNewLayer();
+}
+function chat()
+{
+        if(document.getElementById("chatDiv").style.visibility=="hidden")
+        {
+	       document.getElementById("chatDiv").style.visibility = "visible";
+		document.getElementById("chatDiv").style.display ="inline";
+		document.getElementById("myCanvas").width = 676;
+        }
+        else
+        {
+                document.getElementById("chatDiv").style.visibility="hidden";
+		document.getElementById("chatDiv").style.display ="none";
+		document.getElementById("myCanvas").width = 960;
+        }
+}
+</script>
+<a href="javascript:addLayer()" id="newLayer">Nouveau Calque</a> /
+<a href="javascript:chat()" id="newLayer">Chat</a>
+
+
+  <div class="span12">
+    <p></p>
   </div>
-  <p id="upload" class="hidden">
-    <label>Le drag and drop n'est pas supporté par votre navigateur</label>
-	</p>
-  <p id="filereader"></p>
-  <p id="formdata"></p>
-  <p id="progress"></p>
+  <div id="holder" class="span6 pull-left">
+  
+    <canvas id="myCanvas" width="940" height="640"></canvas>
+  </div>
+    <div id="chatDiv" class="span2 pull-right">
+				<div id="chatDiv">
+					<div id="connectedUsers">
+						<h2 class="nav-header">Utilisateurs en ligne</h2>
+						<ul id="connectedUsersList" class="nav nav-list">			
+						</ul>
+					</div>
+					<ul id="chatMessages">
+					</ul>
+					<form id="chatSendMessageForm">
+						<textarea id="chatSendMessageArea" maxlength = '1000'></textarea>
+						<input type="button" id="chatSendMessageButton" value="Envoyer" class="btn" style="padding-right: 12px;">
+					</form>
+			</div>
+
+   </div>
   
         </section>
 		<section class="calques" id="container ombre " class="span8">
 			<h2>Calques</h2>
 			<ul id="calques" class="dragable">
-				<li draggable='true'>  <input type='checkbox' onclick='showLayer(0)' id='visible0'> <a class='selectedLayer' href='javascript:activateLayer(0);'>Calque 0</a></li>
-					<li draggable='true'>  <input type='checkbox' onclick='showLayer(1)' id='visible1'> <a class='selectedLayer' href='javascript:activateLayer(1);'>Calque 1</a></li>
-			
+
 			</ul>
 			<div id="log"></div>
 			</section>
-		</div>
+			<h1>Harmonisation</h2>
+			
+			<section class="palette" id="container ombre " class="span8">
+			<div class="span12">
+				<h2>Palette</h2>
+						#<input type="text" id="colorHexa" class="input-medium color {required:false}" placeholder="Hexa" maxlength="6" >
+						<button class="btn btn-small btn-success" onClick="addColor()" >Ajouter à la palette</button>
+						<button class="btn btn-small btn-danger" onClick="delColor()">Supprimer de la palette</button>
+				<div id="log"></div>
+			</div>
+			</section>
+			<section class="Ressources" id="ressources" class="span12">
+			<div class="span12">
+			<h2>Ressources</h2>
+			</div>
+			</section>
+			<div class="span12">
+			<section class="Versionning" id="versionning" class="span12">
+			<h2>Versionning</h2>
+			
+			</section>
+			</div>
+			</div>
 		
+			
+			
+		</div>
       <div class="container ombre footer">
             <center>
               <footer>
@@ -139,10 +214,5 @@
               </footer>
             </center>
 		</div>
-		
-	
-      <script src="js/bootstrap.min.js"></script>
-	  <script src="js/danstabulle.js"></script>
-
     </body>
   </html>

@@ -1,4 +1,8 @@
 /* Generic and useful functions */
+var paletteFile ="public/javascripts/colors.dtb";
+var ressourceFile ="public/javascripts/ressources.dtb";
+var defaultPalette = ["#000000", "#FFFFFF","#FC3436","#CD3C9F","#36BFDE","#B0C930","#7D4E32","#FC6222", "#F9E422","endBuffer"];
+
 
 function htmlEscape(str) {
     return String(str)
@@ -98,10 +102,11 @@ function saveScenarioDatabase(text) {
 
 /**/
 
-var currentText = "";
-var textIsEditing = false;
-var connectedClients = [] ; // [{id: socket.id, pseudo: userPseudo}]
-var active_connections = 0;
+var editingScenarios = []; // La liste des scénario en cours d'édition
+
+//Scenario {id, connectedClients, active_connections, currentText}
+
+editingDrawings = []; // Drawing = {id, connectedClients, active_connections, currentDrawing}
 
 server = http.createServer(app);
 
@@ -111,60 +116,295 @@ server.listen(app.get('port'), function(){
 
 io = io.listen(server); 
 
+function getEditingScenarioIndex(scenarioId)
+{
+	for (var i = 0; i < editingScenarios.length; i++) 
+	{
+		if (editingScenarios[i].id == scenarioId) 
+		{
+			return i;
+		}
+	}
+	
+	return -1;
+}
+
+function getPseudoIndex(scenarioIndex, userPseudo)
+{
+	for (var i = 0; i < editingScenarios[scenarioIndex].connectedUsers.length; i++) 
+	{
+		if (userPseudo == editingScenarios[scenarioIndex].connectedUsers[i].pseudo)
+		{
+			return i;
+		}
+	}	
+	
+	return -1;
+}
+
+/* Return the scenario index and the pseudo associated to the socket */
+function getInfosFromSocket(socketId)
+{
+	for (var i = 0; i < editingScenarios.length; i++) {
+
+		for (var j = 0; j < editingScenarios[i].connectedClients.length; j++) {
+		
+			if (editingScenarios[i].connectedClients[j].id == socketId) {
+			
+				return {pseudo: editingScenarios[i].connectedClients[j].pseudo, scenarioIndex: i, socketIndex: j};
+			}
+		}
+	}
+	
+	return {pseudo: "", scenarioIndex: -1, socketIndex: -1};
+}
+
+
 io.sockets.on('connection', function (socket) {
 
 	socketId = socket.id; // The new socket's ID
 
 	/* Scenario management */
 	
-	socket.on('newUserConnection', function (userPseudo)
+	socket.on('newUserConnection', function (infos)
 	{
-		newUser = {id: socketId, pseudo: userPseudo};
-	
-		connectedClients.push(newUser);
-		socket.broadcast.emit('userConnection', newUser);
+		newUser = {id: socketId, pseudo: infos.pseudo};
 		
-		socket.emit('initPage', {text: currentText, clients: connectedClients});
+		/* On reçoit la room correspondant au scénario */
+		socket.join("s" + infos.scenarioId);
 		
-		console.log('New user with pseudo : ' + userPseudo + " and ID : " + socketId);
+		/* Get the scenario index in the editing ones' list */
+		scenarioIndex = getEditingScenarioIndex(infos.scenarioId);
+		
+		/* If the scenario was not in the editing ones' list */
+		if (scenarioIndex == -1) {
+			editingScenarios.push({
+				id: infos.scenarioId,
+				connectedClients: [newUser],
+				connectedUsers : [{pseudo: infos.pseudo, cpt: 1}],
+				active_connections: 1, 
+				currentText: "",
+				currentFramework: {
+									summary: "Résumé de l'histoire", 
+									places: [
+											{name: "lieu1", description:"description"},
+											{name: "lieu2", description:"description"}
+									],
+									characters: [
+											{name: "perso1", description:"description"},
+											{name: "perso2", description:"description"}
+									]
+				}});
+				
+			scenarioIndex = editingScenarios.length - 1;
+		} else { // If some people were already on this scenario
+
+			/* On ajout l'utilisateur à la liste de ceux qui éditent ce scénario */
+			editingScenarios[scenarioIndex].connectedClients.push(newUser);
+			
+			editingScenarios[scenarioIndex].active_connections++; 
+			
+			/* Cherche à savoir si l'utilisateur est déjà connecté sur ce scénario */
+			indexPseudo = getPseudoIndex(scenarioIndex, infos.pseudo);
+			
+			if (indexPseudo == -1) // ça n'est pas le cas
+			{
+				editingScenarios[scenarioIndex].connectedUsers.push({pseudo: infos.pseudo, cpt: 1});
+				
+				/* On broadcast l'évènement à tous les utilisateurs dans cette room / scénario */
+				socket.broadcast.to("s" + infos.scenarioId).emit('userConnection', newUser);
+			} 
+			else
+			{
+				editingScenarios[scenarioIndex].connectedUsers[indexPseudo].cpt++;
+				
+				console.log("Pseudo " + infos.pseudo + " is present " + editingScenarios[scenarioIndex].connectedUsers[indexPseudo].cpt);
+			}
+		}
+		
+		/* On donne au nouvel utilisateur les informations nécessaires pour initialiser la page */
+		socket.emit('initPage', {text: editingScenarios[scenarioIndex].currentText, framework: editingScenarios[scenarioIndex].currentFramework, users: editingScenarios[scenarioIndex].connectedUsers});
+		
+		console.log('New user with pseudo : ' + infos.pseudo + "in room " + + "and ID : " + socketId);
 	});
 	
-    socket.on('newTextVersion', function (newText) {
-        currentText = newText;
+    socket.on('newTextVersion', function (infos) {
+
+		/* Get the scenario index in the editing ones' list */
+		scenarioIndex = getEditingScenarioIndex(infos.scenarioId);
+
+		editingScenarios[scenarioIndex].currentText = infos.newText;
 		
-		console.log('Sending text ' + newText);
-		
-        socket.broadcast.emit('updateEditorText', newText);
+		/* On broadcast le nouveau texte à tous les utilisateurs dans cette room / scénario */
+		socket.broadcast.to("s" + infos.scenarioId).emit('updateEditorText', infos.newText);
     });
 	
-	socket.on('sendChatMessageToServer', function (user, messageContent) {
-        socket.broadcast.emit('updateChatWithMessage', {user: user, content: htmlEscape(messageContent)});
+	socket.on('saveEditorText', function (infos) {
+		//saveScenarioDatabase(infos.text);
     });
 	
-	socket.on('isEditing', function (isEditing) {
-		console.log('IS NOT EDITING');
-    });
+	socket.on('sendScenarioFramework', function (scenarioId, framework)
+	{
+		/* Get the scenario index in the editing ones' list */
+		scenarioIndex = getEditingScenarioIndex(scenarioId);
+
+		editingScenarios[scenarioIndex].currentFramework = framework;
 	
-	socket.on('saveEditorText', function (text) {
-		console.log("FDSFDSFDSFDS");
-		//saveScenarioDatabase(text);
-    });
+		socket.broadcast.to("s" + scenarioId).emit('updateScenarioFramework', framework);
+	});
 	
 	socket.on('disconnect', function() {
-		for (var i = 0; i < connectedClients.length; i++) {
-			if (socket.id == connectedClients[i].id) {
-				socket.broadcast.emit('userDisconnection', connectedClients[i]);
+	
+		infos = getInfosFromSocket(socket.id);
+		
+		/* Is scenario disconnection */
+		if (infos.scenarioIndex != -1)
+		{			
+			pseudoIndex = getPseudoIndex(infos.scenarioIndex, infos.pseudo);
 				
-				console.log(connectedClients[i].pseudo + " has disconnected");
+			if (pseudoIndex == -1)
+				return;
 				
-				connectedClients.remove(i);
+			editingScenarios[infos.scenarioIndex].connectedUsers[pseudoIndex].cpt--;
+
+			if (editingScenarios[infos.scenarioIndex].connectedUsers[pseudoIndex].cpt == 0)
+			{		
+				console.log("UN UTILISATEUR EST MORT");
+			
+				socket.broadcast.to("s" + editingScenarios[infos.scenarioIndex].id).emit('userDisconnection', infos.pseudo);
 				
-				break;
+				editingScenarios[infos.scenarioIndex].active_connections--;
+				
+				editingScenarios[infos.scenarioIndex].connectedUsers.remove(pseudoIndex);
+			}
+			
+			editingScenarios[infos.scenarioIndex].connectedClients.remove(infos.socketIndex);
+		} else { // Drawing disconnection VERSION PROVISOIRE
+		
+			for (var i = 0; i < editingDrawings.length; i++) 
+			{
+				for (var j = 0; j < editingDrawings[i].connectedUsers.length; j++) 
+				{
+					if (editingDrawings[i].connectedUsers[j].id == socketId) {
+							
+						scenarioIndex = i; 
+						socketIndex = j;
+					
+						pseudo = editingDrawings[i].connectedUsers[j].pseudo; 
+
+						socket.broadcast.to("d" + editingDrawings[scenarioIndex].id).emit('userDisconnection', pseudo);
+
+						editingDrawings[i].connectedUsers.remove(j);
+					
+						return;
+					}
+				}
 			}
 		}
 	});
 	
+
+
+
+	/* Chat management */
+	
+	/* Get new message from the client and broadcast it to all clients in the same room */
+	socket.on('sendChatMessageToServer', function (user, messageContent, isScenario, id) {
+	
+		if (isScenario)
+			socket.broadcast.to("s" + id).emit('updateChatWithMessage', {user: user, content: htmlEscape(messageContent)});
+		else // Is drawing
+			socket.broadcast.to("d" + id).emit('updateChatWithMessage', {user: user, content: htmlEscape(messageContent)});
+    });
+
+
+
+	
 	/* Drawing management */
+
+	socket.on('newDrawingUser', function (infos)
+	{
+		newUser = {id: socketId, pseudo: infos.pseudo};
+		
+		console.log("LALALALALKLFKDSLFKDSLFLDSKFKLKFLSKFLDSKFS");
+		
+		/* On reçoit la room correspondant au scénario */
+		socket.join("d" + infos.id);
+		
+		/* Provisoire */
+		
+		socket.broadcast.to("d" + infos.id).emit('userConnection', newUser);
+			
+		drawingIndex = -1;
+			
+		for (var i = 0; i < editingDrawings.length; i++) 
+		{
+			if (editingDrawings[i].id == infos.id)
+				drawingIndex = i;
+		}
+		
+		if (drawingIndex == -1)
+		{
+			editingDrawings.push({id: infos.id, connectedUsers: []});
+		
+			drawingIndex = editingDrawings.length - 1;
+		}
+		
+		editingDrawings[drawingIndex].connectedUsers.push(newUser);
+		
+		socket.emit('initPage', {users: editingDrawings[drawingIndex].connectedUsers});
+
+		/* ---------- */
+		
+		/* Get the scenario index in the editing ones' list */
+		//scenarioIndex = getEditingScenarioIndex(infos.scenarioId);
+		
+		/* If the scenario was not in the editing ones' list */
+		/*if (scenarioIndex == -1) {
+			editingScenarios.push({
+				id: infos.scenarioId,
+				connectedClients: [newUser],
+				connectedUsers : [{pseudo: infos.pseudo, cpt: 1}],
+				active_connections: 1, 
+				currentText: ""});
+				
+			scenarioIndex = editingScenarios.length - 1;
+		} else {*/ // If some people were already on this scenario
+
+			/* On ajout l'utilisateur à la liste de ceux qui éditent ce scénario */
+			//editingScenarios[scenarioIndex].connectedClients.push(newUser);
+			
+			//editingScenarios[scenarioIndex].active_connections++; 
+			
+			/* Cherche à savoir si l'utilisateur est déjà connecté sur ce scénario */
+			//indexPseudo = getPseudoIndex(scenarioIndex, infos.pseudo);
+			
+			// console.log("INDEX PSEUDO = " + indexPseudo);
+			
+			// if (indexPseudo == -1) // ça n'est pas le cas
+			// {
+				// editingScenarios[scenarioIndex].connectedUsers.push({pseudo: infos.pseudo, cpt: 1});
+				
+				/* On broadcast l'évènement à tous les utilisateurs dans cette room / scénario */
+				//socket.broadcast.to("s" + infos.scenarioId).emit('userConnection', newUser);
+			// } 
+			// else
+			// {
+				// editingScenarios[scenarioIndex].connectedUsers[indexPseudo].cpt++;
+				
+				// console.log("Pseudo " + infos.pseudo + " is present " + editingScenarios[scenarioIndex].connectedUsers[indexPseudo].cpt);
+			// }
+		// }
+		
+		/* On donne au nouvel utilisateur les informations nécessaires pour initialiser la page */
+		//socket.emit('initPage', {text: editingScenarios[scenarioIndex].currentText, users: editingScenarios[scenarioIndex].connectedUsers});
+		//socket.emit('initPage', {users: editingScenarios[scenarioIndex].connectedUsers});
+
+		
+		console.log('New drawing user with pseudo : ' + infos.pseudo + " and ID : " + socketId);
+	});
+	
+	active_connections = 0;
 	
 	active_connections++
 
@@ -203,6 +443,83 @@ io.sockets.on('connection', function (socket) {
     
 		io.sockets.emit('drawForMe:end', uid, co_ordinates);
 
+	});
+	
+	socket.on('harmonisation:end', function (uid, co_ordinates) {
+    
+		io.sockets.emit('harmonisation:end', uid, co_ordinates);
+
+	});
+	
+	socket.on('loadPalette:end', function (uid){
+		
+		var fs = require('fs');
+		var colors = [];
+		
+		if (fs.existsSync(paletteFile)) {
+		    data = fs.readFileSync(paletteFile);
+			data.toString().split('\n').forEach(function(line) {
+			colors.push(line);
+		});
+		}
+		else {
+			colors = defaultPalette;
+		}
+		io.sockets.emit('loadColors:end', uid, JSON.stringify(colors));
+	});
+	
+		
+	socket.on('loadRessources:end', function (uid){
+		
+		var fs = require('fs');
+		var ressources = [];
+		
+		if (fs.existsSync(ressourceFile)) {
+		    data = fs.readFileSync(ressourceFile);
+			data.toString().split('\n').forEach(function(line) {
+			ressources.push(line);
+		});
+		}
+		else {
+			ressources = [];
+		}
+		io.sockets.emit('loadRessources:end', uid, JSON.stringify(ressources));
+	});
+	
+	socket.on('savePalette:end', function (uid, colors) {
+		
+		var fs = require('fs');
+
+		fs.writeFile(paletteFile, colors, function(err) {
+		if(err) {
+			fs.createWriteStream(paletteFile);
+			fs.writeFile(paletteFile, colors, function(err) {
+			  if(err) 
+				Console.log("Write Error");
+			});
+		} else {
+			console.log("The file was saved!");
+		}
+		});
+	
+	});
+	
+	socket.on('saveRessources:end', function (uid, ressources) {
+		
+	    var fs = require('fs');
+
+	    fs.writeFile(ressourceFile, ressources, function(err) {
+	    if(err) {
+	    	fs.createWriteStream(ressourceFile);
+	        fs.writeFile(ressourceFile, ressources, function(err) {
+		  if(err) 
+			Console.log("Write Error");
+			});
+		} else {
+			console.log("The file was saved!");
+		}
+		});
+	
 	});
 
 });
