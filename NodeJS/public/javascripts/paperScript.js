@@ -62,9 +62,9 @@ window.onload = function () {
     };
 	
 	
-	function handleImage(image) {
+    function handleImage(image) {
        count = 0;
-	   newLayer();
+       newLayer();
        raster = new Raster(image);
        raster.position = view.center;
 	   path_to_send.raster = image.src;
@@ -80,7 +80,7 @@ window.onload = function () {
 	   event.preventDefault();
     }
  	
-	function addToPathList(item) {
+    function addToPathList(item) {
 		pathList.push(item);
 		currentElement++;
 	}
@@ -88,7 +88,6 @@ window.onload = function () {
     function onDocumentDrop(event) {
 	
        event.preventDefault();
-
        var file = event.dataTransfer.files[0];
        var reader = new FileReader();
 
@@ -101,7 +100,10 @@ window.onload = function () {
         image.src = event.target.result;
 		//raster = new paper.Raster(image);
     };
-    reader.readAsDataURL(file);
+    if (file != null) {
+	reader.readAsDataURL(file);
+    }
+    return false;
 }
 
     DomEvent.add(document, {
@@ -431,6 +433,7 @@ if (selected == pathList[i])
     tool1.onMouseUp = function (event) {
         var myCircle;
         var texteBulle;
+	saveState("Trait " + color + " D'opacité " +  opacity +" Ajouté par " + uid);
         if (path.length < 5) {
             myCircle = new Path.Circle(event.point, 1);
             myCircle.strokeColor = color;

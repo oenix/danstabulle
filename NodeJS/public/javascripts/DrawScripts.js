@@ -21,7 +21,6 @@ var path_to_send = {};
 var path_to_send2 = {};
 var drawForMe = [];
 
-
 var rectangleForMe;
 
 var layer = [];
@@ -197,8 +196,8 @@ function newLayer() {
     layerOpacity.push(100);
     activeLayer = selectedLayer.length - 1;
     printLayers();
-    positionLayer.push(new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y));
-
+    positionLayer.push(new paper.Point(layer[activeLayer].position.x, layer[activeLayer].position.y)); 
+    saveState("Nouveau calque ajouté par " + uid);
 }
 
 function sendNewLayer() {
