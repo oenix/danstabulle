@@ -28,7 +28,7 @@ class DefaultController extends Controller
     {
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Planche');
         
-        $planche = $repository->findBy(array('page' => intval($id)))[0];
+        $planche = $repository->find($id);
         $bandeDessinee = $planche->getBandeDessinee();
         
         $maxPagePlanche = $repository->findBy(array(), array('page' => "desc"))[0];
