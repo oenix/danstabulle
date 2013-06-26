@@ -43,6 +43,54 @@ class DefaultController extends Controller
             'nbPlanche' => $maxPagePlanche->getPage()));
     }
     
+    public function showImageAction($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
+        
+        $image = $repository->find($id);
+        $planche = $image->getPlanche();
+        $bandeDessinee = $planche->getBandeDessinee();
+        
+        $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
+                      "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
+        
+        return $this->render('DTBBdBundle:Default:showImage.html.twig', array('bd' => $bandeDessinee,
+            'role' => $role,
+            'planche' => $planche,
+            'image' => $image));
+    }
+    
+    public function moveImageAction($id, $x, $y)
+    {
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
+        
+        $image = $repository->find($id);
+        $image->setPosX($x);
+        $image->setPosY($y);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($image);
+        $em->flush();
+        
+        return new \Symfony\Component\HttpFoundation\Response("Ok");
+    }
+    
+    public function resizeImageAction($id, $x, $y)
+    {
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
+        
+        $image = $repository->find($id);
+        $image->setWidth($x);
+        $image->setHeight($y);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($image);
+        $em->flush();
+        
+        return new \Symfony\Component\HttpFoundation\Response("Ok");
+    }
+    
     public function addPlancheAction($id)
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
