@@ -1,5 +1,6 @@
 /* Generic and useful functions */
 var paletteFile ="public/javascripts/colors.dtb";
+var ressourceFile ="public/javascripts/ressources.dtb";
 var defaultPalette = ["#000000", "#FFFFFF","#FC3436","#CD3C9F","#36BFDE","#B0C930","#7D4E32","#FC6222", "#F9E422","endBuffer"];
 
 
@@ -463,9 +464,26 @@ io.sockets.on('connection', function (socket) {
 		}
 		else {
 			colors = defaultPalette;
-			console.log(colors);
 		}
 		io.sockets.emit('loadColors:end', uid, JSON.stringify(colors));
+	});
+	
+		
+	socket.on('loadRessources:end', function (uid){
+		
+		var fs = require('fs');
+		var ressources = [];
+		
+		if (fs.existsSync(ressourceFile)) {
+		    data = fs.readFileSync(ressourceFile);
+			data.toString().split('\n').forEach(function(line) {
+			ressources.push(line);
+		});
+		}
+		else {
+			ressources = [];
+		}
+		io.sockets.emit('loadRessources:end', uid, JSON.stringify(ressources));
 	});
 	
 	socket.on('savePalette:end', function (uid, colors) {
@@ -478,6 +496,24 @@ io.sockets.on('connection', function (socket) {
 			fs.writeFile(paletteFile, colors, function(err) {
 			  if(err) 
 				Console.log("Write Error");
+			});
+		} else {
+			console.log("The file was saved!");
+		}
+		});
+	
+	});
+	
+	socket.on('saveRessources:end', function (uid, ressources) {
+		
+	    var fs = require('fs');
+
+	    fs.writeFile(ressourceFile, ressources, function(err) {
+	    if(err) {
+	    	fs.createWriteStream(ressourceFile);
+	        fs.writeFile(ressourceFile, ressources, function(err) {
+		  if(err) 
+			Console.log("Write Error");
 			});
 		} else {
 			console.log("The file was saved!");

@@ -4,6 +4,7 @@ var harmo = {
 };
 
 var nbRessources = 0;
+var ressourceURL = [];
 
 function addColor() {
 	harmo.color = null;
@@ -15,7 +16,7 @@ function addColor() {
 		document.getElementById("color").innerHTML += colors;
 		document.getElementById("colorHexa").value = '';
 		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
-	    harmo.color = null;
+	        harmo.color = null;
 		saveColor();
 	}
 	else
@@ -105,10 +106,9 @@ function createRessource(save) {
 
 
 function saveRessources() {
-		
 	var canvasToSave = document.getElementById("myCanvas");
 	var dataURL = canvasToSave.toDataURL();
-	
+	ressourceURL.push(dataURL);
 	var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
 					<div id='holder'>\
 					<img id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
@@ -119,13 +119,25 @@ function saveRessources() {
 
 	document.getElementById("ressources").innerHTML += createdCanvas;
 	nbRessources += 1;
+	var ressourceToSave = "";
+	for (var i = 0; i < ressourceURL.length; i++) {
+		ressourceToSave += ressourceURL[i] + "\n";
+	}
+	
+	socket.emit('saveRessources:end', uid, ressourceToSave);
 }
 
 function deleteRessource(id) {
-	console.log(id);
 	var element = document.getElementById(id)
 	if (confirm("Etes vous sur de vouloir supprimmer cette ressource ?")) {
 		element.parentNode.removeChild(element);
+		ressourceURL.unset(ressourceURL[parseInt(id[id.length - 1])]);
+		var ressourceToSave = "";
+		for (var i = 0; i < ressourceURL.length; i++) {
+			ressourceToSave += ressourceURL[i] + "\n";
+		}
+		console.log(ressourceToSave);
+		socket.emit('saveRessources:end', uid, ressourceToSave);
 	}
 }
 
@@ -144,6 +156,24 @@ function loadRessource(id) {
 }
 
 
+function restoreRessources(data, artist) {
+	nbRessources = 0;
+	for (var i = 0; i < data.length - 1; i++) {
+		var dataURL = data[i];
+		ressourceURL.push(dataURL);
+		var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
+						<div id='holder'>\
+						<img id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
+						</div>\
+						<button class='btn btn-small btn-success' onClick='loadRessource(\"imageRessource"+ nbRessources +"\")'>Charger</button>\
+						<button class='btn btn-small btn-danger' onClick='deleteRessource(\"ressource"+ nbRessources +"\")'>Supprimer</button>\
+				</div>";
+	
+		document.getElementById("ressources").innerHTML += createdCanvas;
+		nbRessources += 1;
+	}
+}
+
 //EXTERN
 
 
@@ -151,6 +181,14 @@ socket.on('loadColors:end', function (artist, data) {
 
         if (artist !== uid && data) {
             loadColors(JSON.parse(data), artist);
+        }
+    });
+
+socket.on('loadRessources:end', function (artist, data) {
+	
+        if (artist !== uid && data) {
+            restoreRessources(JSON.parse(data), artist);
+	    console.log("coucou");
         }
     });
 

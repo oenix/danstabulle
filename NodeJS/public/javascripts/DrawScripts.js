@@ -36,6 +36,7 @@ var hasDoubleClickedLayer = false;
 
 
 socket.emit('loadPalette:end', uid);
+socket.emit('loadRessources:end', uid);
 
 Array.prototype.unset = function(val){
 	var index = this.indexOf(val)
