@@ -81,7 +81,8 @@ function selectColor() {
 	document.getElementById("colorHexa").value = selectedColor;
 }
 
-function createRessource(save) {	
+function createRessource(save) {
+	
 	if (save == 1) {
 		for (var i = 0; i < layer.length; i++) {
 			if (i != activeLayer)
@@ -101,7 +102,12 @@ function createRessource(save) {
 	else if (save == 2) {
 		saveRessources();
 	}
-	
+	var can = document.getElementById("myCanvas");
+	can.className = can.className + " animated bounceOutDown";
+	setTimeout(function() {
+		var can = document.getElementById("myCanvas");
+		can.className = "";
+	}, 1000);
 }
 
 
@@ -125,6 +131,7 @@ function saveRessources() {
 	}
 	
 	socket.emit('saveRessources:end', uid, ressourceToSave);
+
 }
 
 function deleteRessource(id) {
