@@ -150,7 +150,7 @@ function deleteRessource(id) {
 		}
 		console.log(ressourceToSave);
 		socket.emit('saveRessources:end', uid, ressourceToSave);
-	}, 1000);
+	}, 2000);
 	}
 }
 
