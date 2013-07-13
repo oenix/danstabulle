@@ -103,7 +103,7 @@ function createRessource(save) {
 		saveRessources();
 	}
 	var can = document.getElementById("myCanvas");
-	can.className = can.className + " animated bounceOutDown";
+	can.className = can.className + "animated bounceOutDown";
 	setTimeout(function() {
 		var can = document.getElementById("myCanvas");
 		can.className = "";
@@ -116,6 +116,7 @@ function saveRessources() {
 	var dataURL = canvasToSave.toDataURL();
 	ressourceURL.push(dataURL);
 	var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
+					<div id='r"+ nbRessources +"'>\
 					<div id='holder'>\
 					<img id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
 					</div>\
@@ -136,7 +137,11 @@ function saveRessources() {
 
 function deleteRessource(id) {
 	var element = document.getElementById(id)
+	var el2 = document.getElementById("r" + id[id.length -1]);
+	console.log("r" + id[id.length -1]);
 	if (confirm("Etes vous sur de vouloir supprimmer cette ressource ?")) {
+		el2.className = "animated hinge"
+			setTimeout(function() {
 		element.parentNode.removeChild(element);
 		ressourceURL.unset(ressourceURL[parseInt(id[id.length - 1])]);
 		var ressourceToSave = "";
@@ -145,6 +150,7 @@ function deleteRessource(id) {
 		}
 		console.log(ressourceToSave);
 		socket.emit('saveRessources:end', uid, ressourceToSave);
+	}, 1000);
 	}
 }
 
@@ -169,6 +175,7 @@ function restoreRessources(data, artist) {
 		var dataURL = data[i];
 		ressourceURL.push(dataURL);
 		var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
+						<div id='r"+ nbRessources +"'>\
 						<div id='holder'>\
 						<img id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
 						</div>\
