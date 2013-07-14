@@ -254,6 +254,11 @@ function undo() {
         socket.emit('draw:end', uid, JSON.stringify(path_to_send));
         remove = -1;
     }
+	if (currentElement <= 0) {
+		var can = document.getElementById("undo");
+		can.className = "animated fadeOutDown";
+	}
+	console.log(currentElement);
 }
 
 function redo() {
@@ -268,7 +273,6 @@ function redo() {
         };
         socket.emit('draw:end', uid, JSON.stringify(path_to_send));
         add = -2;
-
     }
 }
 

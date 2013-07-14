@@ -447,6 +447,9 @@ if (selected == pathList[i])
 
 
     tool1.onMouseUp = function (event) {
+		
+		var can = document.getElementById("undo");
+		can.className = "animated fadeInDownBig";
         var myCircle;
         var texteBulle;
 	saveState("Trait " + color + " D'opacité " +  opacity +" Ajouté par " + uid);
