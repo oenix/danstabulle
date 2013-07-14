@@ -9,6 +9,7 @@
 	<link href="/stylesheets/chat.css" rel="stylesheet" media="screen">
 	<link href="/stylesheets/animate.css" rel="stylesheet" media="screen">
 	
+	   <script src="javascripts/psd.parser.min.js"></script>
 	<script type="text/javascript" src="javascripts/jquery.js"></script>
 	<script type="text/javascript" src="/javascripts/drawChat.js"></script>
 	<script type='text/javascript' src="/socket.io/socket.io.js"></script>
@@ -19,6 +20,39 @@
 	<script type='text/javascript' src="/javascripts/versionning.js"></script>
 	<script type="text/javascript" src="javascripts/zepto.js"></script>
 	<script type="text/javascript" src="javascripts/jscolor/jscolor.js"></script>
+ 
+    <script src="https://raw.github.com/imaya/psd.js/master/bin/psd.parser.min.js"></script>
+ <script>
+NodeList.prototype.forEach = Array.prototype.forEach;
+window.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('file').addEventListener('change', onFileSelected, false);
+
+  function onFileSelected(e) {
+    var file = document.getElementById("file").files[0];
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      var input = new Uint8Array(e.target.result);
+      var parser = new PSD.Parser(input);
+	 console.log(e.target.result);
+      parser.parse();
+
+      // image data
+      document.getElementById('target').appendChild(parser.imageData.createCanvas(parser.header));
+
+
+    };
+    reader.readAsArrayBuffer(file);
+
+    e.preventDefault();
+  }
+}, false);
+
+
+function test (event) {
+   var input = new Uint8Array(event.target.result);
+}
+</script>
 
     </head>
     <body>
@@ -48,6 +82,12 @@
 	</div><!-- /.navbar -->
 </div>
 
+
+<div>
+  <input type="file" id="file" name="file" />
+</div>
+
+<div id="target"></div>
 <div>
 	<ul class="breadcrumb">
 		<li><a href="index.html"><i class="icon-home"></i></a> <span class="divider">/</span></li>

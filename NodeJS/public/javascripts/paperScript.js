@@ -90,18 +90,34 @@ window.onload = function () {
        event.preventDefault();
        var file = event.dataTransfer.files[0];
        var reader = new FileReader();
-
        reader.onload = function ( event ) {
+		var psdImg;
+		
+		if (file.name.split('.').pop() == "psd")
+		{
+				var input = new Uint8Array(event.target.result);
+				var parser = new PSD.Parser(input);
+				parser.parse();
+				psdImg = parser.imageData.createCanvas(parser.header).toDataURL();
+		}
+		
        var image = document.createElement('img');
        image.onload = function () {
             handleImage(image);
             view.draw();
         };
-        image.src = event.target.result;
+		if (file.name.split('.').pop() == "psd")
+			image.src = psdImg;
+		else
+			image.src = event.target.result;
+		
 		//raster = new paper.Raster(image);
     };
     if (file != null) {
-	reader.readAsDataURL(file);
+		if (file.name.split('.').pop() == "psd")
+				reader.readAsArrayBuffer(file);
+		else
+				reader.readAsDataURL(file);
     }
     return false;
 }
