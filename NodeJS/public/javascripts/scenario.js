@@ -163,6 +163,17 @@ $(document).ready(function() {
 			$("#scenarioCaractersMain dl").append("<dt class=\"editable\">" + framework.characters[i].name + "</dt>");
 			$("#scenarioCaractersMain dl").append("<dd class=\"editable\">" + framework.characters[i].description + "</dd>");
 		}
+		
+		 $('.editable').editable(editableCallback, { 
+			 type     : 'textarea',
+			 width : 400,
+			 height : 60,
+			 tooltip   : "Cliquez pour éditer !",
+			 onblur : "submit",
+			 callback : function (v, s) {
+				sendScenarioFramework();
+			}
+		});
 	}
 	
 	/* Send the new text to the server for broadcasting */
