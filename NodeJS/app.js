@@ -1,4 +1,4 @@
-/* Generic and useful functions */
+Ôªø/* Generic and useful functions */
 var paletteFile ="public/javascripts/colors.dtb";
 var ressourceFile ="public/javascripts/ressources.dtb";
 var defaultPalette = ["#000000", "#FFFFFF","#FC3436","#CD3C9F","#36BFDE","#B0C930","#7D4E32","#FC6222", "#F9E422","endBuffer"];
@@ -102,7 +102,7 @@ function saveScenarioDatabase(text) {
 
 /**/
 
-var editingScenarios = []; // La liste des scÈnario en cours d'Èdition
+var editingScenarios = []; // La liste des sc√©narios en cours d'√©dition
 
 //Scenario {id, connectedClients, active_connections, currentText}
 
@@ -170,7 +170,7 @@ io.sockets.on('connection', function (socket) {
 	{
 		newUser = {id: socketId, pseudo: infos.pseudo};
 		
-		/* On reÁoit la room correspondant au scÈnario */
+		/* On re√ßoit la room correspondant au sc√©nario */
 		socket.join("s" + infos.scenarioId);
 		
 		/* Get the scenario index in the editing ones' list */
@@ -185,33 +185,33 @@ io.sockets.on('connection', function (socket) {
 				active_connections: 1, 
 				currentText: "",
 				currentFramework: {
-									summary: "RÈsumÈ de l'histoire", 
+									summary: "R√©sum√© de l'histoire", 
 									places: [
-											{name: "lieu1", description:"description"},
-											{name: "lieu2", description:"description"}
+											{name: "Premier lieu", description:"Description"},
+											{name: "Second lieu", description:"Description"}
 									],
 									characters: [
-											{name: "perso1", description:"description"},
-											{name: "perso2", description:"description"}
+											{name: "Premier personnage", description:"Description"},
+											{name: "Second personnage", description:"Description"}
 									]
 				}});
 				
 			scenarioIndex = editingScenarios.length - 1;
 		} else { // If some people were already on this scenario
 
-			/* On ajout l'utilisateur ‡ la liste de ceux qui Èditent ce scÈnario */
+			/* On ajoute l'utilisateur √† la liste de ceux qui √©ditent ce sc√©nario */
 			editingScenarios[scenarioIndex].connectedClients.push(newUser);
 			
 			editingScenarios[scenarioIndex].active_connections++; 
 			
-			/* Cherche ‡ savoir si l'utilisateur est dÈj‡ connectÈ sur ce scÈnario */
+			/* Cherche √† savoir si l'utilisateur est d√©j√† connect√© sur ce sc√©nario */
 			indexPseudo = getPseudoIndex(scenarioIndex, infos.pseudo);
 			
-			if (indexPseudo == -1) // Áa n'est pas le cas
+			if (indexPseudo == -1) // Ca n'est pas le cas
 			{
 				editingScenarios[scenarioIndex].connectedUsers.push({pseudo: infos.pseudo, cpt: 1});
 				
-				/* On broadcast l'ÈvËnement ‡ tous les utilisateurs dans cette room / scÈnario */
+				/* On broadcast l'√©v√®nement √†ous les utilisateurs dans cette room / sc√©nario */
 				socket.broadcast.to("s" + infos.scenarioId).emit('userConnection', newUser);
 			} 
 			else
@@ -222,7 +222,7 @@ io.sockets.on('connection', function (socket) {
 			}
 		}
 		
-		/* On donne au nouvel utilisateur les informations nÈcessaires pour initialiser la page */
+		/* On donne au nouvel utilisateur les informations n√©cessaires pour initialiser la page */
 		socket.emit('initPage', {text: editingScenarios[scenarioIndex].currentText, framework: editingScenarios[scenarioIndex].currentFramework, users: editingScenarios[scenarioIndex].connectedUsers});
 		
 		console.log('New user with pseudo : ' + infos.pseudo + "in room " + + "and ID : " + socketId);
@@ -235,7 +235,7 @@ io.sockets.on('connection', function (socket) {
 
 		editingScenarios[scenarioIndex].currentText = infos.newText;
 		
-		/* On broadcast le nouveau texte ‡ tous les utilisateurs dans cette room / scÈnario */
+		/* On broadcast le nouveau texte √† tous les utilisateurs dans cette room / sc√©nario */
 		socket.broadcast.to("s" + infos.scenarioId).emit('updateEditorText', infos.newText);
     });
 	
@@ -328,7 +328,7 @@ io.sockets.on('connection', function (socket) {
 		
 		console.log("LALALALALKLFKDSLFKDSLFLDSKFKLKFLSKFLDSKFS");
 		
-		/* On reÁoit la room correspondant au scÈnario */
+		/* On re√ßoit la room correspondant au sc√©nario */
 		socket.join("d" + infos.id);
 		
 		/* Provisoire */
