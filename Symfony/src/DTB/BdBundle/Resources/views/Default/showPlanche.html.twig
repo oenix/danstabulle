@@ -1,8 +1,8 @@
 {% extends '::layout.html.twig' %}
 
 {% block stylesheets %}
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js"></script>
-<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css">
+<script type="text/javascript" src="{{ asset('js/jquery-ui.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('css/jquery-ui.css')}}">
 <style>
 .planche { width: 600px; height: 600px; overflow: hidden; max-width: 600px; max-height: 600px; float: left; }
 .demo{width:150px;height:150px; position: absolute; border: 5px solid #FFFFFF; margin: 0px;}
@@ -84,7 +84,7 @@ $(function(){
                 
      $("#goToPlanche").click(function () {
          var value = $("#valuePlanche").val();
-         var url = "{{path('dtb_bd_show_planche', {'id': "text"})}}";
+         var url = "{{path('dtb_bd_redirect_planche', {'page': "text", 'bd': bd.id})}}";
          if (value >= 1) {
             url = url.replace("text", value);
             window.location = url;
