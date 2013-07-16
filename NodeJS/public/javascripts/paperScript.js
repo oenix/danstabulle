@@ -177,6 +177,7 @@ window.onload = function () {
         var shape;
         type = getSelectValue('shape');
         color = getSelectValue('color');
+
         opacity = getSelectValue('opacity');
 
 
@@ -369,7 +370,10 @@ if (selected == pathList[i])
     }
 
     tool1.onMouseDown = function (event) {
-        color = getSelectValue('color');
+		
+		var col = document.getElementsByClassName('active-color');
+		color = col[0].id.slice(5);
+		color = "#" + color;
         size = getSelectValue('size');
         opacity = getSelectValue('opacity');
 	
@@ -448,8 +452,6 @@ if (selected == pathList[i])
 
     tool1.onMouseUp = function (event) {
 		
-		var can = document.getElementById("undo");
-		can.className = "animated fadeInDownBig";
         var myCircle;
         var texteBulle;
 	saveState("Trait " + color + " D'opacité " +  opacity +" Ajouté par " + uid);

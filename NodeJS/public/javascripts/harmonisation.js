@@ -5,6 +5,8 @@ var harmo = {
 
 var nbRessources = 0;
 var ressourceURL = [];
+var nbCouleurs = 0;
+var palette = [];
 
 function addColor() {
 	harmo.color = null;
@@ -12,12 +14,15 @@ function addColor() {
 	if(isHex(document.getElementById("colorHexa").value))
 	{
 		harmo.color = document.getElementById("colorHexa").value.toUpperCase();
-		colors = "<option id='Color"+ harmo.color +"'' value='#"+  harmo.color  +"' style='background-color:#" + harmo.color + ";' onClick='selectColor()'></option>";
+		colors = "<a id='Color" + harmo.color + "'class='btn-color animated bounceIn' style='background-color:#" + harmo.color + "' onclick='chooseColor(\"Color" + harmo.color +"\")'></a>";
+		//colors = "<option id='Color"+ harmo.color +"'' value='#"+  harmo.color  +"' style='background-color:#" + harmo.color + ";' onClick='selectColor()'></option>";
 		document.getElementById("color").innerHTML += colors;
 		document.getElementById("colorHexa").value = '';
 		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
-	        harmo.color = null;
+		palette.push("#" + harmo.color);
+	    harmo.color = null;
 		saveColor();
+		nbCouleurs += 1;
 	}
 	else
 		alert("Couleur non valide");
@@ -27,18 +32,25 @@ var loadColors = function (colors, artist) {
 	var addColor = "";
 	for (var i = 0; i < colors.length - 1; i++) {
 		colors[i] = colors[i].slice(1);
-		addColor += "<option id='Color"+ colors[i] +"'' value='#"+  colors[i]  +"' style='background-color:#" + colors[i] + ";' onClick='selectColor()'></option>";
+		if (i == 0) {
+			addColor += "<a id='Color" + colors[i] + "' class='btn-color active-color' style='background-color:#" + colors[i] + "' onclick='chooseColor(\"Color" + colors[i]  +"\")'></a>";
+		}
+		else {
+			addColor += "<a id='Color" + colors[i]  + "' class='btn-color' style='background-color:#" + colors[i] + "' onclick='chooseColor(\"Color" + colors[i] +"\")'></a>";
+		}
+		nbCouleurs += 1;
+		palette.push("#" + colors[i]);
 	}
 	document.getElementById("color").innerHTML = addColor;
 }
 
 function saveColor() {
-	var colors = "";
-	var nbColors = document.getElementById("color" ).options.length
-	for (var i = 0; i < nbColors; i++) {
-		colors += document.getElementById("color" ).options[i].value + '\n';
+	var colToSave = "";
+	for (var i = 0; i < palette.length; i++) {
+		
+		colToSave += palette[i] + '\n';
 	}
-	socket.emit('savePalette:end', uid, colors);
+	socket.emit('savePalette:end', uid, colToSave);
 }
 
 function isHex(val){
@@ -58,11 +70,26 @@ function delColor() {
 	var option = document.getElementById("colorHexa").value;
 	if(document.getElementById("Color" + option) != null)
 	{
+		
+		var ca = document.getElementById("Color" + option)
+		ca.className += "animated bounceOut";
+		console.log(ca);
+		setTimeout(function(){
 		document.getElementById("color").removeChild(document.getElementById("Color" + option));
+		var col = document.getElementsByClassName('btn-color');
+		col[0].className = "btn-color active-color";
 		selectColor();
 		harmo.delColor = option;
 		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
+		var toDel = 0;
+		for (var i =0; i < palette.length; i++){
+			if (palette[i] == "#" + option) {
+				toDel = i;
+			}
+		}
+		palette.unset(palette[toDel]);
 		saveColor();
+		}, 1000);
 	}
 	else
 		alert("Couleur non valide");
@@ -70,12 +97,15 @@ function delColor() {
 }
 
 function selectColor() {
-	var selectedColor = getSelectValue('color');
+	var col = document.getElementsByClassName('active-color');
+	var colores = col[0].id.slice(5);
+	colores = ("#" + colores).toUpperCase();;
+	var selectedColor = colores;
 	var R = hexToR(selectedColor);
 	var G = hexToG(selectedColor);
 	var B = hexToB(selectedColor)
 	
-	document.getElementById("color").style.backgroundColor = "rgba(" + R + "," + G + "," + B + "," + getSelectValue('opacity') / 100 + ")";
+	document.getElementsByClassName('active-color')[0].style.backgroundColor = "rgba(" + R + "," + G + "," + B + "," + getSelectValue('opacity') / 100 + ")";
 	document.getElementById("colorHexa").style.backgroundColor = selectedColor;
 	selectedColor = selectedColor.substring(1);
 	document.getElementById("colorHexa").value = selectedColor;
@@ -115,7 +145,7 @@ function saveRessources() {
 	var canvasToSave = document.getElementById("myCanvas");
 	var dataURL = canvasToSave.toDataURL();
 	ressourceURL.push(dataURL);
-	var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
+	/*var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
 					<div id='r"+ nbRessources +"'>\
 					<div id='holder'>\
 					<img id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
@@ -123,6 +153,14 @@ function saveRessources() {
 					<button class='btn btn-small btn-success' onClick='loadRessource(\"imageRessource"+ nbRessources +"\")'>Charger</button>\
 					<button class='btn btn-small btn-danger' onClick='deleteRessource(\"ressource"+ nbRessources +"\")'>Supprimer</button>\
 			</div>";
+	*/
+		var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
+						<div id='r"+ nbRessources +"'>\
+						<img  style='border: 2px solid #CCC; ' id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
+						<button class='btn btn-small btn-success' onClick='loadRessource(\"imageRessource"+ nbRessources +"\")'>Charger</button>\
+						<button class='btn btn-small btn-danger' onClick='deleteRessource(\"ressource"+ nbRessources +"\")'>Supprimer</button>\
+				</div>";
+	
 
 	document.getElementById("ressources").innerHTML += createdCanvas;
 	nbRessources += 1;
@@ -176,9 +214,7 @@ function restoreRessources(data, artist) {
 		ressourceURL.push(dataURL);
 		var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
 						<div id='r"+ nbRessources +"'>\
-						<div id='holder'>\
-						<img id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
-						</div>\
+						<img  style='border: 2px solid #CCC; ' id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
 						<button class='btn btn-small btn-success' onClick='loadRessource(\"imageRessource"+ nbRessources +"\")'>Charger</button>\
 						<button class='btn btn-small btn-danger' onClick='deleteRessource(\"ressource"+ nbRessources +"\")'>Supprimer</button>\
 				</div>";
@@ -216,7 +252,7 @@ var syncHarmonisation = function (points, artist){
 }
 
 function addExternColor(color) {
-		var colors = "<option id='Color"+ color +"'' value='#"+ color +" 'style='background-color:#" + color + ";' onClick='selectColor()'></option>";
+		var colors = "<a id='Color" + color  + "' class='btn-color' style='background-color:#" + color + "' onclick='chooseColor(\"Color" + color +"\")'></a>";
 		document.getElementById("color").innerHTML += colors;
 }
 
