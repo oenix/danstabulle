@@ -36,7 +36,7 @@ function GetURLParameter(sParam)
 
 $(document).ready(function() {
 
-	var socket = io.connect('http://localhost:3000');
+	var socket = io.connect(":3000");
 
 	var pseudo = pseudoScenario;
 		
@@ -209,7 +209,7 @@ $(document).ready(function() {
 			addNewUser(init.users[i]);
 		}
 	
-		updateEditorText(init.text);
+		//updateEditorText(init.text);
 		updateScenarioFramework(init.framework);
 	});
 	

@@ -13,7 +13,7 @@ var selected, segment;
 //Rafraichissement en milliseconde;
 var rafraichissement = 1;
 // Initialise Socket.io
-var socket = io.connect('http://localhost:3000');
+var socket = io.connect();
 
 var send_paths_timer;
 var timer_is_active = false;
