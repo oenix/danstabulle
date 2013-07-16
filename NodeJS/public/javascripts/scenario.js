@@ -40,7 +40,7 @@ $(document).ready(function() {
 
 	var pseudo = GetURLParameter("pseudo");
 		
-	if (pseudo == undefined || pseudo == null) {
+	if (pseudo == undefined || pseudo == null || pseudo == "") {
 		pseudo = "oenix" + Math.floor(Math.random() * 201);
 	}
 
@@ -101,7 +101,7 @@ $(document).ready(function() {
 	/* Add an user to the users' list */
 
 	function addNewUser(newUser) {
-		$('#connectedUsersList').append("<li clientId='" + newUser.id + "'><a href='#' target='_blank'>" + newUser.pseudo + "</a></li>");
+		$('#connectedUsersList').append("<li><a href='#' target='_blank'>" + newUser.pseudo + "</a></li>");
 	}
 	
 	/* Update the content of the text editor */
@@ -109,6 +109,61 @@ $(document).ready(function() {
 	function updateEditorText(text) {
 		tinyMCE.activeEditor.setContent(text);
 	};
+	
+	/* Send the content of the scenario framework to the server */
+  
+	function sendScenarioFramework() {
+	
+		summary = $("#scenarioStoryMain p").html();
+		
+		places = [];
+		characters = [];
+
+		$("#scenarioPlacesMain dt").each(function (index)
+		{
+			places.push({name: $(this).html(), description: ""});
+		});
+		
+		$("#scenarioPlacesMain dd").each(function (index)
+		{
+			places[index].description = $(this).html();
+		});
+		
+		$("#scenarioCaractersMain dt").each(function (index)
+		{
+			characters.push({name: $(this).html(), description: ""});
+		});
+		
+		$("#scenarioCaractersMain dd").each(function (index)
+		{
+			characters[index].description = $(this).html();
+		});
+	
+		scenarioFramework = {summary: summary, places: places, characters: characters};
+		
+		socket.emit('sendScenarioFramework', scenarioId, scenarioFramework);
+	};
+	
+	function updateScenarioFramework(framework)
+	{
+		$("#scenarioStoryMain p").html(framework.summary);
+	
+		$("#scenarioPlacesMain dl").html("");
+		
+		for (var i = 0; i < framework.places.length; i++)
+		{
+			$("#scenarioPlacesMain dl").append("<dt class=\"editable\">" + framework.places[i].name + "</dt>");
+			$("#scenarioPlacesMain dl").append("<dd class=\"editable\">" + framework.places[i].description + "</dd>");
+		}
+		
+		$("#scenarioCaractersMain dl").html("");
+
+		for (var i = 0; i < framework.characters.length; i++)
+		{
+			$("#scenarioCaractersMain dl").append("<dt class=\"editable\">" + framework.characters[i].name + "</dt>");
+			$("#scenarioCaractersMain dl").append("<dd class=\"editable\">" + framework.characters[i].description + "</dd>");
+		}
+	}
 	
 	/* Send the new text to the server for broadcasting */
 	
@@ -126,11 +181,12 @@ $(document).ready(function() {
 	
 	socket.on('initPage', function (init) {
 	
-		for (var i = 0; i < init.clients.length; i++) {
-			addNewUser(init.clients[i]);
+		for (var i = 0; i < init.users.length; i++) {
+			addNewUser(init.users[i]);
 		}
 	
 		updateEditorText(init.text);
+		updateScenarioFramework(init.framework);
 	});
 	
 	/* Update users' list when someone connects */
@@ -141,16 +197,20 @@ $(document).ready(function() {
 		updateChatWithEvent(newUser.pseudo + " s'est connecté.");
 	});
 	
+	socket.on("updateScenarioFramework", function (framework) {
+		updateScenarioFramework(framework);
+	});
+	
 	/* When an user disconnects, its nickname is deleted */
 	
-	socket.on('userDisconnection', function (user) {
-		$("#connectedUsersList li").each(function () {
-			if ($(this).attr("clientId") == user.id) {
-				$(this).remove();
+	socket.on('userDisconnection', function (pseudo) {
+		$("#connectedUsersList li a").each(function () {
+			if ($.trim($(this).html()) == pseudo) {
+				$(this).parent().remove();
 			}
 		});
 		
-		updateChatWithEvent(user.pseudo + " s'est déconnecté.");
+		updateChatWithEvent(pseudo + " s'est déconnecté.");
 	});
 	
 /* START OF Scenario chat management */
@@ -175,7 +235,7 @@ $(document).ready(function() {
 		messageContent = htmlEscape($("#chatSendMessageArea").val());
 	
 		if (messageContent != ""){
-			socket.emit('sendChatMessageToServer', pseudo, messageContent, scenarioId);
+			socket.emit('sendChatMessageToServer', pseudo, messageContent, true, scenarioId);
 		
 			updateChatWithMessage({user: pseudo, content: messageContent});
 		
@@ -208,4 +268,45 @@ $(document).ready(function() {
 	
 /* END OF Scenario chat management */
 
+	/* Fancybox gestion */
+	
+	$('#scenarioStructure').fancybox();
+	
+	$('#scenarioStoryMain').show();
+	
+	$("#helperTrame").bind("click", function () {
+		$('#scenarioStoryMain').show();
+		$('#scenarioCaractersMain').hide();
+		$('#scenarioPlacesMain').hide();
+	});
+	
+	$("#helperPerso").bind("click", function () {
+		$('#scenarioStoryMain').hide();
+		$('#scenarioCaractersMain').show();
+		$('#scenarioPlacesMain').hide();
+	});
+	
+	$("#helperLieux").bind("click", function () {
+		$('#scenarioStoryMain').hide();
+		$('#scenarioCaractersMain').hide();
+		$('#scenarioPlacesMain').show();
+	});
+	
+	/* jsEditable management */
+	
+	function editableCallback (v, s)
+	{
+		return v;
+	}
+
+	 $('.editable').editable(editableCallback, { 
+     type     : 'textarea',
+	 width : 400,
+	 height : 60,
+	 tooltip   : "Cliquez pour éditer !",
+	 onblur : "submit",
+	 callback : function (v, s) {
+		sendScenarioFramework();
+	}
+ });
 });

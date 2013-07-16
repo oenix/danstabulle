@@ -22,6 +22,18 @@ dtb_bd_show_planche:
     pattern:  /showPlanche/{id}
     defaults: { _controller: DTBBdBundle:Default:showPlanche }
 
+dtb_bd_move_image:
+    pattern:  /moveImage/{id}/{x}/{y}
+    defaults: { _controller: DTBBdBundle:Default:moveImage }
+    
+dtb_bd_resize_image:
+    pattern:  /resize/{id}/{x}/{y}
+    defaults: { _controller: DTBBdBundle:Default:resizeImage }
+    
+dtb_bd_show_image:
+    pattern:  /showImage/{id}
+    defaults: { _controller: DTBBdBundle:Default:showImage }
+    
 dtb_bd_add_planche:
     pattern:  /addPlanche/{id}
     defaults: { _controller: DTBBdBundle:Default:addPlanche }

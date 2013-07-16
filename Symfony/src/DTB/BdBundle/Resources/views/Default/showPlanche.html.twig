@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css">
 <style>
 .planche { width: 600px; height: 600px; overflow: hidden; max-width: 600px; max-height: 600px; float: left; }
 .demo{width:150px;height:150px; position: absolute; border: 5px solid #FFFFFF; margin: 0px;}
@@ -13,19 +14,11 @@
 <h2>Page {{planche.page}} <small> "<a href="{{path('dtb_bd_show', {'id': bd.id})}}">{{bd.title}}</a>"</small></h2>
 <div class="span8">
     <div class="planche img-polaroid">
-        <div class="demo" imgID="1">
-            <img src="{{asset('img/v1.jpg')}}" />
-        </div><div class="demo" imgID="2">
-            <img src="{{asset('img/v2.jpg')}}" />
-        </div><div class="demo" imgID="3">
-            <img src="{{asset('img/v3.jpg')}}" />
-        </div><div class="demo" imgID="4">
-            <img src="{{asset('img/v4.jpg')}}" />
-        </div><div class="demo" imgID="5">
-            <img src="{{asset('img/v5.jpg')}}" />
-        </div><div class="demo" imgID="6">
-            <img src="{{asset('img/v6.jpg')}}" />
-        </div>
+        {% for image in planche.images %}
+            <div class="demo" imgID="{{image.id}}" style="top: {{image.posY + 217}}px; left: {{image.posX + 179}}px; width:{{image.width}}px; height: {{image.height}}px;">
+                <img src="{{asset('img/v' ~ image.id ~ '.jpg')}}" />
+            </div>
+        {% endfor %}
     </div>
 </div>
 <div class="span5" id="Status">
@@ -45,13 +38,22 @@ $(function(){
 		stop: function(event) {
 			var offset = $(this).offset();
 			var id = $(this).attr("imgID");
-                        var xPos = offset.left - $(".planche").offset().left;
-                        var yPos = offset.top - $(".planche").offset().top;
+                        var xPos = Math.round(offset.left - $(".planche").offset().left);
+                        var yPos = Math.round(offset.top - $(".planche").offset().top);
+                        console.log($(".planche").offset());
 			$("#Status").append("Drag " + id + " : ");
                         $('#Status').append('x: ' + xPos);
                         $('#Status').append('; y: ' + yPos);
 			$("#Status").append("<br/>");
-			}
+                        var destURL = "{{path('dtb_bd_move_image', {'id': "text1", 'x' : "text2", "y" : "text3"})}}";
+                        destURL = destURL.replace("text1", id);
+                        destURL = destURL.replace("text2", xPos);
+                        destURL = destURL.replace("text3", yPos);
+                        $.ajax({
+                            url: destURL,
+                            type: "get"
+                        });
+                    }
 		})
 	.resizable({
 		grid: 10,
@@ -63,17 +65,30 @@ $(function(){
 			$("#Status").append("Resize " + id + " : "); 
 			$('#Status').append('w: ' + width);
                         $('#Status').append('; h: ' + height);
-			$("#Status").append("<br/>"); 
-			}
+			$("#Status").append("<br/>");
+                        var destURL = "{{path('dtb_bd_resize_image', {'id': "text1", 'x' : "text2", "y" : "text3"})}}";
+                        destURL = destURL.replace("text1", id);
+                        destURL = destURL.replace("text2", width);
+                        destURL = destURL.replace("text3", height);
+                        $.ajax({
+                            url: destURL,
+                            type: "get"
+                        });
+                    }
 		})
-        .click(function() {alert("Edition de l'image : " + $(this).attr("imgID"))});
+        .click(function() {
+            var url = "{{path('dtb_bd_show_image', {'id': "text"})}}";
+            url = url.replace("text", $(this).attr("imgID"));
+            window.location = url;
+        });
                 
      $("#goToPlanche").click(function () {
          var value = $("#valuePlanche").val();
          var url = "{{path('dtb_bd_show_planche', {'id': "text"})}}";
-         url = url.replace("text", value);
-         alert(url);
-         window.location = url;
+         if (value >= 1) {
+            url = url.replace("text", value);
+            window.location = url;
+         }
     });      
 });
 </script>

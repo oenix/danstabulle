@@ -186,4 +186,27 @@ class Image
     {
         return $this->height;
     }
+
+    /**
+     * Set planche
+     *
+     * @param \DTB\BdBundle\Entity\Planche $planche
+     * @return Image
+     */
+    public function setPlanche(\DTB\BdBundle\Entity\Planche $planche = null)
+    {
+        $this->planche = $planche;
+    
+        return $this;
+    }
+
+    /**
+     * Get planche
+     *
+     * @return \DTB\BdBundle\Entity\Planche 
+     */
+    public function getPlanche()
+    {
+        return $this->planche;
+    }
 }

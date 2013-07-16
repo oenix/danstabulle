@@ -85,6 +85,16 @@ class BandeDessinee {
      * @ORM\JoinTable(name="bds_drawers")
      */
     private $drawers;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="DTB\BdBundle\Entity\Palette")
+     */
+    private $palette;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="DTB\BdBundle\Entity\Scenario")
+     */
+    private $scenario;
 
 
     /**
@@ -398,5 +408,51 @@ class BandeDessinee {
     public function getCandidatures()
     {
         return $this->candidatures;
+    }
+
+    /**
+     * Set palette
+     *
+     * @param \DTB\BdBundle\Entity\Palette $palette
+     * @return BandeDessinee
+     */
+    public function setPalette(\DTB\BdBundle\Entity\Palette $palette = null)
+    {
+        $this->palette = $palette;
+    
+        return $this;
+    }
+
+    /**
+     * Get palette
+     *
+     * @return \DTB\BdBundle\Entity\Palette 
+     */
+    public function getPalette()
+    {
+        return $this->palette;
+    }
+
+    /**
+     * Set scenario
+     *
+     * @param \DTB\BdBundle\Entity\Scenario $scenario
+     * @return BandeDessinee
+     */
+    public function setScenario(\DTB\BdBundle\Entity\Scenario $scenario = null)
+    {
+        $this->scenario = $scenario;
+    
+        return $this;
+    }
+
+    /**
+     * Get scenario
+     *
+     * @return \DTB\BdBundle\Entity\Scenario 
+     */
+    public function getScenario()
+    {
+        return $this->scenario;
     }
 }

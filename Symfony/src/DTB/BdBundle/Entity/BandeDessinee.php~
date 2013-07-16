@@ -85,6 +85,16 @@ class BandeDessinee {
      * @ORM\JoinTable(name="bds_drawers")
      */
     private $drawers;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="DTB\BdBundle\Entity\Palette")
+     */
+    private $palette;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="DTB\BdBundle\Entity\Scenario")
+     */
+    private $scenario;
 
 
     /**

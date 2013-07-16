@@ -1,5 +1,11 @@
 # Mac Files
 .DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
 
 # Bootstrap
 Symfony/app/bootstrap*
@@ -16,6 +22,7 @@ Symfony/app/logs/*
 #NodeJS Files
 src/NodeJS/node_modules/*
 NodeJS/node_modules/*
+NodeJS/public/javascripts/colors.dtb
 
 #Config Files
 Symfony/app/config/parameters.yml
