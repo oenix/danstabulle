@@ -1,7 +1,6 @@
 paper.install(window);
 
 
-
 window.onload = function () {
     paper.setup('myCanvas');
     layer[activeLayer] = project.activeLayer;
@@ -174,12 +173,14 @@ window.onload = function () {
 
 
     tool4.onMouseUp = function (event)  {
-        var shape;
-        type = getSelectValue('shape');
-        color = getSelectValue('color');
-
+ 
+        var col = document.getElementsByClassName('active-color');
+		var color = col[0].id.slice(5);
+		color = "#" + color;
+		var type = type1;
+		console.log(type);
         opacity = getSelectValue('opacity');
-
+        var shape;
 
         if (type == "circle") {
             shape = new paper.Path.Circle(event.middlePoint, event.delta.length / 2);

@@ -84,9 +84,9 @@ function printLayers() {
 				htmlLayer = htmlLayer +  "<li onDblclick='selectLayer(" + i + ")'>\
 						    	<input type='checkbox' onclick='showLayer(" + i + ");'" + checked + " id='visible" + i + "'> \
                                 <a href='javascript:activateLayer(" + i + ");' onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' class='tool activeLayer animated pulse' data-toggle='tooltip' data-placement='top' title='' data-original-title='Selectionner'><i class='icon-file-alt'></i> Calque " + i + "</a>\
-                                <a href='javascript:deleteLayer(" + i + ");' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Supprimer'><i class='icon-remove'></i></a>\
-                                <a href='javascript:layerUp(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Monter'><i class='icon-circle-arrow-up'></i></a>\
-                                <a href='javascript:layerDown(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Descendre'><i class='icon-circle-arrow-down'></i></a>"
+                                <a href='javascript:deleteLayer(" + i + ");' class='tool activeLayer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Supprimer'><i class='icon-remove'></i></a>\
+                                <a href='javascript:layerUp(" + i + ")' class='tool activeLayer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Monter'><i class='icon-circle-arrow-up'></i></a>\
+                                <a href='javascript:layerDown(" + i + ")' class='tool activeLayer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Descendre'><i class='icon-circle-arrow-down'></i></a>"
                                + fusionMode(i)
 							   + createSelectOptionForLayer(i) + "</li>";
         } else {
@@ -114,7 +114,7 @@ function changeLayerFusion(mode, nbLayer) {
 }
 
 function fusionMode(layer) {
-		var fusionMode = "<select style='width: 100px; height: 20px; font-size: 11px; margin-left: 20px;'>";
+		var fusionMode = "<select style='width: 100px; font-size: 11px; margin-left: 20px;'>";
         fusionMode += "<option disabled selected>Fusion</option>";
 		fusionMode += "<option onclick='changeLayerFusion(\"normal\", " + layer + " )' value='0'>Normal</option>" 
 		+ 			   "<option onclick='changeLayerFusion(\"screen\", " + layer + ")' >Ecran</option>"
@@ -328,7 +328,7 @@ function activateTool(tool) {
 		for (var i = 1; i <= 7; i++) {
 		document.getElementById("tool" + i).className = "tool btn";
 		}
-		document.getElementById(tool).className = "tool btn active";
+	document.getElementById(tool).className = "tool btn active";
     if (tool == "tool1")
         tool1.activate();
     else if (tool == "tool2")
@@ -347,7 +347,7 @@ $(function(){
 });
 
 function createSelectOptionForLayer(layer) {
-    var select_option = "<select id=layer" + layer + " style='width: 70px; height: 20px; font-size: 11px'>";
+    var select_option = "<select id=layer" + layer + " style='width: 80px; font-size: 11px'>";
 	select_option +=  "<option disabled selected>Opacité</option>";
     for(i = 100; i >= 0; i--) { 
        select_option += "<option onclick='changeLayerOpacity("+ i + ", " + layer + ")'  value=" + i + ">" + i + "</option>";
