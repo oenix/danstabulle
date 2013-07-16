@@ -1,0 +1,81 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+<div class="span9">
+    <h1>Scénario de "<a href="{{path('dtb_bd_show', {'id': bd.id})}}">{{bd.title}}</a>"</h1>
+    <hr>
+    <div class="span8">
+        <small class="muted">Version du {{scenario.lastedition|date('d/m/Y H:i:s')}}</small>
+        {% if role.admin or role.scenarist%}
+            <a href="{{path('dtb_bd_edit_scenario', {'id': bd.id})}}" class="btn btn-small btn-success pull-right">
+                Editer le scénario
+            </a>
+        {% endif %}
+        <br/><br/>
+        {{scenario.content}}
+    </div>
+</div>
+<div class="span3 well">
+    <ul class="nav nav-list">
+        <li class="nav-header">Votre rôle</li>
+        {% if role.admin %}
+        <li>Administrateur</li>
+        {% endif %}
+        {% if role.drawer and not(role.admin) %}
+        <li>Dessinateur</li>
+        {% endif %}
+        {% if role.scenarist and not(role.admin) %}
+        <li>Scénariste</li>
+        {% endif %}
+        {% if not(role.scenarist or role.drawer or role.admin) %}
+        <li>Visiteur</li>
+        {% endif %}
+
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            {% if bd.creator.id != app.user.id %}
+        <li class="nav-header">Contribuer</li>
+                {% if not(role.scenarist) %}
+        <li><a href="{{path('dtb_bd_candidate_scenarist', {'id': bd.id})}}">Rejoindre (Scénariste)</a></li>
+                {% endif %}
+                {% if not(role.drawer) %}
+        <li><a href="{{path('dtb_bd_candidate_drawer', {'id': bd.id})}}">Rejoindre (Dessinateur)</a></li>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            {% if bd.creator.id == app.user.id %}
+        <li class="nav-header">Administrer</li>
+        <li><a href="{{path('dtb_bd_update', {'id': bd.id})}}">Editer</a></li>
+        <li><a href="{{path('dtb_bd_see_candidatures', {'id': bd.id})}}">Contributeurs <span class="badge">{{bd.candidatures.count}}</span></a></li>
+            {% endif %}
+        {% endif %}
+            
+        <li class="nav-header">Informations</li>
+        <li><b><small>Créateur</small></b></li>
+        <li><a href="{{path('dtb_show_user_profile', {'id':bd.creator.id})}}">{{bd.creator.username | capitalize}}</a></li>
+        <li><b><small>Catégorie</small></b></li>
+        <li>{{bd.category.name}}</li>
+        <li><b><small>Age Minimum</small></b></li>
+        <li>{{bd.category.requiredAge}} ans</li>
+        
+        {% if bd.needScenarists %}
+        <li class="nav-header">Scénaristes (Nécessaire)</li>
+        {% else %}
+        <li class="nav-header">Scénaristes</li>
+        {% endif %}
+        {% for user in bd.scenarists %}
+        <li><a href="{{path('dtb_show_user_profile', {'id':user.id})}}">{{user.username | capitalize}}</a></li>
+        {% endfor %}
+        
+        {% if bd.needScenarists %}
+        <li class="nav-header">Dessinateurs (Nécessaire)</li>
+        {% else %}
+        <li class="nav-header">Dessinateurs</li>
+        {% endif %}
+        {% for user in bd.drawers %}
+        <li><a href="{{path('dtb_show_user_profile', {'id':user.id})}}">{{user.username | capitalize}}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

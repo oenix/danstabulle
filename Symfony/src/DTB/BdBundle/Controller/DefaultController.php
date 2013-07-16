@@ -94,6 +94,11 @@ class DefaultController extends Controller
                       "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
                       "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
         
+        if (!$role['admin'] && !$role['scenarist'])
+        {
+            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+        }
+        
         return $this->render('DTBBdBundle:Default:editScenario.html.twig', array('bd' => $bandeDessinee,
             'role' => $role,
             'scenario' => $scenario));
