@@ -1,0 +1,66 @@
+body {
+  padding: 10px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#writingHelper {
+	width:600px;
+	display: none;
+}
+
+	#writingHelper #writingHelperCategories {
+		list-style: none;
+		float: left;
+		width : 150px;
+		height: 300px;
+	}
+
+	#writingHelper #writingHelperMain {
+		float: left;
+		width : 350px;
+		height: 300px;
+	}
+
+		#writingHelper #writingHelperMain .writingHelperMainContent {
+			display: none;
+		}
+		
+	#writingHelper dd{
+		margin-bottom: 10px;
+	}
+			
+	#writingHelper .writingHelperButton {
+		float: right;
+		margin-right: 25px;
+		margin-top: 50px;
+	}
+
+.ckeditor {
+	width: 600px;
+}
+
+.cke_contents {
+height: 450px !important;
+}
+
+#editorDiv {
+    float: left;
+    height: 500px;
+    padding-bottom: 35px;
+    padding-left: 15px;
+    padding-right: 20px;
+    width: 670px;
+}
+
+#isReadOnlySpan {
+	color: red;
+	display: none;
+}
+
+#finishEditingButton {
+	display: none;
+}

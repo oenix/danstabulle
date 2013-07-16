@@ -1,5 +1,18 @@
 {% extends '::layout.html.twig' %}
 
+{% block stylesheets %}
+<link href="{{asset('css/danstabulle_scenario.css')}}" rel="stylesheet" media="screen">
+<link href="{{asset('css/scenario.css')}}" rel="stylesheet" media="screen">
+<link href="{{asset('css/chat.css')}}" rel="stylesheet" media="screen">
+<link href="{{asset('fancybox/jquery.fancybox.css')}}" rel="stylesheet" type="text/css" media="screen" />
+
+<script type="text/javascript" src="{{asset('js/socket.io/socket.io.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/scenario.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/tiny_mce/tiny_mce.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/jquery.jeditable.mini.js')}}"></script>
+<script type="text/javascript" src="{{asset('fancybox/jquery.fancybox.js')}}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="span12">
     <h1>Edition du scénario de "<a href="{{path('dtb_bd_show', {'id': bd.id})}}">{{bd.title}}</a>"</h1>
@@ -7,6 +20,84 @@
     <div class="span8">
         <small class="muted">Version du {{scenario.lastedition|date('d/m/Y H:i:s')}}</small>
         <br/><br/>
+				<section id="Contenu" class="span12">
+        
+			<h1>Scénario</h1> 
+			
+			<a id="scenarioStructure" href="#writingHelper" title="Structure du scénario">Rappels sur le scénario</a>
+			
+			<div id="writingHelper" class="tabbable tabs-left">
+				<ul id="writingHelperCategories" class="nav nav-tabs">
+					<li class="writingHelperCategory dropdown"><a id="helperTrame" data-toggle="tab" href="#scenarioStoryMain">Trame</a></li>
+					<li class="writingHelperCategory dropdown"><a id="helperPerso" data-toggle="tab" href="#scenarioCaractersMain">Personnages</a></li>
+					<li class="writingHelperCategory dropdown"><a id="helperLieux" data-toggle="tab" href="#scenarioPlacesMain">Lieux</a></li>
+				</ul>
+				<div id=writingHelperMain" class="tab-content">
+					<div id="scenarioStoryMain" class="writingHelperMainContent">
+						<h3>Rappel de la trame</h3>
+						<p class="editable ">
+							Marvin sauve le monde au 42ème jour.
+						</p>
+					</div>
+					<div id="scenarioCaractersMain" class="writingHelperMainContent">
+						<h3>Rappel des personnages</h3>
+						<dl> 
+							<dt>Marvin</dt> 
+							<dd class="editable">Le gentil</dd> 
+							<dt>Carmouze</dt> 
+							<dd class="editable">Le méchant</dd> 
+						</dl>
+						
+						<button id="scenarioCharactersButton" class="btn btn-primary writingHelperButton">Nouveau personnage</button>
+					</div>
+					<div id="scenarioPlacesMain" class="writingHelperMainContent">
+						<h3>Rappel des lieux</h3>
+						<dl> 
+							<dt>Epita</dt> 
+							<dd class="editable">Endroit scolaire</dd> 
+							<dt>Bar</dt> 
+							<dd class="editable">Endroit bien</dd> 
+						</dl>
+						
+						<button id="scenarioPlacesButton" class="btn btn-primary writingHelperButton">Nouvel emplacement</button>
+					</div>
+				</div>
+			</div>
+		
+			<hr>
+	
+			<div id="editorDiv">
+				<textarea id="test" class="mceEditor"></textarea>
+			</div>
+			
+			<div id="chatDiv">
+
+				<div id="connectedUsers">
+				
+					<h2 class="nav-header">Utilisateurs en ligne</h2>
+					
+					<ul id="connectedUsersList" class="nav nav-list">			
+					</ul>
+					
+				</div>
+			
+				<ul id="chatMessages">
+				</ul>
+				
+				<form id="chatSendMessageForm">
+					<textarea id="chatSendMessageArea" maxlength = '1000'></textarea>
+					<input type="button" id="chatSendMessageButton" value="Envoyer" class="btn" style="padding-right: 12px;">
+				</form>
+			</div>
+		
+			<!--<span id="isReadOnlySpan">Un autre utilisateur edite actuellement le scenario.</span>
+			<button id="finishEditingButton">Enregistrer</button>
+		
+			<h2>Et la recuperation du texte saisi :</h2>
+			<span id="result">-</div>-->
+			
+			
+		</section>
         <textarea>
             {{scenario.content}}
         </textarea>
