@@ -1,4 +1,4 @@
-﻿/* Generic and useful functions */
+/* Generic and useful functions */
 
 function htmlEscape(str) {
     return String(str)
@@ -44,6 +44,8 @@ $(document).ready(function() {
 		pseudo = "oenix" + Math.floor(Math.random() * 201);
 	}
 
+
+
 	/* Editor events' initialization */	
 	
 	tinyMCE.init({
@@ -51,7 +53,7 @@ $(document).ready(function() {
 		theme : "advanced", 
 		editor_selector :"mceEditor",
 		plugins : "advhr,insertdatetime,preview,save", 
-		save_onsavecallback: function() {console.log("Save");},
+		save_onsavecallback: function() {saveEditorText(tinyMCE.get("tinyEditor").getContent());},
 		width : 670,
 		height : 496,
 		theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,|,fontselect,formatselect",
@@ -185,7 +187,14 @@ $(document).ready(function() {
 	/* Send the text to the server in order to be saved */
 	
 	function saveEditorText(text){
-		socket.emit('saveEditorText', {scenarioId: scenarioId, text: text});
+            
+            $.ajax({
+                url: urlScenario,
+                type: "POST",
+                data: {content:"kiki"}
+            });
+	
+            //socket.emit('saveEditorInDatabase', {scenarioId: scenarioId, newText: text});
 	};
 
 	/* Fill the page with the current text version and the users list */

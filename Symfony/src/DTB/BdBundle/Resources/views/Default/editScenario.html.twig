@@ -10,6 +10,7 @@
 <script>
 var pseudoScenario = "{{app.user.username}}";
 var idScenario = {{scenario.id}};
+var urlScenario = "{{path('dtb_bd_save_scenario', {'id': scenario.id})}}";
 </script>
 <script type="text/javascript" src="http://localhost:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="{{asset('js/scenario.js')}}"></script>
@@ -72,7 +73,7 @@ var idScenario = {{scenario.id}};
 			<hr>
 	
 			<div id="editorDiv">
-				<textarea id="test" class="mceEditor">{{scenario.content}}</textarea>
+				<textarea id="tinyEditor" name="tinyEditor" class="mceEditor">{{scenario.content}}</textarea>
 			</div>
 			
 			<div id="chatDiv">

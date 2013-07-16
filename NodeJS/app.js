@@ -75,7 +75,7 @@ app.get('/scenario', function(req, res){
 
 /* SQL configuration */
 
-var connectionString = "postgres://postgres:admin@localhost:5432/DansTaBulleTest";
+var connectionString = "postgres://postgres:root@localhost:5432/symfony";
 
 var sqlClient = new pg.Client(connectionString);
 
@@ -237,10 +237,13 @@ io.sockets.on('connection', function (socket) {
 		
 		/* On broadcast le nouveau texte à tous les utilisateurs dans cette room / scénario */
 		socket.broadcast.to("s" + infos.scenarioId).emit('updateEditorText', infos.newText);
+		
+				//saveScenarioDatabase(infos.newText);
     });
 	
-	socket.on('saveEditorText', function (infos) {
-		//saveScenarioDatabase(infos.text);
+	socket.on('saveEditorInDatabase', function (infos) {
+		console.log("Ok gros");
+		saveScenarioDatabase(infos.Newtext);
     });
 	
 	socket.on('sendScenarioFramework', function (scenarioId, framework)

@@ -132,6 +132,8 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($scenario);
         $em->flush();
+        
+        return new Response('ok');
     }
     
     public function showImageAction($id)

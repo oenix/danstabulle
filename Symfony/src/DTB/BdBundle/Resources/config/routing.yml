@@ -69,3 +69,7 @@ dtb_bd_edit_scenario:
 dtb_bd_redirect_planche:
     pattern:  /redirectPlanche/{page}/{bd}
     defaults: { _controller: DTBBdBundle:Default:redirectPlanche }
+    
+dtb_bd_save_scenario:
+    pattern:  /saveScenario/{id}
+    defaults: { _controller: DTBBdBundle:Default:saveScenario }
