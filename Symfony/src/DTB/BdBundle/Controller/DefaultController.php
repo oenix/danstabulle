@@ -31,7 +31,7 @@ class DefaultController extends Controller
         $planche = $repository->find($id);
         $bandeDessinee = $planche->getBandeDessinee();
         
-        $maxPagePlanche = $repository->findBy(array(), array('page' => "desc"))[0];
+        $maxPagePlanche = $repository->findBy(array('bandeDessinee' => $bandeDessinee), array('page' => "desc"))[0];
         
         $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
                       "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
@@ -41,6 +41,20 @@ class DefaultController extends Controller
             'role' => $role,
             'planche' => $planche,
             'nbPlanche' => $maxPagePlanche->getPage()));
+    }
+    
+    public function redirectPlancheAction($page, $bd)
+    {
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
+        $bandeDessinee = $repository->find($bd);
+        $planches = $bandeDessinee->getPlanches();
+        foreach ($planches as $planche)
+        {
+            if ($planche->getPage() == $page)
+            {
+                return $this->redirect($this->generateUrl('dtb_bd_show_planche', array('id' => $planche->getId(),)));
+            }
+        }
     }
     
     public function showScenarioAction($id)
@@ -178,7 +192,7 @@ class DefaultController extends Controller
         $bandeDessinee = $repository->find($id);
         
         $maxPagePlanche = $this->getDoctrine()->getRepository('DTBBdBundle:Planche')
-                               ->findBy(array(), array('page' => "desc"))[0];
+                               ->findBy(array('bandeDessinee' => $bandeDessinee), array('page' => "desc"))[0];
         
         $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
                       "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),

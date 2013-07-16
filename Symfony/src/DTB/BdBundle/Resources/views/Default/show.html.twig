@@ -12,7 +12,11 @@
     </div>
     <div class="span8">
         <hr>
-        <h2><a href="{{path('dtb_bd_show_planche', {'id': 1})}}">Naviguer entre les planches</a>
+        {% if bd.planches|length > 0 %}
+        <h2><a href="{{path('dtb_bd_show_planche', {'id': bd.planches[0].id})}}">Naviguer entre les planches</a>
+        {% else %}
+        <h2> Pas encore de planches
+        {% endif %}
         {% if role.admin or role.drawer%}
                 <a href="{{path('dtb_bd_add_planche', {'id': bd.id})}}" class="btn btn-success pull-right">Ajouter une planche</a>
         {% endif %}
