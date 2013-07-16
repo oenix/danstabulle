@@ -53,7 +53,11 @@ $(document).ready(function() {
 		theme : "advanced", 
 		editor_selector :"mceEditor",
 		plugins : "advhr,insertdatetime,preview,save", 
-		save_onsavecallback: function() {saveEditorText(tinyMCE.get("tinyEditor").getContent());},
+		save_onsavecallback: function() {
+                    var ed = tinyMCE.get('tinyEditor');
+                    var data = ed.getContent();
+                    saveEditorText(data);
+                },
 		width : 670,
 		height : 496,
 		theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,|,fontselect,formatselect",
@@ -191,7 +195,7 @@ $(document).ready(function() {
             $.ajax({
                 url: urlScenario,
                 type: "POST",
-                data: {content:"kiki"}
+                data: {content:text}
             });
 	
             //socket.emit('saveEditorInDatabase', {scenarioId: scenarioId, newText: text});
