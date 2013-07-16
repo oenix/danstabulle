@@ -28,6 +28,16 @@ a {
 		#writingHelper #writingHelperMain .writingHelperMainContent {
 			display: none;
 		}
+		
+	#writingHelper dd{
+		margin-bottom: 10px;
+	}
+			
+	#writingHelper .writingHelperButton {
+		float: right;
+		margin-right: 25px;
+		margin-top: 50px;
+	}
 
 .ckeditor {
 	width: 600px;

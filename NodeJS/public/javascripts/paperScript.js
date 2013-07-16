@@ -62,9 +62,9 @@ window.onload = function () {
     };
 	
 	
-	function handleImage(image) {
+    function handleImage(image) {
        count = 0;
-	   newLayer();
+       newLayer();
        raster = new Raster(image);
        raster.position = view.center;
 	   path_to_send.raster = image.src;
@@ -80,7 +80,7 @@ window.onload = function () {
 	   event.preventDefault();
     }
  	
-	function addToPathList(item) {
+    function addToPathList(item) {
 		pathList.push(item);
 		currentElement++;
 	}
@@ -88,20 +88,38 @@ window.onload = function () {
     function onDocumentDrop(event) {
 	
        event.preventDefault();
-
        var file = event.dataTransfer.files[0];
        var reader = new FileReader();
-
        reader.onload = function ( event ) {
+		var psdImg;
+		
+		if (file.name.split('.').pop() == "psd")
+		{
+				var input = new Uint8Array(event.target.result);
+				var parser = new PSD.Parser(input);
+				parser.parse();
+				psdImg = parser.imageData.createCanvas(parser.header).toDataURL();
+		}
+		
        var image = document.createElement('img');
        image.onload = function () {
             handleImage(image);
             view.draw();
         };
-        image.src = event.target.result;
+		if (file.name.split('.').pop() == "psd")
+			image.src = psdImg;
+		else
+			image.src = event.target.result;
+		
 		//raster = new paper.Raster(image);
     };
-    reader.readAsDataURL(file);
+    if (file != null) {
+		if (file.name.split('.').pop() == "psd")
+				reader.readAsArrayBuffer(file);
+		else
+				reader.readAsDataURL(file);
+    }
+    return false;
 }
 
     DomEvent.add(document, {
@@ -159,6 +177,7 @@ window.onload = function () {
         var shape;
         type = getSelectValue('shape');
         color = getSelectValue('color');
+
         opacity = getSelectValue('opacity');
 
 
@@ -351,7 +370,10 @@ if (selected == pathList[i])
     }
 
     tool1.onMouseDown = function (event) {
-        color = getSelectValue('color');
+		
+		var col = document.getElementsByClassName('active-color');
+		color = col[0].id.slice(5);
+		color = "#" + color;
         size = getSelectValue('size');
         opacity = getSelectValue('opacity');
 	
@@ -429,8 +451,10 @@ if (selected == pathList[i])
 
 
     tool1.onMouseUp = function (event) {
+		
         var myCircle;
         var texteBulle;
+	saveState("Trait " + color + " D'opacité " +  opacity +" Ajouté par " + uid);
         if (path.length < 5) {
             myCircle = new Path.Circle(event.point, 1);
             myCircle.strokeColor = color;

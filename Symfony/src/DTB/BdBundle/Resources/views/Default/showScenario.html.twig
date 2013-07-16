@@ -2,27 +2,17 @@
 
 {% block content %}
 <div class="span9">
-    <h1>{{bd.title}}</h1>
+    <h1>Scénario de "<a href="{{path('dtb_bd_show', {'id': bd.id})}}">{{bd.title}}</a>"</h1>
     <hr>
-    <div class="span3">
-        <img src="{{asset('bd/cover'~ bd.id ~'.jpg')}}" class="img-polaroid">
-    </div>
-    <div class="span5">
-        <blockquote style="text-align: justify">{{bd.description}}</blockquote>
-    </div>
     <div class="span8">
-        <hr>
-        <h2><a href="{{path('dtb_bd_show_planche', {'id': 1})}}">Naviguer entre les planches</a>
-        {% if role.admin or role.drawer%}
-                <a href="{{path('dtb_bd_add_planche', {'id': bd.id})}}" class="btn btn-success pull-right">Ajouter une planche</a>
-        {% endif %}
-        </h2>
-        <hr>
-        <h2><a href="{{path('dtb_bd_show_scenario', {'id': 1})}}">Consulter le scénario</a>    
+        <small class="muted">Version du {{scenario.lastedition|date('d/m/Y H:i:s')}}</small>
         {% if role.admin or role.scenarist%}
-                <a href="{{path('dtb_bd_edit_scenario', {'id': bd.id})}}" class="btn btn-success pull-right">Editer le scénario</a>
+            <a href="{{path('dtb_bd_edit_scenario', {'id': bd.id})}}" class="btn btn-small btn-success pull-right">
+                Editer le scénario
+            </a>
         {% endif %}
-        <p><br></p>
+        <br/><br/>
+        {{scenario.content}}
     </div>
 </div>
 <div class="span3 well">

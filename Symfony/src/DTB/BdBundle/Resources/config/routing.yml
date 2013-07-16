@@ -57,3 +57,11 @@ dtb_bd_validate_candidature:
 dtb_bd_delete_candidature:
     pattern:  /deleteCandidate/{id}
     defaults: { _controller: DTBBdBundle:Candidate:delete }
+
+dtb_bd_show_scenario:
+    pattern:  /showScenario/{id}
+    defaults: { _controller: DTBBdBundle:Default:showScenario }
+    
+dtb_bd_edit_scenario:
+    pattern:  /editScenario/{id}
+    defaults: { _controller: DTBBdBundle:Default:editScenario }

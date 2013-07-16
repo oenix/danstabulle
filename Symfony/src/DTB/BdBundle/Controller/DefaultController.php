@@ -43,6 +43,83 @@ class DefaultController extends Controller
             'nbPlanche' => $maxPagePlanche->getPage()));
     }
     
+    public function showScenarioAction($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
+        
+        $bandeDessinee = $repository->find($id);
+        $scenario = $bandeDessinee->getScenario();
+        
+        if ($scenario == null)
+        {
+            $scenario = new \DTB\BdBundle\Entity\Scenario();
+            $scenario->setLastEdition(new \DateTime());
+            $bandeDessinee->setScenario($scenario);
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($bandeDessinee);
+            $em->persist($scenario);
+            $em->flush();
+        }
+                
+        $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
+                      "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
+        
+        return $this->render('DTBBdBundle:Default:showScenario.html.twig', array('bd' => $bandeDessinee,
+            'role' => $role,
+            'scenario' => $scenario));
+    }
+    
+    public function editScenarioAction($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
+        
+        $bandeDessinee = $repository->find($id);
+        $scenario = $bandeDessinee->getScenario();
+        
+        if ($scenario == null)
+        {
+            $scenario = new \DTB\BdBundle\Entity\Scenario();
+            $scenario->setLastEdition(new \DateTime());
+            $bandeDessinee->setScenario($scenario);
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($bandeDessinee);
+            $em->persist($scenario);
+            $em->flush();
+        }
+                
+        $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
+                      "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
+        
+        if (!$role['admin'] && !$role['scenarist'])
+        {
+            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+        }
+        
+        return $this->render('DTBBdBundle:Default:editScenario.html.twig', array('bd' => $bandeDessinee,
+            'role' => $role,
+            'scenario' => $scenario));
+    }
+    
+    public function saveScenarioAction($id)
+    {
+        $request = $this->get('request');
+        $params = $request->request->all();
+        
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Scenario');
+        $scenario = $repository->find($id);
+        
+        $scenario->setLastEdition(new \DateTime());
+        $scenario->setContent($params['content']);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($scenario);
+        $em->flush();
+    }
+    
     public function showImageAction($id)
     {
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');

@@ -1,0 +1,15 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+<div class="span12">
+    <h1>Edition du scénario de "<a href="{{path('dtb_bd_show', {'id': bd.id})}}">{{bd.title}}</a>"</h1>
+    <hr>
+    <div class="span8">
+        <small class="muted">Version du {{scenario.lastedition|date('d/m/Y H:i:s')}}</small>
+        <br/><br/>
+        <textarea>
+            {{scenario.content}}
+        </textarea>
+    </div>
+</div>
+{% endblock %}
