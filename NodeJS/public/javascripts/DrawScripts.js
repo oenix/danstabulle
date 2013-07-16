@@ -83,7 +83,7 @@ function printLayers() {
         if (i == activeLayer) {
 				htmlLayer = htmlLayer +  "<li onDblclick='selectLayer(" + i + ")'>\
 						    	<input type='checkbox' onclick='showLayer(" + i + ");'" + checked + " id='visible" + i + "'> \
-                                <a href='javascript:activateLayer(" + i + ");' onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' class='tool activeLayer animated pulse' data-toggle='tooltip' data-placement='top' title='' data-original-title='Afficher/Cacher'><i class='icon-file-alt'></i> Calque " + i + "</a>\
+                                <a href='javascript:activateLayer(" + i + ");' onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' class='tool activeLayer animated pulse' data-toggle='tooltip' data-placement='top' title='' data-original-title='Selectionner'><i class='icon-file-alt'></i> Calque " + i + "</a>\
                                 <a href='javascript:deleteLayer(" + i + ");' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Supprimer'><i class='icon-remove'></i></a>\
                                 <a href='javascript:layerUp(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Monter'><i class='icon-circle-arrow-up'></i></a>\
                                 <a href='javascript:layerDown(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Descendre'><i class='icon-circle-arrow-down'></i></a>"
@@ -92,7 +92,7 @@ function printLayers() {
         } else {
 					htmlLayer = htmlLayer +  "<li onDblclick='selectLayer(" + i + ")'>\
 						    	<input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> \
-                                <a href='javascript:activateLayer(" + i + ");' onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Afficher/Cacher'><i class='icon-file-alt'></i> Calque " + i + "</a>\
+                                <a href='javascript:activateLayer(" + i + ");' onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Selectionner'><i class='icon-file-alt'></i> Calque " + i + "</a>\
                                 <a href='javascript:deleteLayer(" + i + ");' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Supprimer'><i class='icon-remove'></i></a>\
                                 <a href='javascript:layerUp(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Monter'><i class='icon-circle-arrow-up'></i></a>\
                                 <a href='javascript:layerDown(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Descendre'><i class='icon-circle-arrow-down'></i></a>"
