@@ -65,3 +65,7 @@ dtb_bd_show_scenario:
 dtb_bd_edit_scenario:
     pattern:  /editScenario/{id}
     defaults: { _controller: DTBBdBundle:Default:editScenario }
+    
+dtb_bd_redirect_planche:
+    pattern:  /redirectPlanche/{page}/{bd}
+    defaults: { _controller: DTBBdBundle:Default:redirectPlanche }
