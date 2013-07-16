@@ -104,6 +104,22 @@ class DefaultController extends Controller
             'scenario' => $scenario));
     }
     
+    public function saveScenarioAction($id)
+    {
+        $request = $this->get('request');
+        $params = $request->request->all();
+        
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Scenario');
+        $scenario = $repository->find($id);
+        
+        $scenario->setLastEdition(new \DateTime());
+        $scenario->setContent($params['content']);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($scenario);
+        $em->flush();
+    }
+    
     public function showImageAction($id)
     {
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
