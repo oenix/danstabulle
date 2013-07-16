@@ -112,12 +112,8 @@ function selectColor() {
 }
 
 function createRessource(save) {
-	
-	if (save == 1) {
+	if (save == 0) {
 		for (var i = 0; i < layer.length; i++) {
-			if (i != activeLayer)
-				layer[i].visible = false;
-			else
 				layer[i].visible = true;
 		}
 		setTimeout(saveRessources, 100);
