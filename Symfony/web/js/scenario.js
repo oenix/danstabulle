@@ -36,9 +36,9 @@ function GetURLParameter(sParam)
 
 $(document).ready(function() {
 
-	var socket = io.connect();
+	var socket = io.connect('http://localhost:3000');
 
-	var pseudo = GetURLParameter("pseudo");
+	var pseudo = pseudoScenario;
 		
 	if (pseudo == undefined || pseudo == null || pseudo == "") {
 		pseudo = "oenix" + Math.floor(Math.random() * 201);
@@ -88,7 +88,7 @@ $(document).ready(function() {
 	
 	/* Get the scenario Id from the GET parameter */
 	
-	var scenarioId = GetURLParameter("id");
+	var scenarioId = idScenario;
 	
 	if (scenarioId == undefined) {
 		scenarioId = "1";

@@ -1,12 +1,17 @@
 {% extends '::layout.html.twig' %}
 
 {% block stylesheets %}
-<link href="{{asset('css/danstabulle_scenario.css')}}" rel="stylesheet" media="screen">
+<!--<link href="{{asset('css/danstabulle_scenario.css')}}" rel="stylesheet" media="screen">-->
 <link href="{{asset('css/scenario.css')}}" rel="stylesheet" media="screen">
 <link href="{{asset('css/chat.css')}}" rel="stylesheet" media="screen">
 <link href="{{asset('fancybox/jquery.fancybox.css')}}" rel="stylesheet" type="text/css" media="screen" />
 
-<script type="text/javascript" src="{{asset('js/socket.io/socket.io.js')}}"></script>
+
+<script>
+var pseudoScenario = "{{app.user.username}}";
+var idScenario = {{scenario.id}};
+</script>
+<script type="text/javascript" src="http://localhost:3000/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="{{asset('js/scenario.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/tiny_mce/tiny_mce.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/jquery.jeditable.mini.js')}}"></script>
@@ -67,7 +72,7 @@
 			<hr>
 	
 			<div id="editorDiv">
-				<textarea id="test" class="mceEditor"></textarea>
+				<textarea id="test" class="mceEditor">{{scenario.content}}</textarea>
 			</div>
 			
 			<div id="chatDiv">
@@ -89,18 +94,7 @@
 					<input type="button" id="chatSendMessageButton" value="Envoyer" class="btn" style="padding-right: 12px;">
 				</form>
 			</div>
-		
-			<!--<span id="isReadOnlySpan">Un autre utilisateur edite actuellement le scenario.</span>
-			<button id="finishEditingButton">Enregistrer</button>
-		
-			<h2>Et la recuperation du texte saisi :</h2>
-			<span id="result">-</div>-->
-			
-			
 		</section>
-        <textarea>
-            {{scenario.content}}
-        </textarea>
     </div>
 </div>
 {% endblock %}
