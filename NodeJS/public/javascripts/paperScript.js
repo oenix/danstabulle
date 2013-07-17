@@ -748,6 +748,7 @@ if (selected == pathList[i])
 			var image = new Image();
 			image.src = points.raster;
 			raster = new Raster(image);
+			raster.position = view.center;
 			pathListExtern.push(raster);
 			currentElementExtern ++;
             activeLayer = llayer;
