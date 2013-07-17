@@ -1,7 +1,6 @@
 paper.install(window);
 
 
-
 window.onload = function () {
     paper.setup('myCanvas');
     layer[activeLayer] = project.activeLayer;
@@ -174,11 +173,14 @@ window.onload = function () {
 
 
     tool4.onMouseUp = function (event)  {
-        var shape;
-        type = getSelectValue('shape');
-        color = getSelectValue('color');
+ 
+        var col = document.getElementsByClassName('active-color');
+		var color = col[0].id.slice(5);
+		color = "#" + color;
+		var type = type1;
+		console.log(type);
         opacity = getSelectValue('opacity');
-
+        var shape;
 
         if (type == "circle") {
             shape = new paper.Path.Circle(event.middlePoint, event.delta.length / 2);
@@ -369,7 +371,10 @@ if (selected == pathList[i])
     }
 
     tool1.onMouseDown = function (event) {
-        color = getSelectValue('color');
+		
+		var col = document.getElementsByClassName('active-color');
+		color = col[0].id.slice(5);
+		color = "#" + color;
         size = getSelectValue('size');
         opacity = getSelectValue('opacity');
 	
@@ -448,8 +453,6 @@ if (selected == pathList[i])
 
     tool1.onMouseUp = function (event) {
 		
-		var can = document.getElementById("undo");
-		can.className = "animated fadeInDownBig";
         var myCircle;
         var texteBulle;
 	saveState("Trait " + color + " D'opacité " +  opacity +" Ajouté par " + uid);
@@ -468,6 +471,7 @@ if (selected == pathList[i])
                 path.closed = true;
                 path.simplify(20);
                 path.opacity = 1;
+				path.dashArray = [10, 4];
                 texte = texteBulle.content;
 				
 				console.log(texteBulle.position);
@@ -745,6 +749,7 @@ if (selected == pathList[i])
 			var image = new Image();
 			image.src = points.raster;
 			raster = new Raster(image);
+			raster.position = view.center;
 			pathListExtern.push(raster);
 			currentElementExtern ++;
             activeLayer = llayer;

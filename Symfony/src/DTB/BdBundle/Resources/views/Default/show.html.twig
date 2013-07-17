@@ -11,20 +11,20 @@
         <blockquote style="text-align: justify">{{bd.description}}</blockquote>
     </div>
     <div class="span8">
-        <h2>Planches
-        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-            {% if bd.creator.id == app.user.id %}
-                <a href="{{path('dtb_bd_add_planche', {'id': bd.id})}}" class="btn btn-success">Ajouter une planche</a>
-            {% endif %}
+        <hr>
+        {% if bd.planches|length > 0 %}
+        <h2><a href="{{path('dtb_bd_show_planche', {'id': bd.planches[0].id})}}">Naviguer entre les planches</a>
+        {% else %}
+        <h2> Pas encore de planches
+        {% endif %}
+        {% if role.admin or role.drawer%}
+                <a href="{{path('dtb_bd_add_planche', {'id': bd.id})}}" class="btn btn-success pull-right">Ajouter une planche</a>
         {% endif %}
         </h2>
         <hr>
-        {% if role.admin or role.drawer%}
-            <a href="{{path('dtb_bd_show_planche', {'id': 1})}}">Naviguer entre les planches</a>
-        {% else %}
-            {% for planches in bd.planches %}
-                <img src="{{asset('img/emptyPage.png')}}" width="135px" class="img-polaroid" />
-            {% endfor %}
+        <h2><a href="{{path('dtb_bd_show_scenario', {'id': 1})}}">Consulter le scénario</a>    
+        {% if role.admin or role.scenarist%}
+                <a href="{{path('dtb_bd_edit_scenario', {'id': bd.id})}}" class="btn btn-success pull-right">Editer le scénario</a>
         {% endif %}
         <p><br></p>
     </div>

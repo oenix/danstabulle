@@ -13,7 +13,7 @@ var selected, segment;
 //Rafraichissement en milliseconde;
 var rafraichissement = 1;
 // Initialise Socket.io
-var socket = io.connect('http://localhost:3000');
+var socket = io.connect();
 
 var send_paths_timer;
 var timer_is_active = false;
@@ -58,6 +58,14 @@ function getSelectValue(selectId) {
         return values;
     }
 
+function rgb2hex(rgb) {
+    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    function hex(x) {
+        return ("0" + parseInt(x).toString(16)).slice(-2);
+    }
+    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+}
+
 function changeLayerOpacity(numOpacity, numLayer)
 {
 	layerOpacity[numLayer] = numOpacity;
@@ -67,30 +75,37 @@ function changeLayerOpacity(numOpacity, numLayer)
 }
 
 function printLayers() {
-    var htmlLayer = "";
+    var htmlLayer = "<li class='nav-header'>Calques</li>";
     for (var i = 0; i < layer.length; i++)  {
         var checked = "";
         if (selectedLayer[i])
             checked = "checked='checked'";
         if (i == activeLayer) {
-            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + ") '  draggable='true'> \
-			<input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> \
-			<a class='selectedLayer'  onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' \
-			href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> <a href='javascript:deleteLayer(" + i + ");'>Delete</a> \
-			Opacité : " + createSelectOptionForLayer(i) + " Fusion : " + fusionMode(i) + "\
-			<a href='javascript:layerUp(" + i + ")'>Monter</a>/<a href='javascript:layerDown(" + i + ") '>Descendre</a> </li>";
+				htmlLayer = htmlLayer +  "<li onDblclick='selectLayer(" + i + ")'>\
+						    	<input type='checkbox' onclick='showLayer(" + i + ");'" + checked + " id='visible" + i + "'> \
+                                <a href='javascript:activateLayer(" + i + ");' onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' class='tool activeLayer animated pulse' data-toggle='tooltip' data-placement='top' title='' data-original-title='Selectionner'><i class='icon-file-alt'></i> Calque " + i + "</a>\
+                                <a href='javascript:deleteLayer(" + i + ");' class='tool activeLayer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Supprimer'><i class='icon-remove'></i></a>\
+                                <a href='javascript:layerUp(" + i + ")' class='tool activeLayer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Monter'><i class='icon-circle-arrow-up'></i></a>\
+                                <a href='javascript:layerDown(" + i + ")' class='tool activeLayer' data-toggle='tooltip' data-placement='top' title='' data-original-title='Descendre'><i class='icon-circle-arrow-down'></i></a>"
+                               + fusionMode(i)
+							   + createSelectOptionForLayer(i) + "</li>";
         } else {
-            htmlLayer = htmlLayer + "<li onDblclick='selectLayer(" + i + " )' draggable='true'> \
-						<input type='checkbox' onclick='showLayer(" + i + ")' " + checked + "  id='visible" + i + "'> \
-						<a  onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' href='javascript:activateLayer(" + i + ");'>Calque " + i + "</a> \
-						<a href='javascript:deleteLayer(" + i + ");'>Delete</a> Opacité : " + createSelectOptionForLayer(i) + " Fusion : " + fusionMode(i) +" \
-			<a href='javascript:layerUp(" + i + ")'>Monter</a>/<a href='javascript:layerDown(" + i + ") '>Descendre</a></li>";
+					htmlLayer = htmlLayer +  "<li onDblclick='selectLayer(" + i + ")'>\
+						    	<input type='checkbox' onclick='showLayer(" + i + ")'" + checked + " id='visible" + i + "'> \
+                                <a href='javascript:activateLayer(" + i + ");' onMouseOut='showUnselected(" + i + ")' onMouseOver='showSelected(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Selectionner'><i class='icon-file-alt'></i> Calque " + i + "</a>\
+                                <a href='javascript:deleteLayer(" + i + ");' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Supprimer'><i class='icon-remove'></i></a>\
+                                <a href='javascript:layerUp(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Monter'><i class='icon-circle-arrow-up'></i></a>\
+                                <a href='javascript:layerDown(" + i + ")' class='tool' data-toggle='tooltip' data-placement='top' title='' data-original-title='Descendre'><i class='icon-circle-arrow-down'></i></a>"
+								+ fusionMode(i)
+							    + createSelectOptionForLayer(i) + "</li>";
         }
     }
     document.getElementById("calques").innerHTML = htmlLayer;
     for (var i = 0; i < layer.length; i ++) {
 		document.getElementById("layer" + i).selectedIndex = 100 - layerOpacity[i];
     }
+ $('.tool').tooltip('hide');
+ $('.tool').tooltip({container: 'body'});
 
 }
 
@@ -99,7 +114,8 @@ function changeLayerFusion(mode, nbLayer) {
 }
 
 function fusionMode(layer) {
-		var fusionMode = "<select>";
+		var fusionMode = "<select style='width: 100px; font-size: 11px; margin-left: 20px;'>";
+        fusionMode += "<option disabled selected>Fusion</option>";
 		fusionMode += "<option onclick='changeLayerFusion(\"normal\", " + layer + " )' value='0'>Normal</option>" 
 		+ 			   "<option onclick='changeLayerFusion(\"screen\", " + layer + ")' >Ecran</option>"
 	    +				"<option onclick='changeLayerFusion(\"multiply\", " + layer + ")' >Multiplier</option>"
@@ -167,6 +183,13 @@ function showLayer(nbLayer) {
         selectedLayer[nbLayer] = false;
         layer[nbLayer].visible = false;
     }
+}
+
+
+function addLayer()
+{
+     newLayer();
+     sendNewLayer();
 }
 
 function selectLayer(nbLayer) {
@@ -241,6 +264,19 @@ var uid = (function () {
     return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }());
 
+function chooseColor(id)
+{
+		var ansCol = document.getElementsByClassName("active-color");
+		var color = ansCol[0].id.slice(5);
+		color = "#" + color;
+		ansCol[0].style.backgroundColor = color;
+		ansCol[0].className = "btn-color";
+
+		var col = document.getElementById(id);
+		col.className = "btn-color active-color animated tada";
+		selectColor();
+}
+
 
 function undo() {
     if (currentElement >= 0) {
@@ -254,11 +290,6 @@ function undo() {
         socket.emit('draw:end', uid, JSON.stringify(path_to_send));
         remove = -1;
     }
-	if (currentElement <= 0) {
-		var can = document.getElementById("undo");
-		can.className = "animated fadeOutDown";
-	}
-	console.log(currentElement);
 }
 
 function redo() {
@@ -294,6 +325,10 @@ function autocomplete() {
 }
 
 function activateTool(tool) {
+		for (var i = 1; i <= 7; i++) {
+		document.getElementById("tool" + i).className = "tool btn";
+		}
+	document.getElementById(tool).className = "tool btn active";
     if (tool == "tool1")
         tool1.activate();
     else if (tool == "tool2")
@@ -311,8 +346,9 @@ $(function(){
     }
 });
 
-function createSelectOptionForLayer(layer) {    
-    var select_option = "<select id =layer" + layer + ">";
+function createSelectOptionForLayer(layer) {
+    var select_option = "<select id=layer" + layer + " style='width: 80px; font-size: 11px'>";
+	select_option +=  "<option disabled selected>Opacité</option>";
     for(i = 100; i >= 0; i--) { 
        select_option += "<option onclick='changeLayerOpacity("+ i + ", " + layer + ")'  value=" + i + ">" + i + "</option>";
     }

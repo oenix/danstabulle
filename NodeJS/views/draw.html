@@ -1,226 +1,197 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>DansTaBulle</title>
-   <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link href="/stylesheets/danstabulle.css" rel="stylesheet" media="screen">
-	<link href="/stylesheets/style.css" rel="stylesheet" media="screen">
-	<link href="/stylesheets/chat.css" rel="stylesheet" media="screen">
-	<link href="/stylesheets/animate.css" rel="stylesheet" media="screen">
-	
-	   <script src="javascripts/psd.parser.min.js"></script>
-	<script type="text/javascript" src="javascripts/jquery.js"></script>
-	<script type="text/javascript" src="/javascripts/drawChat.js"></script>
-	<script type='text/javascript' src="/socket.io/socket.io.js"></script>
-	<script type="text/javascript" src="/javascripts/paper.js"></script>
-	<script type="text/javascript" src="javascripts/drawScripts.js"></script>
-	<script type='text/javascript' src="/javascripts/paperScript.js"></script>
-	<script type='text/javascript' src="/javascripts/harmonisation.js"></script>
-	<script type='text/javascript' src="/javascripts/versionning.js"></script>
-	<script type="text/javascript" src="javascripts/zepto.js"></script>
-	<script type="text/javascript" src="javascripts/jscolor/jscolor.js"></script>
-
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="stylesheets/design.css" rel="stylesheet" media="screen">
+        <link href="stylesheets/font-awesome.min.css" rel="stylesheet" media="screen">
+		<link href="/stylesheets/animate.css" rel="stylesheet" media="screen">
+		<link href="/stylesheets/chat.css" rel="stylesheet" media="screen">
+		
+		<script type="text/javascript" src="javascripts/jquery.js"></script>
+		<script type="text/javascript" src="/javascripts/drawChat.js"></script>
+        <script type="text/javascript" src="javascripts/bootstrap.min.js"></script>
+		<script type="text/javascript" src="javascripts/psd.parser.min.js"></script>
+		<script type="text/javascript" src="/javascripts/drawChat.js"></script>
+		<script type='text/javascript' src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript" src="/javascripts/paper.js"></script>
+		<script type="text/javascript" src="javascripts/drawScripts.js"></script>
+		<script type='text/javascript' src="/javascripts/paperScript.js"></script>
+		<script type='text/javascript' src="/javascripts/harmonisation.js"></script>
+		<script type='text/javascript' src="/javascripts/versionning.js"></script>
+		<script type="text/javascript" src="javascripts/zepto.js"></script>
+		<script type="text/javascript" src="javascripts/jscolor/jscolor.js"></script>
     </head>
     <body>
-      <div class="container ombre blanc">
+        <div class="container" style="margin-top: 100px">
+            <div class="btn-toolbar" style="margin: 0;">
+                <div class="btn-group">
+                    <a id="saveAll" href="javascript:createRessource(0)"  class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sauvegarder"><i class="icon-save"></i></a>
+                    <a id="saveLayer"  href="javascript:createRessource(1)" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sauvegarder le calque actif"><i class="icon-ok-circle"></i></a>
+                    <a id="saveVisibleLayer"  href="javascript:createRessource(2)" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sauvegarder les calques visibles"><i class="icon-ok-sign"></i></a>
+                    <a id="save" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Télécharger"><i class="icon-download"></i></a>
+                </div> 
+                <div class="btn-group">
+                    <a id="tool1" href="javascript:activateTool('tool1');" class="tool btn active" data-toggle="tooltip" data-placement="top" title="" data-original-title="Pinceau"><i class="icon-pencil"></i></a>
+                    <a id="tool2" href="javascript:activateTool('tool2');" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sélectionner"><i class="icon-hand-up"></i></a>
+                    <a id="tool3" href="javascript:activateTool('tool3');" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="'Draw For Me'"><i class="icon-question-sign"></i></a>
+                </div>
+                <div class="btn-group">
+                    <a href="javascript:activateTool('tool4'); var type1='circle';"  id="tool4"class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Forme Rond"><i class="icon-circle"></i></a>
+                    <a href="javascript:activateTool('tool5'); var type1='arc';" id="tool5" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Forme Arc de Cercme"><i class="icon-circle-blank"></i></a>
+                    <a href="javascript:activateTool('tool6'); var type1='triangle';" id="tool6" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Forme Triangle"><i class="icon-play icon-rotate-270"></i></a>
+                    <a href="javascript:activateTool('tool7'); var type1='square';" id="tool7" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Forme Carré"><i class="icon-stop"></i></a>
+                </div>
+                <div class="btn-group">
+                    <a href="javascript:undo()" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Annuler"><i class="icon-undo"></i></a>
+                    <a href="javascript:redo()" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refaire"><i class="icon-repeat"></i></a>
+                    <a href="javascript:autocomplete()" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="AutoCompléter"><i class="icon-lightbulb"></i></a>
+                    <a href="javascript:addLayer()" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Nouveau Calque"><i class="icon-file-alt"></i></a>
+                </div>
+                <div class="form-toolbar pull-right">
+                    <label class="checkbox">
+                        <input id="smooth" type="checkbox"> Lisser
+                    </label>
+                </div>
+                <div class="form-toolbar pull-right">
+                    Epaisseur:
+                    <select id="size" style="width: 57px">
+                        <option value="1"> 1</option>
+                        <option value="5"> 5</option>
+                        <option value="10"> 10</option>
+                        <option value="20"> 20</option>
+                        <option value="50"> 50</option>
+                        <option value="100"> 100</option>
+                    </select>
+                </div>
+                <div class="form-toolbar pull-right">
+                    Opacité:
+                    <select id="opacity" style="width: 57px" onclick="selectColor()"><option value="100">100</option><option value="99">99</option><option value="98">98</option><option value="97">97</option><option value="96">96</option><option value="95">95</option><option value="94">94</option><option value="93">93</option><option value="92">92</option><option value="91">91</option><option value="90">90</option><option value="89">89</option><option value="88">88</option><option value="87">87</option><option value="86">86</option><option value="85">85</option><option value="84">84</option><option value="83">83</option><option value="82">82</option><option value="81">81</option><option value="80">80</option><option value="79">79</option><option value="78">78</option><option value="77">77</option><option value="76">76</option><option value="75">75</option><option value="74">74</option><option value="73">73</option><option value="72">72</option><option value="71">71</option><option value="70">70</option><option value="69">69</option><option value="68">68</option><option value="67">67</option><option value="66">66</option><option value="65">65</option><option value="64">64</option><option value="63">63</option><option value="62">62</option><option value="61">61</option><option value="60">60</option><option value="59">59</option><option value="58">58</option><option value="57">57</option><option value="56">56</option><option value="55">55</option><option value="54">54</option><option value="53">53</option><option value="52">52</option><option value="51">51</option><option value="50">50</option><option value="49">49</option><option value="48">48</option><option value="47">47</option><option value="46">46</option><option value="45">45</option><option value="44">44</option><option value="43">43</option><option value="42">42</option><option value="41">41</option><option value="40">40</option><option value="39">39</option><option value="38">38</option><option value="37">37</option><option value="36">36</option><option value="35">35</option><option value="34">34</option><option value="33">33</option><option value="32">32</option><option value="31">31</option><option value="30">30</option><option value="29">29</option><option value="28">28</option><option value="27">27</option><option value="26">26</option><option value="25">25</option><option value="24">24</option><option value="23">23</option><option value="22">22</option><option value="21">21</option><option value="20">20</option><option value="19">19</option><option value="18">18</option><option value="17">17</option><option value="16">16</option><option value="15">15</option><option value="14">14</option><option value="13">13</option><option value="12">12</option><option value="11">11</option><option value="10">10</option><option value="9">9</option><option value="8">8</option><option value="7">7</option><option value="6">6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option><option value="0">0</option></select>
+                </div>
+            </div>
 
-        <div class="masthead">
-        <div style="text-align: center; margin-bottom: 10px">
-          <img id="logo"  src="img/logoPlicMini.png">
+            <div class="btn-toolbar">
+                <div id="color" class="btn-group">
+                  <!--  <a id='Color0' class="btn-color active-color" style="background-color: #000000;" onclick="chooseColor(0)"></a>
+                    <a id='Color1' class="btn-color" style="background-color: #FFFFFF;"onclick="chooseColor(1)"></a>
+                    <a id='Color2' class="btn-color" style="background-color: #FC3436;" onclick="chooseColor(2)"></a>
+                    <a id='Color3' class="btn-color" style="background-color: #CD3C9F;" onclick="chooseColor(3)"></a>
+                    <a id='Color4' class="btn-color" style="background-color: #36BFDE;" onclick="chooseColor(4)"></a>
+                    <a id='Color5' class="btn-color" style="background-color: #B0C930;" onclick="chooseColor(5)"></a>
+                    <a id='Color6' class="btn-color" style="background-color: #7D4E32;" onclick="chooseColor(6)"></a>
+                    <a id='Color7' class="btn-color" style="background-color: #FC6222;" onclick="chooseColor(7)"></a>
+                    <a id='Color8' class="btn-color" style="background-color: #F9E422;" onclick="chooseColor(8)"></a>-->
+                </div>
+                <div class="form-toolbar pull-right">
+                    #<input autocomplete="off" id="colorHexa" class="input-medium color {required:false}" placeholder="Hexa" maxlength="6" type="text">
+                    <button class="btn btn-small btn-success" onclick="addColor()">Ajouter à la palette</button>
+                    <button class="btn btn-small btn-danger" onclick="delColor()">Supprimer de la palette</button>
+                </div>
+            </div>
         </div>
-          <div class="navbar">
-            <div class="navbar-inner">
-              <div class="container">
-                <ul class="nav">
-                  <li><a href="index.html">Accueil</a></li>
-			      <li><a href="explorer.html">Explorer</a></li>	
-				  <li class="active"><a href="#">Contribuer</a></li>
-				  <li><a href="#">Blog</a></li>
-				  <li><a href="#">Shop</a></li>
-                  <li><div class="input-append searchform">
-				  <input class="span2 recherche" id="appendedInput search-query" type="text" data-provide="typeahead" data-items="1">=
-									<span class="add-on"><i class="icon-search"></i></span>
-								</div>
-                  </li>
-                </ul>
-			</div>
-		</div>
-	</div><!-- /.navbar -->
-</div>
-
-<div>
-	<ul class="breadcrumb">
-		<li><a href="index.html"><i class="icon-home"></i></a> <span class="divider">/</span></li>
-		<li><a href="explorer.html">Contribuer</a> <span class="divider">/</span></li>
-		<li class="active">Dessiner</li>
-		<li class="pull-right">
-			<a href="inscription.html">Inscription</a>
-		</li>
-		<li class="dropdown pull-right">
-			<a class="dropdown-toggle" href="#" data-toggle="dropdown">Connexion<strong class="caret"></strong>  <div class="btn-group">
-			</div> </a>
-			<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-				<form class="form-signin">
-					<h4 class="form-signin-heading">Connexion</h4>
-					<input type="text" class="input-medium" placeholder="Email">
-					<input type="password" class="input-medium" placeholder="Mot de Passe">
-					<label class="checkbox">
-						<input type="checkbox" value="remember-me"> Rester connecté
-					</label>
-					<label>
-						<inputvalue="passordforget"><a href="password.html">Mot de passe oublié</a>
-					</label>
-					<button class="btn btn-small btn-primary" type="submit">Connexion</button>
-				</form>
-			</div>
-		</li>
-
-	</ul>
-</div>
-<section id="Contenu" class="span12">
-
-  <p><a id="saveAll" href="javascript:createRessource(0)"> Sauvegarder</a> / 
-  <a id="saveLayer" href="javascript:createRessource(1)"> Sauvegarder le calque Actif</a> /
-  <a id="saveVisibleLayer" href="javascript:createRessource(2)"> Sauvegarder les calques visibles</a> /
-  <a id="save" href=""> Telecharger</a></p>
-  
-	<a href="javascript:activateTool('tool1');" id="pinceau">Pinceau</a> /
-    <a href="javascript:activateTool('tool2');">Select</a> /
-	<a href="javascript:activateTool('tool3');">Draw For Me</a> /
-	<a href="javascript:activateTool('tool4');">Forme</a>
-  <select id='color' style="background-color:#000000;">
-    <option id="Color000000" value='#000000' style="background-color:#000000;" onClick="selectColor()"></option>
-    <option id="ColorFFFFFF" value='#FFFFFF' style="background-color:#FFFFFF;" onClick="selectColor()"></option>
-    <option id="ColorFC3436" value='#FC3436' style="background-color:#FC3436;" onClick="selectColor()"></option>
-    <option id="ColorCD3C9F" value='#CD3C9F' style="background-color:#CD3C9F;" onClick="selectColor()"></option>
-    <option id="Color36BFDE" value='#36BFDE' style="background-color:#36BFDE;" onClick="selectColor()"></option>
-    <option id="ColorB0C930" value='#B0C930' style="background-color:#B0C930;" onClick="selectColor()"></option>
-    <option id="Color7D4E32" value='#7D4E32' style="background-color:#7D4E32;" onClick="selectColor()"></option>
-    <option id="ColorFC6222" value='#FC6222' style="background-color:#FC6222;" onClick="selectColor()"></option>
-    <option id="ColorF9E422" value='#F9E422' style="background-color:#F9E422;" onClick="selectColor()"></option>
-  </select>
-    <select id='size' placeholder="Taille">
-    <option value='1'> 1</option>
-    <option value='5'> 5</option>
-    <option value='10'> 10</option>
-    <option value='20'> 20</option>
-    <option value='50'> 50</option>
-    <option value='100'> 100</option>
-  </select>
-  <select id="opacity" class="1-100" placeholder="opacité" onClick="selectColor()">opacité</select>
-  
-</select>
-  <select id='shape' placeholder="Forme">
-  <option value='square'> Carré</option>
-  <option value='circle'> Rond</option>
-  <option value='arc'> Arcs</option>
-<option value='triangle'> Triangle</option>
-</select>
-  <a id="undo" href="javascript:undo()" class="animated fadeOutUp">undo</a>
-  <a href="javascript:redo()">Redo</a>
-<input type="checkbox" id="smooth"> Lisser
-<a href="javascript:autocomplete()">Autocompleter</a>
-<script>
-  
-setTimeout(chat,200);
-
-function addLayer()
-{
-     newLayer();
-     sendNewLayer();
-}
-function chat()
-{
-        if(document.getElementById("chatDiv").style.visibility=="hidden")
-        {
-	       document.getElementById("chatDiv").style.visibility = "visible";
-		document.getElementById("chatDiv").style.display ="inline";
-		document.getElementById("myCanvas").width = 676;
-        }
-        else
-        {
-                document.getElementById("chatDiv").style.visibility="hidden";
-		document.getElementById("chatDiv").style.display ="none";
-		document.getElementById("myCanvas").width = 960;
-        }
-}
-</script>
-<a href="javascript:addLayer()" id="newLayer">Nouveau Calque</a> /
-<a href="javascript:chat()" id="newLayer">Chat</a>
-
-
-  <div class="span12">
-    <p></p>
-  </div>
-  <div id="holder" class="span6 pull-left">
-  
-    <canvas id="myCanvas" width="940" height="640"></canvas>
-  </div>
-    <div id="chatDiv" class="span2 pull-right">
-				<div id="chatDiv">
-					<div id="connectedUsers">
-						<h2 class="nav-header">Utilisateurs en ligne</h2>
-						<ul id="connectedUsersList" class="nav nav-list">			
-						</ul>
+        <div class="container" style="margin-top: 15px;">
+            <div class="row">
+                <div class="span9">
+				  <div  style="border: 10px solid #CCC;">
+                    <canvas id="myCanvas" width="850" height="640" ></canvas>
 					</div>
-					<ul id="chatMessages">
-					</ul>
-					<form id="chatSendMessageForm">
-						<textarea id="chatSendMessageArea" maxlength = '1000'></textarea>
-						<input type="button" id="chatSendMessageButton" value="Envoyer" class="btn" style="padding-right: 12px;">
-					</form>
-			</div>
+                </div>
+                <div class="span3">
+                    <div class="well" style="padding: 8px 0;">
+                        <ul id="calques" class="nav nav-list">
+                            <li class="nav-header">Calques</li>
+                            <li>
+                                <a href="#" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Afficher/Cacher"><i class="icon-file-alt"></i> Calque 0</a>
+                                <a href="javascript:deleteLayer(0);" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Supprimer"><i class="icon-remove"></i></a>
+                                <a href="javascript:layerUp(0)" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Monter"><i class="icon-circle-arrow-up"></i></a>
+                                <a href="javascript:layerDown(0)" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Descendre"><i class="icon-circle-arrow-down"></i></a>
+                                <select style="width: 100px; height: 20px; font-size: 11px; margin-left: 20px;">
+                                    <option disabled selected>Fusion</option>
+                                    <option onclick="changeLayerFusion(0)" value="0">Normal</option>
+                                    <option onclick="changeLayerFusion(0)">Ecran</option>
+                                    <option onclick="changeLayerFusion(0)">Multiplier</option>
+                                    <option onclick="changeLayerFusion(0)">Par dessus</option>
+                                </select>
+                                <select id="opacity" style="width: 70px; height: 20px; font-size: 11px;" onclick="selectColor()">
+                                    <option disabled selected>Opacité</option>
+                                    <option value="100">100</option><option value="99">99</option><option value="98">98</option><option value="97">97</option><option value="96">96</option><option value="95">95</option><option value="94">94</option><option value="93">93</option><option value="92">92</option><option value="91">91</option><option value="90">90</option><option value="89">89</option><option value="88">88</option><option value="87">87</option><option value="86">86</option><option value="85">85</option><option value="84">84</option><option value="83">83</option><option value="82">82</option><option value="81">81</option><option value="80">80</option><option value="79">79</option><option value="78">78</option><option value="77">77</option><option value="76">76</option><option value="75">75</option><option value="74">74</option><option value="73">73</option><option value="72">72</option><option value="71">71</option><option value="70">70</option><option value="69">69</option><option value="68">68</option><option value="67">67</option><option value="66">66</option><option value="65">65</option><option value="64">64</option><option value="63">63</option><option value="62">62</option><option value="61">61</option><option value="60">60</option><option value="59">59</option><option value="58">58</option><option value="57">57</option><option value="56">56</option><option value="55">55</option><option value="54">54</option><option value="53">53</option><option value="52">52</option><option value="51">51</option><option value="50">50</option><option value="49">49</option><option value="48">48</option><option value="47">47</option><option value="46">46</option><option value="45">45</option><option value="44">44</option><option value="43">43</option><option value="42">42</option><option value="41">41</option><option value="40">40</option><option value="39">39</option><option value="38">38</option><option value="37">37</option><option value="36">36</option><option value="35">35</option><option value="34">34</option><option value="33">33</option><option value="32">32</option><option value="31">31</option><option value="30">30</option><option value="29">29</option><option value="28">28</option><option value="27">27</option><option value="26">26</option><option value="25">25</option><option value="24">24</option><option value="23">23</option><option value="22">22</option><option value="21">21</option><option value="20">20</option><option value="19">19</option><option value="18">18</option><option value="17">17</option><option value="16">16</option><option value="15">15</option><option value="14">14</option><option value="13">13</option><option value="12">12</option><option value="11">11</option><option value="10">10</option><option value="9">9</option><option value="8">8</option><option value="7">7</option><option value="6">6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option><option value="0">0</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a href="#" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Afficher/Cacher"><i class="icon-file-alt"></i> Calque 1</a>
+                                <a href="javascript:deleteLayer(0);" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Supprimer"><i class="icon-remove"></i></a>
+                                <a href="javascript:layerUp(0)" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Monter"><i class="icon-circle-arrow-up"></i></a>
+                                <a href="javascript:layerDown(0)" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Descendre"><i class="icon-circle-arrow-down"></i></a>
+                                <select style="width: 100px; height: 20px; font-size: 11px; margin-left: 20px;">
+                                    <option disabled selected>Fusion</option>
+                                    <option onclick="changeLayerFusion(0)" value="0">Normal</option>
+                                    <option onclick="changeLayerFusion(0)">Ecran</option>
+                                    <option onclick="changeLayerFusion(0)">Multiplier</option>
+                                    <option onclick="changeLayerFusion(0)">Par dessus</option>
+                                </select>
+                                <select id="opacity" style="width: 70px; height: 20px; font-size: 11px;" onclick="selectColor()">
+                                    <option disabled selected>Opacité</option>
+                                    <option value="100">100</option><option value="99">99</option><option value="98">98</option><option value="97">97</option><option value="96">96</option><option value="95">95</option><option value="94">94</option><option value="93">93</option><option value="92">92</option><option value="91">91</option><option value="90">90</option><option value="89">89</option><option value="88">88</option><option value="87">87</option><option value="86">86</option><option value="85">85</option><option value="84">84</option><option value="83">83</option><option value="82">82</option><option value="81">81</option><option value="80">80</option><option value="79">79</option><option value="78">78</option><option value="77">77</option><option value="76">76</option><option value="75">75</option><option value="74">74</option><option value="73">73</option><option value="72">72</option><option value="71">71</option><option value="70">70</option><option value="69">69</option><option value="68">68</option><option value="67">67</option><option value="66">66</option><option value="65">65</option><option value="64">64</option><option value="63">63</option><option value="62">62</option><option value="61">61</option><option value="60">60</option><option value="59">59</option><option value="58">58</option><option value="57">57</option><option value="56">56</option><option value="55">55</option><option value="54">54</option><option value="53">53</option><option value="52">52</option><option value="51">51</option><option value="50">50</option><option value="49">49</option><option value="48">48</option><option value="47">47</option><option value="46">46</option><option value="45">45</option><option value="44">44</option><option value="43">43</option><option value="42">42</option><option value="41">41</option><option value="40">40</option><option value="39">39</option><option value="38">38</option><option value="37">37</option><option value="36">36</option><option value="35">35</option><option value="34">34</option><option value="33">33</option><option value="32">32</option><option value="31">31</option><option value="30">30</option><option value="29">29</option><option value="28">28</option><option value="27">27</option><option value="26">26</option><option value="25">25</option><option value="24">24</option><option value="23">23</option><option value="22">22</option><option value="21">21</option><option value="20">20</option><option value="19">19</option><option value="18">18</option><option value="17">17</option><option value="16">16</option><option value="15">15</option><option value="14">14</option><option value="13">13</option><option value="12">12</option><option value="11">11</option><option value="10">10</option><option value="9">9</option><option value="8">8</option><option value="7">7</option><option value="6">6</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option><option value="0">0</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="well">
+                        <section class="Versionning" id="versionning">
+                            <ul class="nav nav-list">
+                                <li class="nav-header">Versionning</li>
+                                <li>
+                                    <select id="version" style="width: 150px; height: 25px; font-size: 11px; margin-top: 8px;"></select>
+                                    <a id="restoreLink" href="javascript:restoreState(0)" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Rétablir"><i class="icon-refresh"></i></a>
+                                </li>
+                            </ul>
 
-   </div>
-  
-        </section>
-		<section class="calques" id="container ombre " class="span8">
-			<h2>Calques</h2>
-			<ul id="calques" class="dragable">
+                            <div id="imageVersion">
+                            </div>
+                        </section>
+                    </div>
+                    <div class="well">
+                        <ul class="nav nav-list">
+                            <li class="nav-header">Chat</li>
+                        </ul>
+                        <div id="chatDiv" class="span2 pull-right">
+									<div id="chatDiv">
+										<div id="connectedUsers">
+											<h2 class="nav-header">Utilisateurs en ligne</h2>
+											<ul id="connectedUsersList" class="nav nav-list">			
+											</ul>
+										</div>
+										<ul id="chatMessages">
+										</ul>
+										<form id="chatSendMessageForm">
+											<textarea id="chatSendMessageArea" maxlength = '1000'></textarea>
+											<input type="button" id="chatSendMessageButton" value="Envoyer" class="btn" style="padding-right: 12px;">
+										</form>
+								</div>
 
-			</ul>
-			<div id="log"></div>
-			</section>
-			<h1>Harmonisation</h2>
-			
-			<section class="palette" id="container ombre " class="span8">
-			<div class="span12">
-				<h2>Palette</h2>
-						#<input type="text" id="colorHexa" class="input-medium color {required:false}" placeholder="Hexa" maxlength="6" >
-						<button class="btn btn-small btn-success" onClick="addColor()" >Ajouter à la palette</button>
-						<button class="btn btn-small btn-danger" onClick="delColor()">Supprimer de la palette</button>
-				<div id="log"></div>
-			</div>
-			</section>
-			<section class="Ressources" id="ressources" class="span12">
-			<div class="span12">
-			<h2>Ressources</h2>
-			</div>
-			</section>
-			<div class="span12">
-			<section class="Versionning" id="versionning" class="span12">
-			<h2>Versionning</h2>
-			<select id="version">
-			</select>
-			<div id='imageVersion'>
-			</div>
-			<a id="restoreLink" href="javascript:restoreState(0)">Restore</a>
-			</section>
-			</div>
-			
-			</div>
-		
-			
-			
-		</div>
-      <div class="container ombre footer">
-            <center>
-              <footer>
-              <p class="muted credit"><a href="#">DansTaBulle</a> est un projet de quatrième année réalisé à l'<a href="http://www.epita.fr">EPITA</a>, en <a href="http://mti.epita.fr">MTI</a></p>
-              <p class="muted credit">N'hésitez pas à nous <a>contacter</a>, ou bien à visiter la <a href=faq.html>FAQ</a><p>
-              </footer>
-            </center>
-		</div>
+					   </div>
+						<div style="clear: both; height: 1px"></div>
+			            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 15px;">
+            <div class="well" style="width: 830px">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Ressources</li>
+                </ul>
+                <div id="ressources" >
+				</div>
+				
+			<div style="clear: both; height: 1px"></div>
+            </div>
+        </div>
+        <script type="text/javascript">
+		 $(document).ready(function () {
+            $('.tool').tooltip({container: 'body'});
+			});
+        </script>
     </body>
-  </html>
+</html>
