@@ -20,7 +20,6 @@ function addColor() {
 		document.getElementById("colorHexa").value = '';
 		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
 		palette.push("#" + harmo.color);
-		console.log("cacaici" + harmo.color);
 	    harmo.color = null;
 		saveColor();
 		nbCouleurs += 1;
@@ -47,7 +46,6 @@ var loadColors = function (colors, artist) {
 			if (a == palette[j])
 				insert = false;
 		}
-		console.log("#" + colors[i] + " et " + palette[j] + " et insert = " + insert);
 		if (insert)
 			palette.push("#" + colors[i]);
 	}
