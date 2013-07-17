@@ -15,7 +15,7 @@
 <div class="span8">
     <div class="planche img-polaroid">
         {% for image in planche.images %}
-            <div class="demo" imgID="{{image.id}}" style="top: {{image.posY + 217}}px; left: {{image.posX + 179}}px; width:{{image.width}}px; height: {{image.height}}px;">
+            <div class="demo" imgID="{{image.id}}" style="top: {{image.posY + 217}}px; left: {{image.posX + 215}}px; width:{{image.width}}px; height: {{image.height}}px;">
                 <img src="{{asset('img/v' ~ image.id ~ '.jpg')}}" />
             </div>
         {% endfor %}
