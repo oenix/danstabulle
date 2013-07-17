@@ -471,6 +471,7 @@ if (selected == pathList[i])
                 path.closed = true;
                 path.simplify(20);
                 path.opacity = 1;
+				path.dashArray = [10, 4];
                 texte = texteBulle.content;
 				
 				console.log(texteBulle.position);
