@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block title %}DansTaBulle{% endblock %}</title>
+        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/danstabulle.css') }}" rel="stylesheet" media="screen">
+        <script type="text/javascript" src="{{ asset('js/modernizr.custom.29473.js') }}"></script>
+        <script src="{{ asset('js/jquery.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/danstabulle.js') }}"></script>
+    </head>
+    <body>
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand">DansTaBulle</a>
+                    <ul class="nav">
+                        <li><a href="{{ path('dtb_offline_homepage') }}">Accueil</a></li>
+                        <li><a href="{{ path('dtb_bd_explore') }}">Explorer</a></li>
+                        <li><a href="{{ path('dtb_bd_contribute') }}">Contribuer</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Shop</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li> <div class="input-append">
+                                <input class="span2" id="appendedInput search-query" type="text">
+                                <span class="add-on"><i class="icon-search"></i></span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+                
+        <div class="container ombre blanc">  
+                <div class="hero-unit">
+                <h1>Oops! Vous êtes perdu?</h1>
+                <p>La page que vous demandez n'existe pas ou ne vous est pas accessible. Désolé.</p>
+                </div>
+            
+        </div>
+        <div class="container ombre footer">
+            <center>
+                <footer>
+                    <p class="muted credit"><a href="#">DansTaBulle</a> est un projet de quatrième année réalisé à l'<a href="http://www.epita.fr">EPITA</a>, en <a href="mti.epita.fr">MTI</a></p>
+                    <p class="muted credit">N'hésitez pas à nous <a>contacter</a>, ou bien à visiter la <a>FAQ</a><p>
+                </footer>
+            </center>
+        </div>
+    </body>
+</html>

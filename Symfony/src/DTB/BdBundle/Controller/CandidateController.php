@@ -13,7 +13,7 @@ class CandidateController extends Controller
     public function drawerAction($id)
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedHttpException('You have to be logged in');
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
         }
         
         $bd = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee')->find($id);
@@ -45,7 +45,7 @@ class CandidateController extends Controller
     public function scenaristAction($id)
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedHttpException('You have to be logged in');
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
         }
         
         $bd = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee')->find($id);
@@ -77,7 +77,7 @@ class CandidateController extends Controller
     public function seeAction($id)
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedHttpException('You have to be logged in');
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
         }
         
         $bd = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee')->find($id);
@@ -88,7 +88,7 @@ class CandidateController extends Controller
         
         if (!$role['admin'])
         {
-            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+            throw new AccessDeniedHttpException('Vous n\'êtes pas administrateur de cette bande dessinée. Vous ne pouvez donc accéder à cette page.');
         }
         
         $candidaturesDrawer = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->findBy(array("bd" => $bd, "type" => "drawer"));
@@ -100,7 +100,7 @@ class CandidateController extends Controller
     public function validateAction($id)
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedHttpException('You have to be logged in');
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
         }
         
         $candidature = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->find($id);
@@ -113,7 +113,7 @@ class CandidateController extends Controller
         
         if (!$role['admin'])
         {
-            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+            throw new AccessDeniedHttpException('Vous n\'êtes pas administrateur de cette bande dessinée. Vous ne pouvez donc accéder à cette page.');
         }
         
         if ($candidature->getType() == "drawer")
@@ -134,7 +134,7 @@ class CandidateController extends Controller
     public function deleteAction($id)
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedHttpException('You have to be logged in');
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
         }
         
         $candidature = $this->getDoctrine()->getRepository('DTBBdBundle:Candidature')->find($id);
@@ -146,7 +146,7 @@ class CandidateController extends Controller
         
         if (!$role['admin'])
         {
-            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+            throw new AccessDeniedHttpException('Vous n\'êtes pas administrateur de cette bande dessinée. Vous ne pouvez donc accéder à cette page.');
         }
         
         $em = $this->getDoctrine()->getManager();

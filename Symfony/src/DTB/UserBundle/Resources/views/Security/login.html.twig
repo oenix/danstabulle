@@ -4,7 +4,7 @@
 
 {% block fos_user_content %}
 {% if error %}
-    <div>{{ error|trans }}</div>
+    <div class="alert alert-error">{{ error|trans }}</div>
 {% endif %}
 
 <form action="{{ path("fos_user_security_check") }}" method="post">

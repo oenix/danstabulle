@@ -13,7 +13,7 @@ class ContributeController extends Controller
     public function indexAction()
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedHttpException('You have to be logged in');
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
         }
         
         $bandeDessinees = $this->getDoctrine()

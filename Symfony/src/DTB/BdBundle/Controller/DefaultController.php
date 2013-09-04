@@ -110,7 +110,7 @@ class DefaultController extends Controller
         
         if (!$role['admin'] && !$role['scenarist'])
         {
-            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+            throw new AccessDeniedHttpException('Vous n\'êtes ni administrateur, ni scénariste sur cette bande dessinée. Vous ne pouvez donc accéder à cette page.');
         }
         
         return $this->render('DTBBdBundle:Default:editScenario.html.twig', array('bd' => $bandeDessinee,
@@ -187,7 +187,7 @@ class DefaultController extends Controller
     public function addPlancheAction($id)
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedHttpException('You have to be logged in');
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
         }
         
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
@@ -202,7 +202,7 @@ class DefaultController extends Controller
         
         if (!$role['admin'])
         {
-            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+            throw new AccessDeniedHttpException('Vous n\'êtes pas administrateur de cette bande dessinée. Vous ne pouvez donc accéder à cette page.');
         }
  
         $planche = new Planche();
@@ -219,7 +219,7 @@ class DefaultController extends Controller
     public function createAction()
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedHttpException('You have to be logged in');
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
         }
         
         $bandeDessinee = new BandeDessinee();
@@ -248,7 +248,7 @@ class DefaultController extends Controller
     public function updateAction($id)
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            throw new AccessDeniedHttpException('You have to be logged in');
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
         }
         
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
@@ -260,7 +260,7 @@ class DefaultController extends Controller
         
         if (!$role['admin'])
         {
-            throw new AccessDeniedHttpException('Votre rôle ne vous le permet pas');
+            throw new AccessDeniedHttpException('Vous n\'êtes pas administrateur de cette bande dessinée. Vous ne pouvez donc accéder à cette page.');
         }
         
         $form = $this->createForm(new BandeDessineeType, $bandeDessinee);
