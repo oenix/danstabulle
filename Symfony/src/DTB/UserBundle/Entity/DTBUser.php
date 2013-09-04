@@ -3,7 +3,7 @@
 namespace DTB\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\User as BaseUser;
+use FOS\UserBundle\Entity\User as BaseUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
