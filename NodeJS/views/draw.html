@@ -7,8 +7,10 @@
         <link href="stylesheets/design.css" rel="stylesheet" media="screen">
         <link href="stylesheets/font-awesome.min.css" rel="stylesheet" media="screen">
 		<link href="/stylesheets/animate.css" rel="stylesheet" media="screen">
+		<link href="/stylesheets/chat.css" rel="stylesheet" media="screen">
 		
 		<script type="text/javascript" src="javascripts/jquery.js"></script>
+		<script type="text/javascript" src="/javascripts/drawChat.js"></script>
         <script type="text/javascript" src="javascripts/bootstrap.min.js"></script>
 		<script type="text/javascript" src="javascripts/psd.parser.min.js"></script>
 		<script type="text/javascript" src="/javascripts/drawChat.js"></script>
@@ -140,7 +142,7 @@
                             <ul class="nav nav-list">
                                 <li class="nav-header">Versionning</li>
                                 <li>
-                                    <select id="version" style="width: 150px; height: 20px; font-size: 11px; margin-top: 8px;"></select>
+                                    <select id="version" style="width: 150px; height: 25px; font-size: 11px; margin-top: 8px;"></select>
                                     <a id="restoreLink" href="javascript:restoreState(0)" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Rétablir"><i class="icon-refresh"></i></a>
                                 </li>
                             </ul>
@@ -153,7 +155,24 @@
                         <ul class="nav nav-list">
                             <li class="nav-header">Chat</li>
                         </ul>
-                        Je te laisse te débrouiller pour celui là :p
+                        <div id="chatDiv" class="span2 pull-right">
+									<div id="chatDiv">
+										<div id="connectedUsers">
+											<h2 class="nav-header">Utilisateurs en ligne</h2>
+											<ul id="connectedUsersList" class="nav nav-list">			
+											</ul>
+										</div>
+										<ul id="chatMessages">
+										</ul>
+										<form id="chatSendMessageForm">
+											<textarea id="chatSendMessageArea" maxlength = '1000'></textarea>
+											<input type="button" id="chatSendMessageButton" value="Envoyer" class="btn" style="padding-right: 12px;">
+										</form>
+								</div>
+
+					   </div>
+						<div style="clear: both; height: 1px"></div>
+			            </div>
                     </div>
                 </div>
             </div>

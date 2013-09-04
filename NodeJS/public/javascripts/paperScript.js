@@ -471,6 +471,7 @@ if (selected == pathList[i])
                 path.closed = true;
                 path.simplify(20);
                 path.opacity = 1;
+				path.dashArray = [10, 4];
                 texte = texteBulle.content;
 				
 				console.log(texteBulle.position);
@@ -748,6 +749,7 @@ if (selected == pathList[i])
 			var image = new Image();
 			image.src = points.raster;
 			raster = new Raster(image);
+			raster.position = view.center;
 			pathListExtern.push(raster);
 			currentElementExtern ++;
             activeLayer = llayer;

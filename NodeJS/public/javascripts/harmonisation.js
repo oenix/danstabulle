@@ -31,6 +31,7 @@ function addColor() {
 var loadColors = function (colors, artist) {
 	var addColor = "";
 	for (var i = 0; i < colors.length - 1; i++) {
+		var insert = true;
 		colors[i] = colors[i].slice(1);
 		if (i == 0) {
 			addColor += "<a id='Color" + colors[i] + "' class='btn-color active-color' style='background-color:#" + colors[i] + "' onclick='chooseColor(\"Color" + colors[i]  +"\")'></a>";
@@ -39,15 +40,22 @@ var loadColors = function (colors, artist) {
 			addColor += "<a id='Color" + colors[i]  + "' class='btn-color' style='background-color:#" + colors[i] + "' onclick='chooseColor(\"Color" + colors[i] +"\")'></a>";
 		}
 		nbCouleurs += 1;
-		palette.push("#" + colors[i]);
+		for (var j = 0; j < palette.length; j++)
+		{
+			var a = "#" + colors[i];
+			if (a == palette[j])
+				insert = false;
+		}
+		if (insert)
+			palette.push("#" + colors[i]);
 	}
 	document.getElementById("color").innerHTML = addColor;
 }
 
 function saveColor() {
+	
 	var colToSave = "";
 	for (var i = 0; i < palette.length; i++) {
-		
 		colToSave += palette[i] + '\n';
 	}
 	socket.emit('savePalette:end', uid, colToSave);

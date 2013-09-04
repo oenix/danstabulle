@@ -1,5 +1,4 @@
 #chatDiv {
-    float: left;
     width: 222px;
 }
 
@@ -37,7 +36,7 @@
 		border: 1px solid #CCCCCC;
 		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 		float: left;
-		height: 311px;
+		height: 150px;
 		list-style-type: none;
 		margin: 0;
 		overflow: auto;

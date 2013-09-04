@@ -152,7 +152,7 @@ $(document).ready(function() {
 		
 		for (var i = 0; i < framework.places.length; i++)
 		{
-			$("#scenarioPlacesMain dl").append("<dt class=\"editable\">" + framework.places[i].name + "</dt>");
+			$("#scenarioPlacesMain dl").append("<dt class=\"editable_title\">" + framework.places[i].name + "</dt>");
 			$("#scenarioPlacesMain dl").append("<dd class=\"editable\">" + framework.places[i].description + "</dd>");
 		}
 		
@@ -160,20 +160,11 @@ $(document).ready(function() {
 
 		for (var i = 0; i < framework.characters.length; i++)
 		{
-			$("#scenarioCaractersMain dl").append("<dt class=\"editable\">" + framework.characters[i].name + "</dt>");
+			$("#scenarioCaractersMain dl").append("<dt class=\"editable_title\">" + framework.characters[i].name + "</dt>");
 			$("#scenarioCaractersMain dl").append("<dd class=\"editable\">" + framework.characters[i].description + "</dd>");
 		}
 		
-		 $('.editable').editable(editableCallback, { 
-			 type     : 'textarea',
-			 width : 400,
-			 height : 60,
-			 tooltip   : "Cliquez pour éditer !",
-			 onblur : "submit",
-			 callback : function (v, s) {
-				sendScenarioFramework();
-			}
-		});
+		makeTextEditable();
 	}
 	
 	/* Send the new text to the server for broadcasting */
@@ -283,6 +274,10 @@ $(document).ready(function() {
 	
 	$('#scenarioStructure').fancybox();
 	
+	$("#scenarioStructure").bind("click", function () {
+		$('#helperTrame').click();
+	});
+	
 	$('#scenarioStoryMain').show();
 	
 	$("#helperTrame").bind("click", function () {
@@ -303,21 +298,59 @@ $(document).ready(function() {
 		$('#scenarioPlacesMain').show();
 	});
 	
+	/* Add new framework elements */ 
+	
+	$("#scenarioCharactersButton").bind("click", function () {
+		
+		$("#scenarioCaractersMain dl").append("<dt class=\"editable_title\">Nouveau personnage</dt>");
+		$("#scenarioCaractersMain dl").append("<dd class=\"editable\">Sa description</dd>");				
+		
+		sendScenarioFramework();
+		
+		makeTextEditable();
+	});
+	
+	$("#scenarioPlacesButton").bind("click", function () {
+		
+		$("#scenarioPlacesMain dl").append("<dt class=\"editable_title\">Nouveau lieu</dt>");
+		$("#scenarioPlacesMain dl").append("<dd class=\"editable\">Sa description</dd>");					
+		
+		sendScenarioFramework();
+		
+		makeTextEditable();
+	});
+	
 	/* jsEditable management */
 	
 	function editableCallback (v, s)
 	{
 		return v;
 	}
+	
+	function makeTextEditable()
+	{
+		$('.editable_title').editable(editableCallback, { 
+			 type     : 'textarea',
+			 width : 400,
+			 height : 20,
+			 tooltip   : "Cliquez pour éditer !",
+			 onblur : "submit",
+			 callback : function (v, s) {
+				sendScenarioFramework();
+			}
+		});
 
-	 $('.editable').editable(editableCallback, { 
-     type     : 'textarea',
-	 width : 400,
-	 height : 60,
-	 tooltip   : "Cliquez pour éditer !",
-	 onblur : "submit",
-	 callback : function (v, s) {
-		sendScenarioFramework();
+		$('.editable').editable(editableCallback, { 
+			 type     : 'textarea',
+			 width : 400,
+			 height : 60,
+			 tooltip   : "Cliquez pour éditer !",
+			 onblur : "submit",
+			 callback : function (v, s) {
+				sendScenarioFramework();
+			}
+		});
 	}
- });
+	
+	makeTextEditable();
 });
