@@ -43,11 +43,11 @@ window.onload = function () {
             return null;
         }
         text.fillColor = 'black';
-        text.font = "Script";
-        text.fontSize = 15;
+        text.font = "myfont";
+        text.fontSize = 30;
 
-        text.point.x = text.point.x - text.point.length / 12;
-        text.point.y = text.point.y - text.point.length / 50;
+       // text.point.x = text.point.x - text.point.length / 12;
+        //text.point.y = text.point.y - text.point.length / 50;
         //      currentElement++;
         return text;
     }
