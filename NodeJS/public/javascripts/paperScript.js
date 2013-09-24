@@ -464,7 +464,7 @@ if (selected == pathList[i])
             myCircle.strokeColor = 'white';
         }
         //Si C'est une bulle :
-        if (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && path.length > 200) {
+        if (bubble && (Math.abs(path.firstSegment.point.x - path.lastSegment.point.x) < 30 && Math.abs(path.firstSegment.point.y - path.lastSegment.point.y) < 30 && path.length > 200)) {
             texteBulle = text(new Point(path.position.x, path.position.y), "Texte de la bulle");
             if (texteBulle != null) {
                 path.style = bulleStyle;
