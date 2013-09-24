@@ -1,0 +1,196 @@
+<?php
+
+namespace DTB\BdBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Topic
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="DTB\BdBundle\Entity\TopicRepository")
+ */
+class Topic
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="content", type="text")
+     */
+    private $content;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="time", type="datetime")
+     */
+    private $time;
+
+    /**
+     * @ORM\OneToMany(targetEntity="DTB\BdBundle\Entity\Post", mappedBy="topic")
+     */
+    private $posts;
+    
+    /**
+     * @ORM\ManytoOne(targetEntity="DTB\BdBundle\Entity\Forum", inversedBy="topics", cascade={"persist"})
+     */
+    private $forum;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Topic
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     * @return Topic
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string 
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * Set time
+     *
+     * @param \DateTime $time
+     * @return Topic
+     */
+    public function setTime($time)
+    {
+        $this->time = $time;
+    
+        return $this;
+    }
+
+    /**
+     * Get time
+     *
+     * @return \DateTime 
+     */
+    public function getTime()
+    {
+        return $this->time;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add posts
+     *
+     * @param \DTB\BdBundle\Entity\Post $posts
+     * @return Topic
+     */
+    public function addPost(\DTB\BdBundle\Entity\Post $posts)
+    {
+        $this->posts[] = $posts;
+    
+        return $this;
+    }
+
+    /**
+     * Remove posts
+     *
+     * @param \DTB\BdBundle\Entity\Post $posts
+     */
+    public function removePost(\DTB\BdBundle\Entity\Post $posts)
+    {
+        $this->posts->removeElement($posts);
+    }
+
+    /**
+     * Get posts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPosts()
+    {
+        return $this->posts;
+    }
+
+    /**
+     * Set forum
+     *
+     * @param \DTB\BdBundle\Entity\Forum $forum
+     * @return Topic
+     */
+    public function setForum(\DTB\BdBundle\Entity\Forum $forum = null)
+    {
+        $this->forum = $forum;
+    
+        return $this;
+    }
+
+    /**
+     * Get forum
+     *
+     * @return \DTB\BdBundle\Entity\Forum 
+     */
+    public function getForum()
+    {
+        return $this->forum;
+    }
+}

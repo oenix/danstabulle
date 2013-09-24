@@ -5,12 +5,12 @@ namespace DTB\BdBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Scenario
+ * Post
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="DTB\BdBundle\Entity\ScenarioRepository")
+ * @ORM\Entity(repositoryClass="DTB\BdBundle\Entity\PostRepository")
  */
-class Scenario
+class Post
 {
     /**
      * @var integer
@@ -24,17 +24,21 @@ class Scenario
     /**
      * @var string
      *
-     * @ORM\Column(name="content", type="text", nullable=true)
+     * @ORM\Column(name="content", type="text")
      */
     private $content;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="last_edition", type="datetime")
+     * @ORM\Column(name="time", type="datetime")
      */
-    private $last_edition;
+    private $time;
 
+    /**
+     * @ORM\ManytoOne(targetEntity="DTB\BdBundle\Entity\Topic", inversedBy="posts", cascade={"persist"})
+     */
+    private $topic;
 
     /**
      * Get id
@@ -50,7 +54,7 @@ class Scenario
      * Set content
      *
      * @param string $content
-     * @return Scenario
+     * @return Post
      */
     public function setContent($content)
     {
@@ -70,25 +74,25 @@ class Scenario
     }
 
     /**
-     * Set last_edition
+     * Set time
      *
-     * @param \DateTime $lastEdition
-     * @return Scenario
+     * @param \DateTime $time
+     * @return Post
      */
-    public function setLastEdition($lastEdition)
+    public function setTime($time)
     {
-        $this->last_edition = $lastEdition;
+        $this->time = $time;
     
         return $this;
     }
 
     /**
-     * Get last_edition
+     * Get time
      *
      * @return \DateTime 
      */
-    public function getLastEdition()
+    public function getTime()
     {
-        return $this->last_edition;
+        return $this->time;
     }
 }
