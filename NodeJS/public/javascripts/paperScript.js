@@ -46,8 +46,8 @@ window.onload = function () {
         text.font = "myfont";
         text.fontSize = 30;
 
-       // text.point.x = text.point.x - text.point.length / 12;
-        //text.point.y = text.point.y - text.point.length / 50;
+        text.point.x = text.point.x - text.point.length / 8;
+        text.point.y = text.point.y - text.point.length / 40;
         //      currentElement++;
         return text;
     }
@@ -471,7 +471,9 @@ if (selected == pathList[i])
                 path.closed = true;
                 path.simplify(20);
                 path.opacity = 1;
-				path.dashArray = [10, 4];
+				if (confirm("Activer le style silencieux ?")) {
+					path.dashArray = [10, 4];
+				}
                 texte = texteBulle.content;
 				
 				console.log(texteBulle.position);
