@@ -101,4 +101,67 @@ class Forum
     {
         return $this->description;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->topics = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Set bandeDessinee
+     *
+     * @param \DTB\BdBundle\Entity\BandeDessinee $bandeDessinee
+     * @return Forum
+     */
+    public function setBandeDessinee(\DTB\BdBundle\Entity\BandeDessinee $bandeDessinee = null)
+    {
+        $this->bandeDessinee = $bandeDessinee;
+    
+        return $this;
+    }
+
+    /**
+     * Get bandeDessinee
+     *
+     * @return \DTB\BdBundle\Entity\BandeDessinee 
+     */
+    public function getBandeDessinee()
+    {
+        return $this->bandeDessinee;
+    }
+
+    /**
+     * Add topics
+     *
+     * @param \DTB\BdBundle\Entity\Topic $topics
+     * @return Forum
+     */
+    public function addTopic(\DTB\BdBundle\Entity\Topic $topics)
+    {
+        $this->topics[] = $topics;
+    
+        return $this;
+    }
+
+    /**
+     * Remove topics
+     *
+     * @param \DTB\BdBundle\Entity\Topic $topics
+     */
+    public function removeTopic(\DTB\BdBundle\Entity\Topic $topics)
+    {
+        $this->topics->removeElement($topics);
+    }
+
+    /**
+     * Get topics
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTopics()
+    {
+        return $this->topics;
+    }
 }

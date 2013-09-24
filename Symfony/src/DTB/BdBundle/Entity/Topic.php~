@@ -51,6 +51,11 @@ class Topic
      * @ORM\ManytoOne(targetEntity="DTB\BdBundle\Entity\Forum", inversedBy="topics", cascade={"persist"})
      */
     private $forum;
+    
+    /**
+     * @ORM\ManytoOne(targetEntity="DTB\UserBundle\Entity\DTBUser", cascade={"persist"})
+     */
+    private $creator;
 
     /**
      * Get id
@@ -129,5 +134,68 @@ class Topic
     public function getTime()
     {
         return $this->time;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add posts
+     *
+     * @param \DTB\BdBundle\Entity\Post $posts
+     * @return Topic
+     */
+    public function addPost(\DTB\BdBundle\Entity\Post $posts)
+    {
+        $this->posts[] = $posts;
+    
+        return $this;
+    }
+
+    /**
+     * Remove posts
+     *
+     * @param \DTB\BdBundle\Entity\Post $posts
+     */
+    public function removePost(\DTB\BdBundle\Entity\Post $posts)
+    {
+        $this->posts->removeElement($posts);
+    }
+
+    /**
+     * Get posts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPosts()
+    {
+        return $this->posts;
+    }
+
+    /**
+     * Set forum
+     *
+     * @param \DTB\BdBundle\Entity\Forum $forum
+     * @return Topic
+     */
+    public function setForum(\DTB\BdBundle\Entity\Forum $forum = null)
+    {
+        $this->forum = $forum;
+    
+        return $this;
+    }
+
+    /**
+     * Get forum
+     *
+     * @return \DTB\BdBundle\Entity\Forum 
+     */
+    public function getForum()
+    {
+        return $this->forum;
     }
 }

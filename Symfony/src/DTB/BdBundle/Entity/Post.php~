@@ -39,6 +39,11 @@ class Post
      * @ORM\ManytoOne(targetEntity="DTB\BdBundle\Entity\Topic", inversedBy="posts", cascade={"persist"})
      */
     private $topic;
+    
+    /**
+     * @ORM\ManytoOne(targetEntity="DTB\UserBundle\Entity\DTBUser", cascade={"persist"})
+     */
+    private $creator;
 
     /**
      * Get id
@@ -94,5 +99,28 @@ class Post
     public function getTime()
     {
         return $this->time;
+    }
+
+    /**
+     * Set topic
+     *
+     * @param \DTB\BdBundle\Entity\Topic $topic
+     * @return Post
+     */
+    public function setTopic(\DTB\BdBundle\Entity\Topic $topic = null)
+    {
+        $this->topic = $topic;
+    
+        return $this;
+    }
+
+    /**
+     * Get topic
+     *
+     * @return \DTB\BdBundle\Entity\Topic 
+     */
+    public function getTopic()
+    {
+        return $this->topic;
     }
 }

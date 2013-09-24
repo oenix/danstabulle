@@ -51,6 +51,11 @@ class Topic
      * @ORM\ManytoOne(targetEntity="DTB\BdBundle\Entity\Forum", inversedBy="topics", cascade={"persist"})
      */
     private $forum;
+    
+    /**
+     * @ORM\ManytoOne(targetEntity="DTB\UserBundle\Entity\DTBUser", cascade={"persist"})
+     */
+    private $creator;
 
     /**
      * Get id
@@ -192,5 +197,28 @@ class Topic
     public function getForum()
     {
         return $this->forum;
+    }
+
+    /**
+     * Set creator
+     *
+     * @param \DTB\UserBundle\Entity\DTBUser $creator
+     * @return Topic
+     */
+    public function setCreator(\DTB\UserBundle\Entity\DTBUser $creator = null)
+    {
+        $this->creator = $creator;
+    
+        return $this;
+    }
+
+    /**
+     * Get creator
+     *
+     * @return \DTB\UserBundle\Entity\DTBUser 
+     */
+    public function getCreator()
+    {
+        return $this->creator;
     }
 }
