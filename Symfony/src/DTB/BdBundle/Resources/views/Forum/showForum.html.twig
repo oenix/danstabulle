@@ -1,0 +1,32 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+<div class="span12">
+    <h1>Forum <a href="{{path('dtb_show_board', {'id': bd.id})}}">{{bd.title}}</a> - <small>{{forum.name}}</small></h1>
+    
+    
+    <a href="{{path('dtb_create_topic', {'id': forum.id})}}" class="pull-right btn btn-success btn-small">Nouveau Topic</a><br/><br/>
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="50px">#</th>
+                <th width="600px">Titre</th>
+                <th width="150px">Créateur</th>
+                <th width="50px">Réponses</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% set counter = 0 %}
+    {% for topic in forum.topics %}
+    {% set counter = counter + 1 %}
+                <tr>
+                    <td>{{counter}}</td>
+                    <td><a href="{{path('dtb_show_topic', {'id':topic.id})}}">{{topic.title}}</a></td>
+                    <td>{{topic.creator.username}}</td>
+                    <td>{{topic.posts|length}}</td>
+                </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

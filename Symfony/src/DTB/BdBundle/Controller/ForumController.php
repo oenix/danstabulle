@@ -57,7 +57,7 @@ class ForumController extends Controller
                       "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
                       "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
         
-        return $this->render('DTBBdBundle:Forum:showForum.html.twig', array(
+        return $this->render('DTBBdBundle:Forum:showTopic.html.twig', array(
             'bd' => $bandeDessinee,
             'role' => $role,
             'forum' => $forum,

@@ -73,3 +73,39 @@ dtb_bd_redirect_planche:
 dtb_bd_save_scenario:
     pattern:  /saveScenario/{id}
     defaults: { _controller: DTBBdBundle:Default:saveScenario }
+    
+dtb_show_board:
+    pattern: /showBoard/{id}
+    defaults: { _controller: DTBBdBundle:Forum:show }
+    
+dtb_show_forum:
+    pattern: /showForum/{id}
+    defaults: { _controller: DTBBdBundle:Forum:showForum }
+
+dtb_show_topic:
+    pattern: /showTopic/{id}
+    defaults: { _controller: DTBBdBundle:Forum:showTopic }
+    
+dtb_create_topic:
+    pattern: /createTopic/{id}
+    defaults: { _controller: DTBBdBundle:Forum:createTopic }
+    
+dtb_create_post:
+    pattern: /createPost/{id}
+    defaults: { _controller: DTBBdBundle:Forum:createPost }
+    
+dtb_update_topic:
+    pattern: /updateTopic/{id}
+    defaults: { _controller: DTBBdBundle:Forum:updateTopic }
+    
+dtb_update_post:
+    pattern: /updatePost/{id}
+    defaults: { _controller: DTBBdBundle:Forum:updatePost }
+    
+dtb_delete_topic:
+    pattern: /deleteTopic/{id}
+    defaults: { _controller: DTBBdBundle:Forum:deleteTopic }
+    
+dtb_delete_post:
+    pattern: /deletePost/{id}
+    defaults: { _controller: DTBBdBundle:Forum:deletePost }

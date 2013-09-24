@@ -73,6 +73,9 @@
         <li><b><small>Age Minimum</small></b></li>
         <li>{{bd.category.requiredAge}} ans</li>
         
+        <li class="nav-header">Communauté</li>
+        <li><a href="{{path('dtb_show_board', {'id':bd.id})}}">Forum</a></li>
+        
         {% if bd.needScenarists %}
         <li class="nav-header">Scénaristes (Nécessaire)</li>
         {% else %}

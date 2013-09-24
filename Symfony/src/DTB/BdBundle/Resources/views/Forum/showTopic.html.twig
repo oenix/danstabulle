@@ -1,0 +1,39 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+<div class="span12">
+    <h1>Forum <a href="{{path('dtb_show_board', {'id': bd.id})}}">{{bd.title}}</a> - <small><a href="{{path('dtb_show_forum', {'id':forum.id})}}">{{forum.name}}</a></small></h1>
+    <hr>
+    <h2>{{topic.title}}
+
+    <a href="{{path('dtb_create_topic', {'id': forum.id})}}" class="pull-right btn btn-success btn-small">Nouveau Topic</a>  
+    <a href="{{path('dtb_create_post', {'id': topic.id})}}" class="pull-right btn btn-primary btn-small" style="margin-left: 10px; margin-right: 10px">Nouvelle Réponse</a> 
+    </h2>
+    <hr>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th width="50px">#</th>
+                <th width="150px">Créateur</th>
+                <th width="700px">Contenu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0</td>
+                <td>{{topic.creator.username}}</td>
+                <td>{{topic.content}}</td>
+            </tr>
+    {% set counter = 0 %}
+    {% for post in topic.posts %}
+    {% set counter = counter + 1 %}
+            <tr>
+                <td>{{counter}}</td>
+                <td>{{post.creator.username}}</td>
+                <td>{{post.content}}</td>
+            </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

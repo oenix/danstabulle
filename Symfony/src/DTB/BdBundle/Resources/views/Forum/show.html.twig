@@ -1,0 +1,30 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+<div class="span12">
+    <h1>Forum <a href="{{path('dtb_bd_show', {'id': bd.id})}}">{{bd.title}}</a></h1>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="50px">#</th>
+                <th width="150px">Titre</th>
+                <th width="600px">Description</th>
+                <th width="50px">Topics</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% set counter = 0 %}
+    {% for forum in forums %}
+    {% set counter = counter + 1 %}
+                <tr>
+                    <td>{{counter}}</td>
+                    <td><a href="{{path('dtb_show_forum', {'id':forum.id})}}">{{forum.name}}</a></td>
+                    <td>{{forum.description}}</td>
+                    <td>{{forum.topics|length}}</td>
+                </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
