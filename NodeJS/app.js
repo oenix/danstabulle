@@ -1,7 +1,7 @@
 ﻿/* Generic and useful functions */
 var paletteFile ="public/javascripts/colors.dtb";
 var ressourceFile ="public/javascripts/ressources.dtb";
-var defaultPalette = ["#000000", "#FFFFFF","#FC3436","#CD3C9F","#36BFDE","#B0C930","#7D4E32","#FC6222", "#F9E422","endBuffer"];
+var defaultPalette = ["#000000", "#FFFFFF","#72CC51","#2762A6","#D5D80D", "#EF5426","#34373C", "#D22632", "#F3D155", "#00A7CC", "#D65277","endBuffer"];
 
 
 function htmlEscape(str) {
