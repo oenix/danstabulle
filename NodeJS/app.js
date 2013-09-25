@@ -1,6 +1,7 @@
 ﻿/* Generic and useful functions */
-var paletteFile ="public/javascripts/colors.dtb";
-var ressourceFile ="public/javascripts/ressources.dtb";
+var paletteFile = "public/javascripts/colors.dtb";
+var ressourceFile = "public/javascripts/ressources.dtb";
+var canvasFile = "public/javascripts/canvas.dtb";
 var defaultPalette = ["#000000", "#FFFFFF","#72CC51","#2762A6","#D5D80D", "#EF5426","#34373C", "#D22632", "#F3D155", "#00A7CC", "#D65277","endBuffer"];
 
 
@@ -471,6 +472,23 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.emit('loadColors:end', uid, JSON.stringify(colors));
 	});
 	
+	socket.on('loadCanvas:end', function (uid){
+		
+		var fs = require('fs');
+		var ressources = [];
+		
+		if (fs.existsSync(canvasFile)) {
+		    data = fs.readFileSync(canvasFile);
+		    data.toString().split('\n').forEach(function(line) {
+		    ressources.push(line);
+		});
+		}
+		else
+		{
+		    ressources = null;
+		}
+		io.sockets.emit('loadCanvas:end', uid, JSON.stringify(ressources));
+	});
 		
 	socket.on('loadRessources:end', function (uid){
 		
@@ -515,6 +533,24 @@ io.sockets.on('connection', function (socket) {
 	    if(err) {
 	    	fs.createWriteStream(ressourceFile);
 	        fs.writeFile(ressourceFile, ressources, function(err) {
+		  if(err) 
+			Console.log("Write Error");
+			});
+		} else {
+			console.log("The file was saved!");
+		}
+		});
+	
+	});
+	
+	socket.on('saveCanvas:end', function (uid, ressources) {
+		
+	    var fs = require('fs');
+
+	    fs.writeFile(canvasFile, ressources, function(err) {
+	    if(err) {
+	    	fs.createWriteStream(canvasFile);
+	        fs.writeFile(canvasFile, ressources, function(err) {
 		  if(err) 
 			Console.log("Write Error");
 			});
