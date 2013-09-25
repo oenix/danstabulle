@@ -228,11 +228,14 @@ function restoreRessources(data, artist) {
 
 
 function restoreCanvas(data, artist) {
-	var image = new Image();
-	image.src = data[0];
-	raster = new Raster(image);
-	pathList.push(raster);
-	currentElement ++;
+	if (data != null)
+	{
+		var image = new Image();
+		image.src = data[0];
+		raster = new Raster(image);
+		pathList.push(raster);
+		currentElement ++;
+	}
 }
 
 

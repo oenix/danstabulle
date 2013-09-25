@@ -35,11 +35,9 @@ var fusionLayer = [];
 var selectLayerBounds;
 var hasDoubleClickedLayer = false;
 
-
-	console.log("test");
+//If persistance wanted
 socket.emit('loadCanvas:end', uid);
 socket.emit('loadPalette:end', uid);
-
 socket.emit('loadRessources:end', uid);
 
 Array.prototype.unset = function(val){
