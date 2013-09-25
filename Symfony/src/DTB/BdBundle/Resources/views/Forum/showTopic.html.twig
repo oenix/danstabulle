@@ -14,23 +14,35 @@
         <thead>
             <tr>
                 <th width="50px">#</th>
-                <th width="150px">Créateur</th>
+                <th width="150px">Informations</th>
                 <th width="700px">Contenu</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>0</td>
-                <td>{{topic.creator.username}}</td>
-                <td>{{topic.content}}</td>
+                <td>{{topic.creator.username}}<br/><small>Le {{topic.time|date('d/m/Y \à H:i')}}</small><br/><br/>
+                {% if role.admin or app.user.id == topic.creator.id %}
+                <a href="{{path('dtb_delete_topic', {'id': topic.id})}}" class="btn btn-danger btn-small">Supprimer</a>
+                <a href="{{path('dtb_update_topic', {'id': topic.id})}}" class="btn btn-danger btn-small">Editer</a>
+                {% endif %}
+                </td>
+                <td>{{topic.content|raw|nl2br}}</td>
             </tr>
     {% set counter = 0 %}
     {% for post in topic.posts %}
     {% set counter = counter + 1 %}
             <tr>
                 <td>{{counter}}</td>
-                <td>{{post.creator.username}}</td>
-                <td>{{post.content}}</td>
+                <td>
+                    {{post.creator.username}}<br/>
+                    <small>Le {{post.time|date('d/m/Y \à H:i')}}</small><br/><br/>
+                    {% if role.admin or app.user.id == post.creator.id %}
+                    <a href="{{path('dtb_delete_post', {'id': post.id})}}" class="btn btn-small">Supprimer</a>
+                    <a href="{{path('dtb_update_post', {'id': post.id})}}" class="btn btn-small">Editer</a>
+                    {% endif %}
+                </td>
+                <td>{{post.content|raw|nl2br}}</td>
             </tr>
     {% endfor %}
         </tbody>

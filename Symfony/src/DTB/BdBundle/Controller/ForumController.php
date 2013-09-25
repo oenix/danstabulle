@@ -85,7 +85,7 @@ class ForumController extends Controller
             if ($form->isValid())
             {
                 $topic->setCreator($this->getUser());
-                $topic->setTime(time());
+                $topic->setTime(new \DateTime());
                 $topic->setForum($forum);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($topic);
@@ -122,7 +122,7 @@ class ForumController extends Controller
             if ($form->isValid())
             {
                 $post->setCreator($this->getUser());
-                $post->setTime(time());
+                $post->setTime(new \DateTime());
                 $post->setTopic($topic);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
@@ -168,8 +168,6 @@ class ForumController extends Controller
             
             if ($form->isValid())
             {
-                $topic->setTime(time());
-                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($topic);
                 $em->flush();
@@ -180,6 +178,8 @@ class ForumController extends Controller
         
         return $this->render('DTBBdBundle:Forum:createTopic.html.twig', array(
             'forum' => $forum,
+            'topic' => $topic,
+            'edit' => true,
             'form' => $form->createView()));
     }
     
@@ -213,9 +213,7 @@ class ForumController extends Controller
             $form->bind($request);
             
             if ($form->isValid())
-            {
-                $post->setTime(time());
-                
+            {                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($post);
                 $em->flush();
@@ -227,6 +225,8 @@ class ForumController extends Controller
         return $this->render('DTBBdBundle:Forum:createPost.html.twig', array(
             'forum' => $forum,
             'topic' => $topic,
+            'post' => $post,
+            'edit' => true,
             'form' => $form->createView()));
     }
     
@@ -261,6 +261,8 @@ class ForumController extends Controller
         
         $em->remove($topic);
         $em->flush();
+        
+        return $this->redirect($this->generateUrl('dtb_show_forum', array('id' => $forum->getId())));
     }
     
     public function deletePostAction($id)
@@ -289,5 +291,7 @@ class ForumController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->remove($post);
         $em->flush();
+        
+        return $this->redirect($this->generateUrl('dtb_show_topic', array('id' => $topic->getId())));
     }
 }

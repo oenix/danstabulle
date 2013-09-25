@@ -10,8 +10,9 @@
         <thead>
             <tr>
                 <th width="50px">#</th>
-                <th width="600px">Titre</th>
-                <th width="150px">Créateur</th>
+                <th width="550px">Titre</th>
+                <th width="100px">Créateur</th>
+                <th width="100px">Création</th>
                 <th width="50px">Réponses</th>
             </tr>
         </thead>
@@ -23,6 +24,7 @@
                     <td>{{counter}}</td>
                     <td><a href="{{path('dtb_show_topic', {'id':topic.id})}}">{{topic.title}}</a></td>
                     <td>{{topic.creator.username}}</td>
+                    <td><small>{{topic.time|date('d/m H:i')}}</small></td>
                     <td>{{topic.posts|length}}</td>
                 </tr>
     {% endfor %}
