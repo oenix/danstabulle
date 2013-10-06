@@ -102,11 +102,9 @@ function saveScenarioDatabase(text) {
 
 /**/
 
-var editingScenarios = []; // La liste des sc√©narios en cours d'√©dition
+var editingScenarios = []; //Scenario {id, connectedClients, active_connections, currentText}
 
-//Scenario {id, connectedClients, active_connections, currentText}
-
-editingDrawings = []; // Drawing = {id, connectedClients, active_connections, currentDrawing}
+var editingDrawings = []; // Drawing = {id, connectedClients, active_connections, currentDrawing}
 
 server = http.createServer(app);
 
@@ -121,6 +119,19 @@ function getEditingScenarioIndex(scenarioId)
 	for (var i = 0; i < editingScenarios.length; i++) 
 	{
 		if (editingScenarios[i].id == scenarioId) 
+		{
+			return i;
+		}
+	}
+	
+	return -1;
+}
+
+function getEditingDrawingIndex(drawingId)
+{
+	for (var i = 0; i < editingDrawings.length; i++) 
+	{
+		if (editingDrawings[i].id == drawingId) 
 		{
 			return i;
 		}
@@ -237,12 +248,10 @@ io.sockets.on('connection', function (socket) {
 		
 		/* On broadcast le nouveau texte √† tous les utilisateurs dans cette room / sc√©nario */
 		socket.broadcast.to("s" + infos.scenarioId).emit('updateEditorText', infos.newText);
-		
-				//saveScenarioDatabase(infos.newText);
     });
 	
-	socket.on('saveEditorInDatabase', function (infos) {
-		console.log("Ok gros");
+	socket.on('saveEditorInDatabase', function (infos) 
+	{
 		saveScenarioDatabase(infos.Newtext);
     });
 	
@@ -256,8 +265,8 @@ io.sockets.on('connection', function (socket) {
 		socket.broadcast.to("s" + scenarioId).emit('updateScenarioFramework', framework);
 	});
 	
-	socket.on('disconnect', function() {
-	
+	socket.on('disconnect', function() 
+	{
 		infos = getInfosFromSocket(socket.id);
 		
 		/* Is scenario disconnection */
@@ -282,22 +291,25 @@ io.sockets.on('connection', function (socket) {
 			}
 			
 			editingScenarios[infos.scenarioIndex].connectedClients.remove(infos.socketIndex);
-		} else { // Drawing disconnection VERSION PROVISOIRE
-		
+		} else { 		
 			for (var i = 0; i < editingDrawings.length; i++) 
 			{
-				for (var j = 0; j < editingDrawings[i].connectedUsers.length; j++) 
+				for (var j = 0; j < editingDrawings[i].connectedClients.length; j++) 
 				{
-					if (editingDrawings[i].connectedUsers[j].id == socketId) {
+					console.log("USER DISCONNECTED : " + editingDrawings[i].connectedClients[j].id + " - " + socket.id + " - " +  editingDrawings[i].connectedClients[j].pseudo);
+				
+					if (editingDrawings[i].connectedClients[j].id == socket.id) {
 							
-						scenarioIndex = i; 
+						drawingIndex = i; 
 						socketIndex = j;
 					
-						pseudo = editingDrawings[i].connectedUsers[j].pseudo; 
+						pseudo = editingDrawings[i].connectedClients[j].pseudo; 
+						
+						console.log("USER DISCONNECTED : " + editingDrawings[i].connectedClients[j].id + " - " + socket.id + " - " + pseudo);
 
-						socket.broadcast.to("d" + editingDrawings[scenarioIndex].id).emit('userDisconnection', pseudo);
+						socket.broadcast.to("d" + editingDrawings[drawingIndex].id).emit('userDisconnection', pseudo);
 
-						editingDrawings[i].connectedUsers.remove(j);
+						editingDrawings[i].connectedClients.remove(j);
 					
 						return;
 					}
@@ -312,16 +324,13 @@ io.sockets.on('connection', function (socket) {
 	/* Chat management */
 	
 	/* Get new message from the client and broadcast it to all clients in the same room */
-	socket.on('sendChatMessageToServer', function (user, messageContent, isScenario, id) {
-	
+	socket.on('sendChatMessageToServer', function (user, messageContent, isScenario, id) 
+	{
 		if (isScenario)
 			socket.broadcast.to("s" + id).emit('updateChatWithMessage', {user: user, content: htmlEscape(messageContent)});
 		else // Is drawing
 			socket.broadcast.to("d" + id).emit('updateChatWithMessage', {user: user, content: htmlEscape(messageContent)});
     });
-
-
-
 	
 	/* Drawing management */
 
@@ -329,82 +338,44 @@ io.sockets.on('connection', function (socket) {
 	{
 		newUser = {id: socketId, pseudo: infos.pseudo};
 		
-		console.log("LALALALALKLFKDSLFKDSLFLDSKFKLKFLSKFLDSKFS");
-		
 		/* On re√ßoit la room correspondant au sc√©nario */
 		socket.join("d" + infos.id);
 		
-		/* Provisoire */
+		/* Get the drawing index in the editing ones' list */
+		drawingIndex = getEditingDrawingIndex(infos.id);
+		
+		console.log("Avant : " + drawingIndex);
+		
+		/* If the drawing was not in the editing ones' list */
+		if (drawingIndex == -1) {
+			editingDrawings.push({
+				id: infos.id,
+				connectedClients: [newUser],
+				active_connections: 1, 
+				currentDrawing: ""
+				});
+				
+			drawingIndex = editingDrawings.length - 1;
+		} else { // If some people were already on this scenario
+
+			/* On ajoute l'utilisateur √† la liste de ceux qui √©ditent ce sc√©nario */
+			editingDrawings[drawingIndex].connectedClients.push(newUser);
+			
+			editingDrawings[drawingIndex].active_connections++; 
+				
+			/* On broadcast l'√©v√®nement √†ous les utilisateurs dans cette room / sc√©nario */
+			socket.broadcast.to("s" + infos.id).emit('userConnection', newUser);
+		}
+
+		console.log("Apr√®s : " + drawingIndex);
 		
 		socket.broadcast.to("d" + infos.id).emit('userConnection', newUser);
-			
-		drawingIndex = -1;
-			
-		for (var i = 0; i < editingDrawings.length; i++) 
-		{
-			if (editingDrawings[i].id == infos.id)
-				drawingIndex = i;
-		}
 		
-		if (drawingIndex == -1)
-		{
-			editingDrawings.push({id: infos.id, connectedUsers: []});
+		/* On donne au nouvel utilisateur les informations n√©cessaires pour initialiser la page */
+		socket.emit('initPage', {users: editingDrawings[drawingIndex].connectedClients});
 		
-			drawingIndex = editingDrawings.length - 1;
-		}
 		
-		editingDrawings[drawingIndex].connectedUsers.push(newUser);
-		
-		socket.emit('initPage', {users: editingDrawings[drawingIndex].connectedUsers});
-
-		/* ---------- */
-		
-		/* Get the scenario index in the editing ones' list */
-		//scenarioIndex = getEditingScenarioIndex(infos.scenarioId);
-		
-		/* If the scenario was not in the editing ones' list */
-		/*if (scenarioIndex == -1) {
-			editingScenarios.push({
-				id: infos.scenarioId,
-				connectedClients: [newUser],
-				connectedUsers : [{pseudo: infos.pseudo, cpt: 1}],
-				active_connections: 1, 
-				currentText: ""});
-				
-			scenarioIndex = editingScenarios.length - 1;
-		} else {*/ // If some people were already on this scenario
-
-			/* On ajout l'utilisateur ‡ la liste de ceux qui Èditent ce scÈnario */
-			//editingScenarios[scenarioIndex].connectedClients.push(newUser);
-			
-			//editingScenarios[scenarioIndex].active_connections++; 
-			
-			/* Cherche ‡ savoir si l'utilisateur est dÈj‡ connectÈ sur ce scÈnario */
-			//indexPseudo = getPseudoIndex(scenarioIndex, infos.pseudo);
-			
-			// console.log("INDEX PSEUDO = " + indexPseudo);
-			
-			// if (indexPseudo == -1) // Áa n'est pas le cas
-			// {
-				// editingScenarios[scenarioIndex].connectedUsers.push({pseudo: infos.pseudo, cpt: 1});
-				
-				/* On broadcast l'ÈvËnement ‡ tous les utilisateurs dans cette room / scÈnario */
-				//socket.broadcast.to("s" + infos.scenarioId).emit('userConnection', newUser);
-			// } 
-			// else
-			// {
-				// editingScenarios[scenarioIndex].connectedUsers[indexPseudo].cpt++;
-				
-				// console.log("Pseudo " + infos.pseudo + " is present " + editingScenarios[scenarioIndex].connectedUsers[indexPseudo].cpt);
-			// }
-		// }
-		
-		/* On donne au nouvel utilisateur les informations nÈcessaires pour initialiser la page */
-		//socket.emit('initPage', {text: editingScenarios[scenarioIndex].currentText, users: editingScenarios[scenarioIndex].connectedUsers});
-		//socket.emit('initPage', {users: editingScenarios[scenarioIndex].connectedUsers});
-
-		
-		console.log('New drawing user with pseudo : ' + infos.pseudo + " and ID : " + socketId);
+		console.log('New drawing user with pseudo : ' + infos.pseudo + ", on drawing ID : " + infos.id + " and with ID : " + socketId);
 	});
 	
 	active_connections = 0;
@@ -414,47 +385,47 @@ io.sockets.on('connection', function (socket) {
 	io.sockets.emit('user:connect', active_connections);
 	
 	socket.on('disconnect', function () {
-		active_connections--
-		io.sockets.emit('user:disconnect', active_connections);
+		//active_connections--;
+		//io.sockets.emit('user:disconnect', active_connections);
 	});
   
-	socket.on('draw:progress', function (uid, co_ordinates) {
+	socket.on('draw:progress', function (uid, co_ordinates, drawingId) {
     
-		io.sockets.emit('draw:progress', uid, co_ordinates)
+		io.broadcast.to("d" + drawingId).emit('draw:progress', uid, co_ordinates)
 
 	});
 	
-	socket.on('modification:end', function (uid, co_ordinates) {
+	socket.on('modification:end', function (uid, co_ordinates, drawingId) {
     
-		io.sockets.emit('modification:end', uid, co_ordinates)
+		io.broadcast.to("d" + drawingId).emit('modification:end', uid, co_ordinates)
 
 	});
   
-	socket.on('draw:end', function (uid, co_ordinates) {
+	socket.on('draw:end', function (uid, co_ordinates, drawingId) {
     
-		io.sockets.emit('draw:end', uid, co_ordinates);
+		io.broadcast.to("d" + drawingId).emit('draw:end', uid, co_ordinates);
 
 	});
 	
-	socket.on('drawForMe:progress', function (uid, co_ordinates) {
+	socket.on('drawForMe:progress', function (uid, co_ordinates, drawingId) {
     
-		io.sockets.emit('drawForMe:progress', uid, co_ordinates);
+		io.broadcast.to("d" + drawingId).emit('drawForMe:progress', uid, co_ordinates);
 
 	});
 	
-	socket.on('drawForMe:end', function (uid, co_ordinates) {
+	socket.on('drawForMe:end', function (uid, co_ordinates, drawingId) {
     
-		io.sockets.emit('drawForMe:end', uid, co_ordinates);
+		io.broadcast.to("d" + drawingId).emit('drawForMe:end', uid, co_ordinates);
 
 	});
 	
-	socket.on('harmonisation:end', function (uid, co_ordinates) {
+	socket.on('harmonisation:end', function (uid, co_ordinates, drawingId) {
     
-		io.sockets.emit('harmonisation:end', uid, co_ordinates);
+		io.broadcast.to("d" + drawingId).emit('harmonisation:end', uid, co_ordinates);
 
 	});
 	
-	socket.on('loadPalette:end', function (uid){
+	socket.on('loadPalette:end', function (uid, drawingId){
 		
 		var fs = require('fs');
 		var colors = [];
@@ -468,11 +439,11 @@ io.sockets.on('connection', function (socket) {
 		else {
 			colors = defaultPalette;
 		}
-		io.sockets.emit('loadColors:end', uid, JSON.stringify(colors));
+		io.broadcast.to("d" + drawingId).emit('loadColors:end', uid, JSON.stringify(colors));
 	});
 	
 		
-	socket.on('loadRessources:end', function (uid){
+	socket.on('loadRessources:end', function (uid, drawingId){
 		
 		var fs = require('fs');
 		var ressources = [];
@@ -486,10 +457,10 @@ io.sockets.on('connection', function (socket) {
 		else {
 			ressources = [];
 		}
-		io.sockets.emit('loadRessources:end', uid, JSON.stringify(ressources));
+		io.broadcast.to("d" + drawingId).emit('loadRessources:end', uid, JSON.stringify(ressources));
 	});
 	
-	socket.on('savePalette:end', function (uid, colors) {
+	socket.on('savePalette:end', function (uid, colors, drawingId) {
 		
 		var fs = require('fs');
 
@@ -507,7 +478,7 @@ io.sockets.on('connection', function (socket) {
 	
 	});
 	
-	socket.on('saveRessources:end', function (uid, ressources) {
+	socket.on('saveRessources:end', function (uid, ressources, drawingId) {
 		
 	    var fs = require('fs');
 
