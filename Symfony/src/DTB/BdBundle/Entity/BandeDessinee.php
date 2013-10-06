@@ -75,6 +75,11 @@ class BandeDessinee {
     private $planches;
     
     /**
+     * @ORM\OneToMany(targetEntity="DTB\BdBundle\Entity\Forum", mappedBy="bandeDessinee")
+     */
+    private $forums;
+    
+    /**
      * @ORM\ManytoMany(targetEntity="DTB\UserBundle\Entity\DTBUser", inversedBy="bandesDessineesScenarist", cascade={"persist"})
      * @ORM\JoinTable(name="bds_scenarists")
      */
@@ -454,5 +459,38 @@ class BandeDessinee {
     public function getScenario()
     {
         return $this->scenario;
+    }
+
+    /**
+     * Add forums
+     *
+     * @param \DTB\BdBundle\Entity\Forum $forums
+     * @return BandeDessinee
+     */
+    public function addForum(\DTB\BdBundle\Entity\Forum $forums)
+    {
+        $this->forums[] = $forums;
+    
+        return $this;
+    }
+
+    /**
+     * Remove forums
+     *
+     * @param \DTB\BdBundle\Entity\Forum $forums
+     */
+    public function removeForum(\DTB\BdBundle\Entity\Forum $forums)
+    {
+        $this->forums->removeElement($forums);
+    }
+
+    /**
+     * Get forums
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getForums()
+    {
+        return $this->forums;
     }
 }

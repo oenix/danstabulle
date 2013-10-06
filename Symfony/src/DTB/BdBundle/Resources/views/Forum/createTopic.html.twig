@@ -1,0 +1,25 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+<style>
+        textarea
+        {
+            width: 500px;
+            height: 100px;
+        }
+</style>
+<div style="text-align: center">
+        {% if edit %}
+        <form method="post" action="{{path('dtb_update_topic', {'id': topic.id})}}">
+        <legend>Editer un Topic</legend>
+        {% else %}
+        <form method="post" action="{{path('dtb_create_topic', {'id': forum.id})}}">
+        <legend>Créer un nouveau Topic</legend>
+        {% endif %}
+        {{form_widget(form)}}
+        <div class="form-actions">
+            <input type="submit" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+{% endblock %}

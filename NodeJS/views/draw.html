@@ -9,9 +9,11 @@
 		<link href="/stylesheets/animate.css" rel="stylesheet" media="screen">
 		<link href="/stylesheets/chat.css" rel="stylesheet" media="screen">
 		
+		
 		<script type="text/javascript" src="javascripts/jquery.js"></script>
 		<script type="text/javascript" src="/javascripts/drawChat.js"></script>
-        <script type="text/javascript" src="javascripts/bootstrap.min.js"></script>
+		
+		<script src="javascripts/bootstrap.min.js"></script>	
 		<script type="text/javascript" src="javascripts/psd.parser.min.js"></script>
 		<script type='text/javascript' src="/socket.io/socket.io.js"></script>
 		<script type="text/javascript" src="/javascripts/paper.js"></script>
@@ -48,6 +50,44 @@
                     <a href="javascript:autocomplete()" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="AutoCompléter"><i class="icon-lightbulb"></i></a>
                     <a href="javascript:addLayer()" class="tool btn" data-toggle="tooltip" data-placement="top" title="" data-original-title="Nouveau Calque"><i class="icon-file-alt"></i></a>
                 </div>
+
+				 <div class="btn-group">
+				<!-- Button to trigger modal -->
+				<a href="#myModal" role="button" class="tool btn" data-toggle="modal" data-placement="top" title="" data-original-title="Importer votre écriture"><i class="icon-edit"></i></a>
+				<a href="javascript:activateBubbles()" id="bubble" class="tool btn active" data-toggle="tooltip" data-placement="top" title="" data-original-title="Activer/Desactiver la reconaissance de bulles"><i class="icon-comment"></i></a>
+				</div>
+				<!-- Modal -->
+				<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h3 id="myModalLabel">Utilisez votre propre écriture</h3>
+					</div>
+					<div class="modal-body">
+						
+							<h5>Suivez ces quelques étapes simples pour importer votre propre police sur DansTaBulle</h5>
+								<ul>
+									<li><h6>Rendez vous sur le site <a href="http://www.paintfont.com/">Paint Font</a></h6></li>
+
+									<li><h6>Dans <b>Predefined group of characters</b> cliquez sur <b>French</b></h6></li>
+
+									<li><h6>Cliquez sur <b>Create Template</b> en bas de page</h6></li>
+
+									<li><h6>Imprimez le document téléchargé puis remplissez le</h6></li>
+									<li><h6>Scannez le document rempli sur votre ordinateur</h6></li>
+									<li><h6>Trouvez et cliquez sur le bouton <b>Upload filled out templates</b></h6></li>
+									<li><h6>Au niveau de <b>Select template(s) to upload*</b> sélectionnez vos documents scannés</h6></li>
+									<li><h6>Entrez le nom suivant dans Font name : <b>"myfont" (à remplacer par le pseudo de l'utilisateur)</b></h6></li>
+									<li><h6>Choisissez TTF et cliquez sur <b>send</b></h6></li>
+									<li><h6>Enregistrer le fichier et double cliquez dessus</h6></li>
+									<li><h6>Cliquez sur <b>Installer</b></h6></li>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">Annuler</button>
+						<button class="btn btn-primary">J'ai tout fait !</button>
+					</div>
+				</div>
+
+
                 <div class="form-toolbar pull-right">
                     <label class="checkbox">
                         <input id="smooth" type="checkbox"> Lisser
@@ -139,7 +179,7 @@
                     <div class="well">
                         <section class="Versionning" id="versionning">
                             <ul class="nav nav-list">
-                                <li class="nav-header">Versionning</li>
+                                <li class="nav-header">Historique</li>
                                 <li>
                                     <select id="version" style="width: 150px; height: 25px; font-size: 11px; margin-top: 8px;"></select>
                                     <a id="restoreLink" href="javascript:restoreState(0)" class="tool" data-toggle="tooltip" data-placement="top" title="" data-original-title="Rétablir"><i class="icon-refresh"></i></a>
@@ -192,5 +232,6 @@
             $('.tool').tooltip({container: 'body'});
 			});
         </script>
+
     </body>
 </html>

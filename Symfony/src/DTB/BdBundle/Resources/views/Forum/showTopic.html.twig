@@ -1,0 +1,51 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+<div class="span12">
+    <h1>Forum <a href="{{path('dtb_show_board', {'id': bd.id})}}">{{bd.title}}</a> - <small><a href="{{path('dtb_show_forum', {'id':forum.id})}}">{{forum.name}}</a></small></h1>
+    <hr>
+    <h2>{{topic.title}}
+
+    <a href="{{path('dtb_create_topic', {'id': forum.id})}}" class="pull-right btn btn-success btn-small">Nouveau Topic</a>  
+    <a href="{{path('dtb_create_post', {'id': topic.id})}}" class="pull-right btn btn-primary btn-small" style="margin-left: 10px; margin-right: 10px">Nouvelle Réponse</a> 
+    </h2>
+    <hr>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th width="50px">#</th>
+                <th width="150px">Informations</th>
+                <th width="700px">Contenu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0</td>
+                <td>{{topic.creator.username}}<br/><small>Le {{topic.time|date('d/m/Y \à H:i')}}</small><br/><br/>
+                {% if role.admin or app.user.id == topic.creator.id %}
+                <a href="{{path('dtb_delete_topic', {'id': topic.id})}}" class="btn btn-danger btn-small">Supprimer</a>
+                <a href="{{path('dtb_update_topic', {'id': topic.id})}}" class="btn btn-danger btn-small">Editer</a>
+                {% endif %}
+                </td>
+                <td>{{topic.content|raw|nl2br}}</td>
+            </tr>
+    {% set counter = 0 %}
+    {% for post in topic.posts %}
+    {% set counter = counter + 1 %}
+            <tr>
+                <td>{{counter}}</td>
+                <td>
+                    {{post.creator.username}}<br/>
+                    <small>Le {{post.time|date('d/m/Y \à H:i')}}</small><br/><br/>
+                    {% if role.admin or app.user.id == post.creator.id %}
+                    <a href="{{path('dtb_delete_post', {'id': post.id})}}" class="btn btn-small">Supprimer</a>
+                    <a href="{{path('dtb_update_post', {'id': post.id})}}" class="btn btn-small">Editer</a>
+                    {% endif %}
+                </td>
+                <td>{{post.content|raw|nl2br}}</td>
+            </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

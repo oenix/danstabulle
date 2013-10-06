@@ -14,6 +14,8 @@ var selected, segment;
 var rafraichissement = 1;
 // Initialise Socket.io
 var socket = io.connect();
+var bubble = true;
+
 
 var send_paths_timer;
 var timer_is_active = false;
@@ -33,7 +35,8 @@ var fusionLayer = [];
 var selectLayerBounds;
 var hasDoubleClickedLayer = false;
 
-
+//If persistance wanted
+socket.emit('loadCanvas:end', uid);
 socket.emit('loadPalette:end', uid);
 socket.emit('loadRessources:end', uid);
 
@@ -42,6 +45,21 @@ Array.prototype.unset = function(val){
 	if(index > -1){
 		this.splice(index,1)
 	}
+}
+
+function activateBubbles() {
+	
+		var elmt = document.getElementById("bubble");
+		if (bubble) {
+			
+				elmt.className = "tool btn"
+				bubble = false;
+		}
+		else
+		{
+				elmt.className = "tool btn active"
+				bubble = true;		
+		}
 }
 
 function getSelectValue(selectId) {
