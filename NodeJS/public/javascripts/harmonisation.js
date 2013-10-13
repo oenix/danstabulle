@@ -149,15 +149,6 @@ function saveRessources() {
 	var canvasToSave = document.getElementById("myCanvas");
 	var dataURL = canvasToSave.toDataURL();
 	ressourceURL.push(dataURL);
-	/*var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
-					<div id='r"+ nbRessources +"'>\
-					<div id='holder'>\
-					<img id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
-					</div>\
-					<button class='btn btn-small btn-success' onClick='loadRessource(\"imageRessource"+ nbRessources +"\")'>Charger</button>\
-					<button class='btn btn-small btn-danger' onClick='deleteRessource(\"ressource"+ nbRessources +"\")'>Supprimer</button>\
-			</div>";
-	*/
 		var createdCanvas = "<div class='span4' id='ressource" + nbRessources + "'>\
 						<div id='r"+ nbRessources +"'>\
 						<img  style='border: 2px solid #CCC; ' id='imageRessource" + nbRessources + "' width='306' height='212' src='" + dataURL +"'/>\
@@ -175,6 +166,12 @@ function saveRessources() {
 	
 	socket.emit('saveRessources:end', uid, ressourceToSave);
 
+}
+
+function saveCanvas() {
+	var canvasToSave = document.getElementById("myCanvas");
+	var dataURL = canvasToSave.toDataURL();
+	socket.emit('saveCanvas:end', uid, dataURL);
 }
 
 function deleteRessource(id) {
@@ -228,12 +225,27 @@ function restoreRessources(data, artist) {
 	}
 }
 
+
+
+function restoreCanvas(data, artist) {
+	if (data != null)
+	{
+		var image = new Image();
+		image.src = data[0];
+		raster = new Raster(image);
+		pathList.push(raster);
+		currentElement ++;
+	}
+}
+
+
 //EXTERN
 
 
 socket.on('loadColors:end', function (artist, data) {
 
         if (artist !== uid && data) {
+		
             loadColors(JSON.parse(data), artist);
         }
     });
@@ -241,8 +253,15 @@ socket.on('loadColors:end', function (artist, data) {
 socket.on('loadRessources:end', function (artist, data) {
 	
         if (artist !== uid && data) {
+		
             restoreRessources(JSON.parse(data), artist);
-	    console.log("coucou");
+        }
+    });
+
+socket.on('loadCanvas:end', function (artist, data) {
+	
+        if (artist !== uid && data) {
+            restoreCanvas(JSON.parse(data), artist);
         }
     });
 

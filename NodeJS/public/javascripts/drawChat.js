@@ -1,4 +1,4 @@
-/* Generic and useful functions */
+ï»¿/* Generic and useful functions */
 
 function htmlEscape(str) {
     return String(str)
@@ -84,7 +84,7 @@ $(document).ready(function() {
 		messageContent = htmlEscape($("#chatSendMessageArea").val());
 	
 		if (messageContent != ""){
-			socket.emit('sendChatMessageToServer', pseudo, messageContent, drawingId);
+			socket.emit('sendChatMessageToServer', pseudo, messageContent, false, drawingId);
 		
 			updateChatWithMessage({user: pseudo, content: messageContent});
 		
@@ -108,7 +108,7 @@ $(document).ready(function() {
 	socket.on('userConnection', function (newUser) {
 		addNewUser(newUser);
 		
-		updateChatWithEvent(newUser.pseudo + " s'est connecté.");
+		updateChatWithEvent(newUser.pseudo + " s'est connectÃ©.");
 	});
 	
 	socket.on('updateChatWithMessage', function (message) {
@@ -139,6 +139,6 @@ $(document).ready(function() {
 			}
 		});
 		
-		updateChatWithEvent(pseudo + " s'est déconnecté.");
+		updateChatWithEvent(pseudo + " s'est dÃ©connectÃ©.");
 	});
 });

@@ -30,6 +30,9 @@ function loadPreview(nbPreview) {
 
 function saveState(stateName) {
    getPreview();
+   // Here is the persistance
+   saveCanvas();
+   //End of presistance
    var saveLayers = layer.slice(0);
    var state = {
         layer : saveLayers,

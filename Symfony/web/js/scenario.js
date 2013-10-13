@@ -44,8 +44,6 @@ $(document).ready(function() {
 		pseudo = "oenix" + Math.floor(Math.random() * 201);
 	}
 
-
-
 	/* Editor events' initialization */	
 	
 	tinyMCE.init({
@@ -189,7 +187,20 @@ $(document).ready(function() {
                 data: {content:text}
             });
 	
-            //socket.emit('saveEditorInDatabase', {scenarioId: scenarioId, newText: text});
+        //socket.emit('saveEditorInDatabase', {scenarioId: scenarioId, newText: text});
+	};
+	
+	/* Display the preview of an old version of the text when selected in history */
+	
+	function getOldTextVersion(versionId){
+            
+        /*$.ajax({
+			url: urlScenario,
+            type: "POST",
+            data: {versionId: versionId}
+        });*/
+		
+		return {date: "30/09/1991 : 21h 00", text: "Nous mangeons de la soupe !"};
 	};
 
 	/* Fill the page with the current text version and the users list */
@@ -283,8 +294,36 @@ $(document).ready(function() {
 	
 /* END OF Scenario chat management */
 
-	/* Fancybox gestion */
+	/* History management */
+
+	$("#historySelector").change(function() {
 	
+		oldVersion = getOldTextVersion($("#historySelector").val());
+		
+		$("#historyPreviewText").html(oldVersion.text);
+		$("#historyPreviewTitle").html("Version du " + oldVersion.date);
+
+		$('#historyPreviewButton').click();
+	});
+	
+	$("#historyPreviewAccept").click(function()	{
+		updateEditorText($("#historyPreviewText").html());
+		
+		$.fancybox.close();
+		
+		$("#historySelector").val("-1");
+	});
+	
+	$("#historyPreviewCancel").click(function()	{
+		$.fancybox.close();
+		
+		$("#historySelector").val("-1");
+	});
+	
+	/* Fancybox management */
+	
+	$("#historyPreviewButton").fancybox();
+		
 	$('#scenarioStructure').fancybox();
 	
 	$("#scenarioStructure").bind("click", function () {
