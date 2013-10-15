@@ -23,6 +23,8 @@ Symfony/app/logs/*
 src/NodeJS/node_modules/*
 NodeJS/node_modules/*
 NodeJS/public/javascripts/colors.dtb
+NodeJS/public/javascripts/canvas.dtb
+NodeJS/public/javascripts/ressources.dtb
 
 #Config Files
 Symfony/app/config/parameters.yml
