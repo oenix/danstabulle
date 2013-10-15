@@ -57,6 +57,7 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 /* Routing configuration */
 
 app.get('/', routes.index);

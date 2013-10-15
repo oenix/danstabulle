@@ -53,46 +53,15 @@ function saveURL(id, params) {
 	return true;
 }
 
-function loadURL(url, params) {
-	if(window.XMLHttpRequest) {
-		try {
-			req = new XMLHttpRequest();
-		} catch(e) {
-			req = false;
-			}
-		}
-	else if(window.ActiveXObject) {
-		try {
-			req = new ActiveXObject("Msxml2.XMLHTTP");
-		} catch(e)
-		{
-		try
-		{
-			req = new ActiveXObject("Microsoft.XMLHTTP");
-		} catch(e) {
-			req = false;
-			}
-			}
-			}
-			if(req) {
-				req.onreadystatechange = processReqChange;
-				req.open("GET", url + '?' + params, true);
-				req.send(null);
-				return true;
-			}
-		return false;
-}
-
-
 //TODO Replace the 1 by Draw ID
 socket.emit('loadPalette:end', uid, id);
 console.log(id);
 socket.emit('loadRessources:end', uid, id);
 
 //If persistance wanted
-socket.emit('loadCanvas:end', uid);
+socket.emit('loadCanvas:end', uid, id);
 
-var dataUrlfroWebServices = loadURL('http://localhost:80/danstabulle/Symfony/web/app_dev.php/getImage/' + id, null);
+var dataUrlfromWebServices = "file:///C:/Users/Oenix/Documents/GitHub/danstabulle/Symfony/web/vignette/" + id + ".png";
 
 
 function GetURLParameter(sParam)
