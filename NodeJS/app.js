@@ -519,7 +519,7 @@ io.sockets.on('connection', function (socket) {
 		
 	    var fs = require('fs');
 
-	    fs.writeFile(canvasFile, ressources, function(err) {
+	    fs.writeFile(canvasFile + id + ".png", ressources, function(err) {
 	    if(err) {
 	    	fs.createWriteStream(canvasFile + id + ".png");
 	        fs.writeFile(canvasFile + id + ".png", ressources, function(err) {
