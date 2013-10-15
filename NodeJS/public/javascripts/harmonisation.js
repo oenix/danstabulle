@@ -175,6 +175,7 @@ function saveCanvas() {
 	var canvasToSave = document.getElementById("myCanvas");
 	var dataURL = canvasToSave.toDataURL();
 	socket.emit('saveCanvas:end', uid, dataURL);
+	console.log("canvas saved");
 }
 
 function deleteRessource(id) {
@@ -237,8 +238,16 @@ function restoreCanvas(data, artist) {
 		var image = new Image();
 		image.src = data[0];
 		raster = new Raster(image);
-		pathList.push(raster);
-		currentElement ++;
+		//pathList.push(raster);
+		//currentElement ++;
+		if (raster.size.height == 640) {
+			raster.bounds.x = 0;
+			raster.bounds.y = 0;
+		}
+		else
+		{
+			location.reload()
+		}
 	}
 }
 

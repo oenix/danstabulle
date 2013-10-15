@@ -35,12 +35,14 @@ var fusionLayer = [];
 var selectLayerBounds;
 var hasDoubleClickedLayer = false;
 
-//If persistance wanted
-//socket.emit('loadCanvas:end', uid);
+
 
 //TODO Replace the 1 by Draw ID
 socket.emit('loadPalette:end', uid, 1);
 socket.emit('loadRessources:end', uid, 1);
+
+//If persistance wanted
+socket.emit('loadCanvas:end', uid);
 
 Array.prototype.unset = function(val){
 	var index = this.indexOf(val)

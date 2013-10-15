@@ -17,6 +17,7 @@ window.onload = function () {
     var raster;
     var count = 0;
     
+    
     path_to_send = {
         activeLayer: 0,
         newLayer: false,
