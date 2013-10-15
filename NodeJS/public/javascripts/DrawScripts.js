@@ -36,6 +36,68 @@ var selectLayerBounds;
 var hasDoubleClickedLayer = false;
 
 
+var req; // global variable to hold request object
+function saveURL(url, params) {
+	if(window.XMLHttpRequest) {
+		try {
+			req = new XMLHttpRequest();
+		} catch(e) {
+			req = false;
+			}
+		}
+	else if(window.ActiveXObject) {
+		try {
+			req = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch(e)
+		{
+		try
+		{
+			req = new ActiveXObject("Microsoft.XMLHTTP");
+		} catch(e) {
+			req = false;
+			}
+			}
+			}
+			if(req) {
+				req.onreadystatechange = processReqChange;
+				 req.open("POST", url, true);
+				 req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				 req.send(params);
+				return true;
+			}
+		return false;
+}
+
+function loadURL(url, params) {
+	if(window.XMLHttpRequest) {
+		try {
+			req = new XMLHttpRequest();
+		} catch(e) {
+			req = false;
+			}
+		}
+	else if(window.ActiveXObject) {
+		try {
+			req = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch(e)
+		{
+		try
+		{
+			req = new ActiveXObject("Microsoft.XMLHTTP");
+		} catch(e) {
+			req = false;
+			}
+			}
+			}
+			if(req) {
+				req.onreadystatechange = processReqChange;
+				req.open("GET", url + '?' + params, true);
+				req.send(null);
+				return true;
+			}
+		return false;
+}
+
 
 //TODO Replace the 1 by Draw ID
 socket.emit('loadPalette:end', uid, id);
@@ -44,6 +106,8 @@ socket.emit('loadRessources:end', uid, id);
 
 //If persistance wanted
 socket.emit('loadCanvas:end', uid);
+
+var dataUrlfroWebServices = loadXMLDoc('/getImage/' + id, null);
 
 
 function GetURLParameter(sParam)
