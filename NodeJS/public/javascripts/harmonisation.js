@@ -18,7 +18,8 @@ function addColor() {
 		//colors = "<option id='Color"+ harmo.color +"'' value='#"+  harmo.color  +"' style='background-color:#" + harmo.color + ";' onClick='selectColor()'></option>";
 		document.getElementById("color").innerHTML += colors;
 		document.getElementById("colorHexa").value = '';
-		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
+		//TODO Replace the 1 by Draw ID
+		socket.emit('harmonisation:end', uid, JSON.stringify(harmo), 1);
 		palette.push("#" + harmo.color);
 	    harmo.color = null;
 		saveColor();
@@ -58,7 +59,8 @@ function saveColor() {
 	for (var i = 0; i < palette.length; i++) {
 		colToSave += palette[i] + '\n';
 	}
-	socket.emit('savePalette:end', uid, colToSave);
+	//TODO
+	socket.emit('savePalette:end', uid, colToSave, 1);
 }
 
 function isHex(val){
@@ -88,7 +90,8 @@ function delColor() {
 		col[0].className = "btn-color active-color";
 		selectColor();
 		harmo.delColor = option;
-		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
+		//TODO Replace the 1 by Draw ID
+		socket.emit('harmonisation:end', uid, JSON.stringify(harmo), 1);
 		var toDel = 0;
 		for (var i =0; i < palette.length; i++){
 			if (palette[i] == "#" + option) {
@@ -163,8 +166,8 @@ function saveRessources() {
 	for (var i = 0; i < ressourceURL.length; i++) {
 		ressourceToSave += ressourceURL[i] + "\n";
 	}
-	
-	socket.emit('saveRessources:end', uid, ressourceToSave);
+	//TODO Replace the 1 by Draw ID
+	socket.emit('saveRessources:end', uid, ressourceToSave, 1);
 
 }
 
@@ -188,7 +191,8 @@ function deleteRessource(id) {
 			ressourceToSave += ressourceURL[i] + "\n";
 		}
 		console.log(ressourceToSave);
-		socket.emit('saveRessources:end', uid, ressourceToSave);
+		//TODO Replace the 1 by Draw ID
+		socket.emit('saveRessources:end', uid, ressourceToSave, 1);
 	}, 2000);
 	}
 }

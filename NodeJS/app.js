@@ -392,37 +392,37 @@ io.sockets.on('connection', function (socket) {
   
 	socket.on('draw:progress', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('draw:progress', uid, co_ordinates)
+		socket.broadcast.to("d" + drawingId).emit('draw:progress', uid, co_ordinates)
 
 	});
 	
 	socket.on('modification:end', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('modification:end', uid, co_ordinates)
+		socket.broadcast.to("d" + drawingId).emit('modification:end', uid, co_ordinates)
 
 	});
   
 	socket.on('draw:end', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('draw:end', uid, co_ordinates);
+		socket.broadcast.to("d" + drawingId).emit('draw:end', uid, co_ordinates);
 
 	});
 	
 	socket.on('drawForMe:progress', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('drawForMe:progress', uid, co_ordinates);
+		socket.broadcast.to("d" + drawingId).emit('drawForMe:progress', uid, co_ordinates);
 
 	});
 	
 	socket.on('drawForMe:end', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('drawForMe:end', uid, co_ordinates);
+		socket.broadcast.to("d" + drawingId).emit('drawForMe:end', uid, co_ordinates);
 
 	});
 	
 	socket.on('harmonisation:end', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('harmonisation:end', uid, co_ordinates);
+		socket.broadcast.to("d" + drawingId).emit('harmonisation:end', uid, co_ordinates);
 
 	});
 	
@@ -440,7 +440,7 @@ io.sockets.on('connection', function (socket) {
 		else {
 			colors = defaultPalette;
 		}
-		io.broadcast.to("d" + drawingId).emit('loadColors:end', uid, JSON.stringify(colors));
+		socket.emit('loadColors:end', uid, JSON.stringify(colors));
 	});
 	
 	socket.on('loadCanvas:end', function (uid){
@@ -458,7 +458,7 @@ io.sockets.on('connection', function (socket) {
 		{
 		    ressources = null;
 		}
-		io.sockets.emit('loadCanvas:end', uid, JSON.stringify(ressources));
+		socket.emit('loadCanvas:end', uid, JSON.stringify(ressources));
 	});
 		
 	socket.on('loadRessources:end', function (uid, drawingId){
@@ -475,7 +475,7 @@ io.sockets.on('connection', function (socket) {
 		else {
 			ressources = [];
 		}
-		io.broadcast.to("d" + drawingId).emit('loadRessources:end', uid, JSON.stringify(ressources));
+		socket.emit('loadRessources:end', uid, JSON.stringify(ressources));
 	});
 	
 	socket.on('savePalette:end', function (uid, colors, drawingId) {

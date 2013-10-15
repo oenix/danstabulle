@@ -36,9 +36,11 @@ var selectLayerBounds;
 var hasDoubleClickedLayer = false;
 
 //If persistance wanted
-socket.emit('loadCanvas:end', uid);
-socket.emit('loadPalette:end', uid);
-socket.emit('loadRessources:end', uid);
+//socket.emit('loadCanvas:end', uid);
+
+//TODO Replace the 1 by Draw ID
+socket.emit('loadPalette:end', uid, 1);
+socket.emit('loadRessources:end', uid, 1);
 
 Array.prototype.unset = function(val){
 	var index = this.indexOf(val)
@@ -89,7 +91,8 @@ function changeLayerOpacity(numOpacity, numLayer)
 	layerOpacity[numLayer] = numOpacity;
 	layer[numLayer].opacity = numOpacity / 100;
 	path_to_send.layerOpacity = layerOpacity;
-	socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+	//TODO Replace the 1 by Draw ID
+	socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
 }
 
 function printLayers() {
@@ -151,7 +154,8 @@ function layerUp(nbLayer) {
 				layer[nbLayer - 1] = l;
 				path_to_send.up = nbLayer;
 				path_to_send.positionLayer = null;
-				socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+				//TODO Replace the 1 by Draw ID
+				socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
 				path_to_send.up = null;
 		}
 }
@@ -164,7 +168,8 @@ function layerDown(nbLayer) {
 				layer[nbLayer + 1] = l;
 				path_to_send.down = nbLayer;
 				path_to_send.positionLayer = null;
-				socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+				//TODO
+				socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
 				path_to_send.down = null;
 		}
 }
@@ -244,7 +249,8 @@ function newLayer() {
 function sendNewLayer() {
     path_to_send.newLayer = true;
     path_to_send.positionLayer = positionLayer;
-    socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+	//TODO Replace the 1 by Draw ID
+    socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
     path_to_send.newLayer = false;
 }
 
@@ -305,7 +311,8 @@ function undo() {
         path_to_send = {
             remove: remove
         };
-        socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+		//TODO Replace the 1 by Draw ID
+        socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
         remove = -1;
     }
 }
@@ -320,7 +327,8 @@ function redo() {
         path_to_send = {
             add: add
         };
-        socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+		//TODO Replace the 1 by Draw ID Replace the 1 by Draw ID
+        socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
         add = -2;
     }
 }
