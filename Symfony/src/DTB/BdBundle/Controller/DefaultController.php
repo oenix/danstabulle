@@ -136,6 +136,31 @@ class DefaultController extends Controller
         return new Response('ok');
     }
     
+    public function saveImageAction($id)
+    {
+        $request = $this->get('request');
+        $params = $request->request->all();
+        
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
+        $image = $repository->find($id);
+        
+        $image->setContent($params['content']);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($image);
+        $em->flush();
+        
+        return new Response('ok');
+    }
+    
+    public function getImageAction($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
+        $image = $repository->find($id);
+        
+        return new Response($image->getContent());
+    }
+    
     public function showImageAction($id)
     {
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');

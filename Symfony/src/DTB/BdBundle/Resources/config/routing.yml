@@ -74,6 +74,14 @@ dtb_bd_save_scenario:
     pattern:  /saveScenario/{id}
     defaults: { _controller: DTBBdBundle:Default:saveScenario }
     
+dtb_bd_save_image:
+    pattern:  /saveImage/{id}
+    defaults: { _controller: DTBBdBundle:Default:saveImage }
+    
+dtb_bd_get_image:
+    pattern:  /getImage/{id}
+    defaults: { _controller: DTBBdBundle:Default:getImage }
+    
 dtb_show_board:
     pattern: /showBoard/{id}
     defaults: { _controller: DTBBdBundle:Forum:show }
