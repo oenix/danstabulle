@@ -60,7 +60,7 @@ function saveColor() {
 		colToSave += palette[i] + '\n';
 	}
 	//TODO
-	socket.emit('savePalette:end', uid, colToSave, 1);
+	socket.emit('savePalette:end', uid, colToSave, id);
 }
 
 function isHex(val){
@@ -241,13 +241,15 @@ function restoreCanvas(data, artist) {
 		//pathList.push(raster);
 		//currentElement ++;
 		if (raster.size.height == 640) {
-			raster.bounds.x = 0;
-			raster.bounds.y = 0;
+			raster.position = new Point(850/2, 640/2);
 		}
 		else
 		{
 			location.reload()
 		}
+		
+		console.log(raster.bounds);
+		console.log(raster.size);
 	}
 }
 

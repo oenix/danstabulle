@@ -70,7 +70,7 @@ window.onload = function () {
 	   path_to_send.raster = image.src;
 	   addToPathList(raster);
 		//TODO Replace the 1 by Draw ID
-	   socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
+	   socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
 	   path_to_send.raster = null;
       // Transform the raster, so it fills the view:
 	//  if (raster.bounds > view.bounds)
@@ -163,7 +163,7 @@ window.onload = function () {
 		path_to_send.thisLayer = activeLayer;
 		path_to_send.positionLayer = positionLayer;
 			//TODO Replace the 1 by Draw ID
-		socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
+		socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
 		selectLayerBounds.remove();
 		hasDoubleClickedLayer = false;
 		thisLayer = null;
@@ -255,7 +255,7 @@ window.onload = function () {
         if (!timer_is_active) {
             send_paths_timer = setInterval(function () {
 				//TODO Replace the 1 by Draw ID
-                socket.emit('drawForMe:progress', uid, JSON.stringify(path_to_send), 1);
+                socket.emit('drawForMe:progress', uid, JSON.stringify(path_to_send), id);
                 path_to_send.path = new Array();
 
             }, rafraichissement);
@@ -276,12 +276,12 @@ window.onload = function () {
             drawForMe.push(textDrawForMe);
             path_to_send.texte = textDrawForMe.content;
 	//TODO Replace the 1 by Draw ID
-            socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send), 1);
+            socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send), id);
 
         } else {
             path.remove();
 	//TODO Replace the 1 by Draw ID
-            socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send), 1);
+            socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send), id);
         }
     }
 
@@ -370,7 +370,7 @@ if (selected == pathList[i])
         path_to_send.update = get_indice(selected);
         path_to_send.updatePath = new Point(pathList[get_indice(selected)].position.x, pathList[get_indice(selected)].position.y);
 		//TODO Replace the 1 by Draw ID        
-		socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
+		socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
         selected = null;
         segment = null;
         hitResult = null;
@@ -445,7 +445,7 @@ if (selected == pathList[i])
 
             send_paths_timer = setInterval(function () {
 		//TODO Replace the 1 by Draw ID
-                socket.emit('draw:progress', uid, JSON.stringify(path_to_send2), 1);
+                socket.emit('draw:progress', uid, JSON.stringify(path_to_send2), id);
                 path_to_send2.path = new Array();
 
             }, rafraichissement);
@@ -514,7 +514,7 @@ if (selected == pathList[i])
         if (currentElement != pathList.length - 1)
             currentElement = pathList.length - 1;
 	    //TODO Replace the 1 by Draw ID 
-        socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
+        socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
         clearInterval(send_paths_timer);
         path_to_send.path = new Array();
         path_to_send.hasRaster = false;
@@ -659,7 +659,6 @@ if (selected == pathList[i])
     var end_external_path = function (points, artist) {
 
         var path = external_paths[artist];
-
         if (points.hasRaster) {
             var img = new Image();
             img.src = points.image
