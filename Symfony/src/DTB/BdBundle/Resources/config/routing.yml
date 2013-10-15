@@ -77,7 +77,7 @@ dtb_bd_save_scenario:
 dtb_bd_save_image:
     pattern:  /saveImage/{id}
     defaults: { _controller: DTBBdBundle:Default:saveImage }
-    
+
 dtb_bd_get_image:
     pattern:  /getImage/{id}
     defaults: { _controller: DTBBdBundle:Default:getImage }

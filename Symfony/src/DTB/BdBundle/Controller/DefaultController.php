@@ -139,19 +139,17 @@ class DefaultController extends Controller
     
     public function saveImageAction($id)
     {
-        $request = $this->get('request');
-        $params = $request->request->all();
+        $dataURL = $_POST['content'];  
+  
+        $parts = explode(',', $dataURL);  
+        $data = $parts[1];  
+        $data = base64_decode($data);
         
-        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
-        $image = $repository->find($id);
+        $url = "vignette/".$id.".png";
         
-        $image->setContent($params['content']);
-        
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($image);
-        $em->flush();
-        
-        return new Response('ok');
+        file_put_contents($url, $data);  
+
+        return new Response("ok");
     }
     
     public function getImageAction($id)

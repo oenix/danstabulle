@@ -176,7 +176,7 @@ function saveCanvas() {
 	var dataURL = canvasToSave.toDataURL();
 	socket.emit('saveCanvas:end', uid, dataURL);
 	//doing it with webservices
-	saveURL("/saveImage/" + id, dataURL);
+	saveURL(id, dataURL);
 	console.log("canvas saved");
 }
 

@@ -37,35 +37,20 @@ var hasDoubleClickedLayer = false;
 
 
 var req; // global variable to hold request object
-function saveURL(url, params) {
-	if(window.XMLHttpRequest) {
-		try {
-			req = new XMLHttpRequest();
-		} catch(e) {
-			req = false;
-			}
-		}
-	else if(window.ActiveXObject) {
-		try {
-			req = new ActiveXObject("Msxml2.XMLHTTP");
-		} catch(e)
-		{
-		try
-		{
-			req = new ActiveXObject("Microsoft.XMLHTTP");
-		} catch(e) {
-			req = false;
-			}
-			}
-			}
-			if(req) {
-				req.onreadystatechange = processReqChange;
-				 req.open("POST", url, true);
-				 req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-				 req.send(params);
-				return true;
-			}
-		return false;
+function saveURL(id, params) {
+	console.log({content:params});
+	 $.ajax({
+		url: "http://localhost:80/danstabulle/Symfony/web/app_dev.php/saveImage/" + id,
+		type: "POST",
+		data: {content:params},
+		success: function(html) {console.log("Reponse :" + html)},
+		error: function (xhr, ajaxOptions, thrownError) {
+        console.log(xhr.status);
+        console.log(thrownError);
+		console.log(ajaxOptions);
+      }
+	});
+	return true;
 }
 
 function loadURL(url, params) {
@@ -107,7 +92,7 @@ socket.emit('loadRessources:end', uid, id);
 //If persistance wanted
 socket.emit('loadCanvas:end', uid);
 
-var dataUrlfroWebServices = loadXMLDoc('/getImage/' + id, null);
+var dataUrlfroWebServices = loadURL('http://localhost:80/danstabulle/Symfony/web/app_dev.php/getImage/' + id, null);
 
 
 function GetURLParameter(sParam)
