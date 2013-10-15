@@ -123,4 +123,27 @@ class Post
     {
         return $this->topic;
     }
+
+    /**
+     * Set creator
+     *
+     * @param \DTB\UserBundle\Entity\DTBUser $creator
+     * @return Post
+     */
+    public function setCreator(\DTB\UserBundle\Entity\DTBUser $creator = null)
+    {
+        $this->creator = $creator;
+    
+        return $this;
+    }
+
+    /**
+     * Get creator
+     *
+     * @return \DTB\UserBundle\Entity\DTBUser 
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
 }

@@ -24,7 +24,7 @@ class Image
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     private $title;
 
@@ -55,6 +55,13 @@ class Image
      * @ORM\Column(name="height", type="integer")
      */
     private $height;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="content", type="text", nullable=true)
+     */
+    private $content;
     
     /**
      * @ORM\ManytoOne(targetEntity="DTB\BdBundle\Entity\Planche", inversedBy="images", cascade={"persist"})
@@ -208,5 +215,28 @@ class Image
     public function getPlanche()
     {
         return $this->planche;
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     * @return Image
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string 
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 }

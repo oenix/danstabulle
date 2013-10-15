@@ -7,6 +7,7 @@ use DTB\BdBundle\Entity\BandeDessinee;
 use DTB\BdBundle\Form\BandeDessineeType;
 use DTB\BdBundle\Entity\Planche;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -134,6 +135,31 @@ class DefaultController extends Controller
         $em->flush();
         
         return new Response('ok');
+    }
+    
+    public function saveImageAction($id)
+    {
+        $request = $this->get('request');
+        $params = $request->request->all();
+        
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
+        $image = $repository->find($id);
+        
+        $image->setContent($params['content']);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($image);
+        $em->flush();
+        
+        return new Response('ok');
+    }
+    
+    public function getImageAction($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
+        $image = $repository->find($id);
+        
+        return new Response($image->getContent());
     }
     
     public function showImageAction($id)
