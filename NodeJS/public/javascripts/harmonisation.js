@@ -174,7 +174,7 @@ function saveRessources() {
 function saveCanvas() {
 	var canvasToSave = document.getElementById("myCanvas");
 	var dataURL = canvasToSave.toDataURL();
-	socket.emit('saveCanvas:end', uid, dataURL);
+	socket.emit('saveCanvas:end', uid, dataURL, id);
 	//doing it with webservices
 	saveURL(id, dataURL);
 	console.log("canvas saved");
@@ -232,30 +232,9 @@ function restoreRessources(data, artist) {
 	}
 }
 
-function getBase64Image(img) {
-    // Create an empty canvas element
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-
-    // Copy the image contents to the canvas
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-
-    // Get the data-URL formatted image
-    // Firefox supports PNG and JPEG. You could check img.src to
-    // guess the original format, but be aware the using "image/jpg"
-    // will re-encode the image.
-    var dataURL = canvas.toDataURL();
-
-    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-}
-
 function restoreCanvas(data, artist) {
 	if (data != null)
 	{
-		
-		
 		var image = new Image();
 		image.src = data[0];	
 		//image.src = dataUrlfromWebServices;
@@ -268,7 +247,7 @@ function restoreCanvas(data, artist) {
 		}
 		else
 		{
-			//location.reload()
+			location.reload()
 		}
 		
 		console.log(raster.bounds);
