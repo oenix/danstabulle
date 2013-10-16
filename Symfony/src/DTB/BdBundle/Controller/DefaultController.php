@@ -258,8 +258,33 @@ class DefaultController extends Controller
             if ($form->isValid())
             {
                 $bandeDessinee->setCreator($this->getUser());
+                
+                $forum = new \DTB\BdBundle\Entity\Forum();
+                $forum->setBandeDessinee($bandeDessinee);
+                $forum->setDescription("Discussion sur les planches de la bande dessinée");
+                $forum->setName("Planches");
+                
+                $forum2 = new \DTB\BdBundle\Entity\Forum();
+                $forum2->setBandeDessinee($bandeDessinee);
+                $forum2->setDescription("Discussion sur le scénario de la bande dessinée.");
+                $forum2->setName("Scénario");
+                
+                $forum3 = new \DTB\BdBundle\Entity\Forum();
+                $forum3->setBandeDessinee($bandeDessinee);
+                $forum3->setDescription("Présentation des divers membres de la bande dessinée.");
+                $forum3->setName("Présentation des membres");
+                
+                $forum4 = new \DTB\BdBundle\Entity\Forum();
+                $forum4->setBandeDessinee($bandeDessinee);
+                $forum4->setDescription("Discussion générale sur la bande dessinée.");
+                $forum4->setName("Général");
+                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($bandeDessinee);
+                $em->persist($forum);
+                $em->persist($forum2);
+                $em->persist($forum3);
+                $em->persist($forum4);
                 $em->flush();
                 
                 return $this->redirect($this->generateUrl('dtb_bd_show', array('id' => $bandeDessinee->getId())));
