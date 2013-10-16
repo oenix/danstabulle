@@ -25,7 +25,7 @@
     <input type="text" id="valuePlanche" placeholder="Entrez un numéro de page (/{{nbPlanche}})" style="margin-bottom: 0px;"/>
     <input type="submit" id="goToPlanche" class="btn btn-success" value="Aller à la page" />
     <br/><br/>
-    <a href="#" class="btn btn-block btn-info disabled">Ajouter une image</a>
+    <a href="{{path('dtb_bd_create_image', {'id': planche.id})}}" class="btn btn-block btn-info">Ajouter une image</a>
     <br/>
 </div>
 </body>

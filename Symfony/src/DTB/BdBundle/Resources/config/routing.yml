@@ -34,6 +34,10 @@ dtb_bd_show_image:
     pattern:  /showImage/{id}
     defaults: { _controller: DTBBdBundle:Default:showImage }
     
+dtb_bd_create_image:
+    pattern: /createImage/{id}
+    defaults: { _controller: DTBBdBundle:Default:createImage }
+    
 dtb_bd_add_planche:
     pattern:  /addPlanche/{id}
     defaults: { _controller: DTBBdBundle:Default:addPlanche }

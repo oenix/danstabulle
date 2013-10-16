@@ -294,6 +294,49 @@ class DefaultController extends Controller
         return $this->render('DTBBdBundle:Default:create.html.twig', array('form' => $form->createView()));
     }
     
+    public function createImageAction($id)
+    {
+        if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
+        }
+        
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Planche');
+        $planche = $repository->find($id);
+        $bandeDessinee = $planche->getBandeDessinee();
+        
+        $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
+                      "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
+        
+        if (!$role['admin'] && !$role['drawer'])
+        {
+            throw new AccessDeniedHttpException('Vous n\'êtes ni administrateur ni dessinateur de cette bande dessinée. Vous ne pouvez donc accéder à cette page.');
+        }
+        
+        $image = new \DTB\BdBundle\Entity\Image();
+        $image->setPlanche($planche);
+        $image->setHeight(100);
+        $image->setWidth(100);
+        $image->setPosX(10);
+        $image->setPosY(10);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($image);
+        $em->flush();
+        
+        $dataURL = "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";  
+  
+        $parts = explode(',', $dataURL);  
+        $data = $parts[1];  
+        $data = base64_decode($data);
+        
+        $url = "vignette/".$image->getId().".png";
+        
+        file_put_contents($url, $data); 
+        
+        return $this->redirect($this->generateUrl('dtb_bd_show_planche', array('id' => $planche->getId())));
+    }
+    
     public function updateAction($id)
     {
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
