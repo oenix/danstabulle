@@ -24,7 +24,7 @@ class Image
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     private $title;
 
@@ -55,6 +55,13 @@ class Image
      * @ORM\Column(name="height", type="integer")
      */
     private $height;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="content", type="text")
+     */
+    private $content;
     
     /**
      * @ORM\ManytoOne(targetEntity="DTB\BdBundle\Entity\Planche", inversedBy="images", cascade={"persist"})

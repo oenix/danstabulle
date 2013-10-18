@@ -198,4 +198,27 @@ class Topic
     {
         return $this->forum;
     }
+
+    /**
+     * Set creator
+     *
+     * @param \DTB\UserBundle\Entity\DTBUser $creator
+     * @return Topic
+     */
+    public function setCreator(\DTB\UserBundle\Entity\DTBUser $creator = null)
+    {
+        $this->creator = $creator;
+    
+        return $this;
+    }
+
+    /**
+     * Get creator
+     *
+     * @return \DTB\UserBundle\Entity\DTBUser 
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
 }

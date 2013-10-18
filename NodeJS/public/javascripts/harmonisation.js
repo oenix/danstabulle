@@ -18,7 +18,8 @@ function addColor() {
 		//colors = "<option id='Color"+ harmo.color +"'' value='#"+  harmo.color  +"' style='background-color:#" + harmo.color + ";' onClick='selectColor()'></option>";
 		document.getElementById("color").innerHTML += colors;
 		document.getElementById("colorHexa").value = '';
-		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
+		//TODO Replace the 1 by Draw ID
+		socket.emit('harmonisation:end', uid, JSON.stringify(harmo), 1);
 		palette.push("#" + harmo.color);
 	    harmo.color = null;
 		saveColor();
@@ -58,7 +59,8 @@ function saveColor() {
 	for (var i = 0; i < palette.length; i++) {
 		colToSave += palette[i] + '\n';
 	}
-	socket.emit('savePalette:end', uid, colToSave);
+	//TODO
+	socket.emit('savePalette:end', uid, colToSave, id);
 }
 
 function isHex(val){
@@ -88,7 +90,8 @@ function delColor() {
 		col[0].className = "btn-color active-color";
 		selectColor();
 		harmo.delColor = option;
-		socket.emit('harmonisation:end', uid, JSON.stringify(harmo));
+		//TODO Replace the 1 by Draw ID
+		socket.emit('harmonisation:end', uid, JSON.stringify(harmo), 1);
 		var toDel = 0;
 		for (var i =0; i < palette.length; i++){
 			if (palette[i] == "#" + option) {
@@ -163,15 +166,18 @@ function saveRessources() {
 	for (var i = 0; i < ressourceURL.length; i++) {
 		ressourceToSave += ressourceURL[i] + "\n";
 	}
-	
-	socket.emit('saveRessources:end', uid, ressourceToSave);
+	//TODO Replace the 1 by Draw ID
+	socket.emit('saveRessources:end', uid, ressourceToSave, 1);
 
 }
 
 function saveCanvas() {
 	var canvasToSave = document.getElementById("myCanvas");
 	var dataURL = canvasToSave.toDataURL();
-	socket.emit('saveCanvas:end', uid, dataURL);
+	socket.emit('saveCanvas:end', uid, dataURL, id);
+	//doing it with webservices
+	saveURL(id, dataURL);
+	console.log("canvas saved");
 }
 
 function deleteRessource(id) {
@@ -188,7 +194,8 @@ function deleteRessource(id) {
 			ressourceToSave += ressourceURL[i] + "\n";
 		}
 		console.log(ressourceToSave);
-		socket.emit('saveRessources:end', uid, ressourceToSave);
+		//TODO Replace the 1 by Draw ID
+		socket.emit('saveRessources:end', uid, ressourceToSave, 1);
 	}, 2000);
 	}
 }
@@ -225,16 +232,26 @@ function restoreRessources(data, artist) {
 	}
 }
 
-
-
 function restoreCanvas(data, artist) {
 	if (data != null)
 	{
 		var image = new Image();
-		image.src = data[0];
+		image.src = data[0];	
+		//image.src = dataUrlfromWebServices;
+
 		raster = new Raster(image);
-		pathList.push(raster);
-		currentElement ++;
+		//pathList.push(raster);
+		//currentElement ++;
+		if (raster.size.height == 640) {
+			raster.position = new Point(850/2, 640/2);
+		}
+		else
+		{
+			location.reload()
+		}
+		
+		console.log(raster.bounds);
+		console.log(raster.size);
 	}
 }
 

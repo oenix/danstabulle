@@ -15,7 +15,7 @@ var rafraichissement = 1;
 // Initialise Socket.io
 var socket = io.connect();
 var bubble = true;
-
+var id = parseInt(GetURLParameter("id"));
 
 var send_paths_timer;
 var timer_is_active = false;
@@ -35,10 +35,48 @@ var fusionLayer = [];
 var selectLayerBounds;
 var hasDoubleClickedLayer = false;
 
+
+var req; // global variable to hold request object
+function saveURL(id, params) {
+	console.log({content:params});
+	 $.ajax({
+		url: "http://localhost:80/danstabulle/Symfony/web/app_dev.php/saveImage/" + id,
+		type: "POST",
+		data: {content:params},
+		success: function(html) {console.log("Reponse :" + html)},
+		error: function (xhr, ajaxOptions, thrownError) {
+        console.log(xhr.status);
+        console.log(thrownError);
+		console.log(ajaxOptions);
+      }
+	});
+	return true;
+}
+
+//TODO Replace the 1 by Draw ID
+socket.emit('loadPalette:end', uid, id);
+console.log(id);
+socket.emit('loadRessources:end', uid, id);
+
 //If persistance wanted
-socket.emit('loadCanvas:end', uid);
-socket.emit('loadPalette:end', uid);
-socket.emit('loadRessources:end', uid);
+socket.emit('loadCanvas:end', uid, id);
+
+var dataUrlfromWebServices = "file:///C:/Users/Oenix/Documents/GitHub/danstabulle/Symfony/web/vignette/" + id + ".png";
+
+
+function GetURLParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
 
 Array.prototype.unset = function(val){
 	var index = this.indexOf(val)
@@ -89,7 +127,8 @@ function changeLayerOpacity(numOpacity, numLayer)
 	layerOpacity[numLayer] = numOpacity;
 	layer[numLayer].opacity = numOpacity / 100;
 	path_to_send.layerOpacity = layerOpacity;
-	socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+	//TODO Replace the 1 by Draw ID
+	socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
 }
 
 function printLayers() {
@@ -151,7 +190,8 @@ function layerUp(nbLayer) {
 				layer[nbLayer - 1] = l;
 				path_to_send.up = nbLayer;
 				path_to_send.positionLayer = null;
-				socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+				//TODO Replace the 1 by Draw ID
+				socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
 				path_to_send.up = null;
 		}
 }
@@ -164,7 +204,8 @@ function layerDown(nbLayer) {
 				layer[nbLayer + 1] = l;
 				path_to_send.down = nbLayer;
 				path_to_send.positionLayer = null;
-				socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+				//TODO
+				socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
 				path_to_send.down = null;
 		}
 }
@@ -244,7 +285,8 @@ function newLayer() {
 function sendNewLayer() {
     path_to_send.newLayer = true;
     path_to_send.positionLayer = positionLayer;
-    socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+	//TODO Replace the 1 by Draw ID
+    socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
     path_to_send.newLayer = false;
 }
 
@@ -305,7 +347,8 @@ function undo() {
         path_to_send = {
             remove: remove
         };
-        socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+		//TODO Replace the 1 by Draw ID
+        socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
         remove = -1;
     }
 }
@@ -320,7 +363,8 @@ function redo() {
         path_to_send = {
             add: add
         };
-        socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+		//TODO Replace the 1 by Draw ID Replace the 1 by Draw ID
+        socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
         add = -2;
     }
 }

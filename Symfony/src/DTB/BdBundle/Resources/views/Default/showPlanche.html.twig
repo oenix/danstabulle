@@ -15,8 +15,8 @@
 <div class="span8">
     <div class="planche img-polaroid">
         {% for image in planche.images %}
-            <div class="demo" imgID="{{image.id}}" style="top: {{image.posY + 217}}px; left: {{image.posX + 197}}px; width:{{image.width}}px; height: {{image.height}}px;">
-                <img src="{{asset('img/v' ~ image.id ~ '.jpg')}}" />
+            <div class="demo" imgID="{{image.id}}" style="top: {{image.posY + 217}}px; left: {{image.posX + 182}}px; width:{{image.width}}px; height: {{image.height}}px;">
+                <img src="{{ asset('vignette/'~ image.id ~ '.png')}}" />
             </div>
         {% endfor %}
     </div>
@@ -25,7 +25,7 @@
     <input type="text" id="valuePlanche" placeholder="Entrez un numéro de page (/{{nbPlanche}})" style="margin-bottom: 0px;"/>
     <input type="submit" id="goToPlanche" class="btn btn-success" value="Aller à la page" />
     <br/><br/>
-    <a href="#" class="btn btn-block btn-info disabled">Ajouter une image</a>
+    <a href="{{path('dtb_bd_create_image', {'id': planche.id})}}" class="btn btn-block btn-info">Ajouter une image</a>
     <br/>
 </div>
 </body>
@@ -77,7 +77,7 @@ $(function(){
                     }
 		})
         .click(function() {
-            var url = "{{path('dtb_bd_show_image', {'id': "text"})}}";
+            var url = "http://localhost:3000/draw?id=text";
             url = url.replace("text", $(this).attr("imgID"));
             window.location = url;
         });

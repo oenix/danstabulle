@@ -34,6 +34,10 @@ dtb_bd_show_image:
     pattern:  /showImage/{id}
     defaults: { _controller: DTBBdBundle:Default:showImage }
     
+dtb_bd_create_image:
+    pattern: /createImage/{id}
+    defaults: { _controller: DTBBdBundle:Default:createImage }
+    
 dtb_bd_add_planche:
     pattern:  /addPlanche/{id}
     defaults: { _controller: DTBBdBundle:Default:addPlanche }
@@ -73,6 +77,14 @@ dtb_bd_redirect_planche:
 dtb_bd_save_scenario:
     pattern:  /saveScenario/{id}
     defaults: { _controller: DTBBdBundle:Default:saveScenario }
+    
+dtb_bd_save_image:
+    pattern:  /saveImage/{id}
+    defaults: { _controller: DTBBdBundle:Default:saveImage }
+
+dtb_bd_get_image:
+    pattern:  /getImage/{id}
+    defaults: { _controller: DTBBdBundle:Default:getImage }
     
 dtb_show_board:
     pattern: /showBoard/{id}

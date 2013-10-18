@@ -7,6 +7,7 @@ use DTB\BdBundle\Entity\BandeDessinee;
 use DTB\BdBundle\Form\BandeDessineeType;
 use DTB\BdBundle\Entity\Planche;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -136,6 +137,29 @@ class DefaultController extends Controller
         return new Response('ok');
     }
     
+    public function saveImageAction($id)
+    {
+        $dataURL = $_POST['content'];  
+  
+        $parts = explode(',', $dataURL);  
+        $data = $parts[1];  
+        $data = base64_decode($data);
+        
+        $url = "vignette/".$id.".png";
+        
+        file_put_contents($url, $data);  
+
+        return new Response("ok");
+    }
+    
+    public function getImageAction($id)
+    {
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
+        $image = $repository->find($id);
+        
+        return new Response($image->getContent());
+    }
+    
     public function showImageAction($id)
     {
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Image');
@@ -234,8 +258,33 @@ class DefaultController extends Controller
             if ($form->isValid())
             {
                 $bandeDessinee->setCreator($this->getUser());
+                
+                $forum = new \DTB\BdBundle\Entity\Forum();
+                $forum->setBandeDessinee($bandeDessinee);
+                $forum->setDescription("Discussion sur les planches de la bande dessinée");
+                $forum->setName("Planches");
+                
+                $forum2 = new \DTB\BdBundle\Entity\Forum();
+                $forum2->setBandeDessinee($bandeDessinee);
+                $forum2->setDescription("Discussion sur le scénario de la bande dessinée.");
+                $forum2->setName("Scénario");
+                
+                $forum3 = new \DTB\BdBundle\Entity\Forum();
+                $forum3->setBandeDessinee($bandeDessinee);
+                $forum3->setDescription("Présentation des divers membres de la bande dessinée.");
+                $forum3->setName("Présentation des membres");
+                
+                $forum4 = new \DTB\BdBundle\Entity\Forum();
+                $forum4->setBandeDessinee($bandeDessinee);
+                $forum4->setDescription("Discussion générale sur la bande dessinée.");
+                $forum4->setName("Général");
+                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($bandeDessinee);
+                $em->persist($forum);
+                $em->persist($forum2);
+                $em->persist($forum3);
+                $em->persist($forum4);
                 $em->flush();
                 
                 return $this->redirect($this->generateUrl('dtb_bd_show', array('id' => $bandeDessinee->getId())));
@@ -243,6 +292,49 @@ class DefaultController extends Controller
         }
         
         return $this->render('DTBBdBundle:Default:create.html.twig', array('form' => $form->createView()));
+    }
+    
+    public function createImageAction($id)
+    {
+        if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedHttpException('Vous devez être connecté pour accéder à cette page.');
+        }
+        
+        $repository = $this->getDoctrine()->getRepository('DTBBdBundle:Planche');
+        $planche = $repository->find($id);
+        $bandeDessinee = $planche->getBandeDessinee();
+        
+        $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
+                      "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
+                      "scenarist" => $bandeDessinee->getScenarists()->contains($this->getUser()));
+        
+        if (!$role['admin'] && !$role['drawer'])
+        {
+            throw new AccessDeniedHttpException('Vous n\'êtes ni administrateur ni dessinateur de cette bande dessinée. Vous ne pouvez donc accéder à cette page.');
+        }
+        
+        $image = new \DTB\BdBundle\Entity\Image();
+        $image->setPlanche($planche);
+        $image->setHeight(100);
+        $image->setWidth(100);
+        $image->setPosX(10);
+        $image->setPosY(10);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($image);
+        $em->flush();
+        
+        $dataURL = "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";  
+  
+        $parts = explode(',', $dataURL);  
+        $data = $parts[1];  
+        $data = base64_decode($data);
+        
+        $url = "vignette/".$image->getId().".png";
+        
+        file_put_contents($url, $data); 
+        
+        return $this->redirect($this->generateUrl('dtb_bd_show_planche', array('id' => $planche->getId())));
     }
     
     public function updateAction($id)

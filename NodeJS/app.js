@@ -1,7 +1,7 @@
 ﻿/* Generic and useful functions */
 var paletteFile = "public/javascripts/colors.dtb";
 var ressourceFile = "public/javascripts/ressources.dtb";
-var canvasFile = "public/javascripts/canvas.dtb";
+var canvasFile = "public/javascripts/draws/canvas";
 var defaultPalette = ["#000000", "#FFFFFF","#72CC51","#2762A6","#D5D80D", "#EF5426","#34373C", "#D22632", "#F3D155", "#00A7CC", "#D65277","endBuffer"];
 
 
@@ -56,6 +56,7 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 /* Routing configuration */
 
@@ -392,37 +393,37 @@ io.sockets.on('connection', function (socket) {
   
 	socket.on('draw:progress', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('draw:progress', uid, co_ordinates)
+		socket.broadcast.to("d" + drawingId).emit('draw:progress', uid, co_ordinates)
 
 	});
 	
 	socket.on('modification:end', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('modification:end', uid, co_ordinates)
+		socket.broadcast.to("d" + drawingId).emit('modification:end', uid, co_ordinates)
 
 	});
   
 	socket.on('draw:end', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('draw:end', uid, co_ordinates);
+		socket.broadcast.to("d" + drawingId).emit('draw:end', uid, co_ordinates);
 
 	});
 	
 	socket.on('drawForMe:progress', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('drawForMe:progress', uid, co_ordinates);
+		socket.broadcast.to("d" + drawingId).emit('drawForMe:progress', uid, co_ordinates);
 
 	});
 	
 	socket.on('drawForMe:end', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('drawForMe:end', uid, co_ordinates);
+		socket.broadcast.to("d" + drawingId).emit('drawForMe:end', uid, co_ordinates);
 
 	});
 	
 	socket.on('harmonisation:end', function (uid, co_ordinates, drawingId) {
     
-		io.broadcast.to("d" + drawingId).emit('harmonisation:end', uid, co_ordinates);
+		socket.broadcast.to("d" + drawingId).emit('harmonisation:end', uid, co_ordinates);
 
 	});
 	
@@ -440,16 +441,16 @@ io.sockets.on('connection', function (socket) {
 		else {
 			colors = defaultPalette;
 		}
-		io.broadcast.to("d" + drawingId).emit('loadColors:end', uid, JSON.stringify(colors));
+		socket.emit('loadColors:end', uid, JSON.stringify(colors));
 	});
 	
-	socket.on('loadCanvas:end', function (uid){
+	socket.on('loadCanvas:end', function (uid, id){
 		
 		var fs = require('fs');
 		var ressources = [];
 		
-		if (fs.existsSync(canvasFile)) {
-		    data = fs.readFileSync(canvasFile);
+		if (fs.existsSync(canvasFile + id + ".png")) {
+		    data = fs.readFileSync(canvasFile + id + ".png");
 		    data.toString().split('\n').forEach(function(line) {
 		    ressources.push(line);
 		});
@@ -458,7 +459,7 @@ io.sockets.on('connection', function (socket) {
 		{
 		    ressources = null;
 		}
-		io.sockets.emit('loadCanvas:end', uid, JSON.stringify(ressources));
+		socket.emit('loadCanvas:end', uid, JSON.stringify(ressources));
 	});
 		
 	socket.on('loadRessources:end', function (uid, drawingId){
@@ -475,7 +476,7 @@ io.sockets.on('connection', function (socket) {
 		else {
 			ressources = [];
 		}
-		io.broadcast.to("d" + drawingId).emit('loadRessources:end', uid, JSON.stringify(ressources));
+		socket.emit('loadRessources:end', uid, JSON.stringify(ressources));
 	});
 	
 	socket.on('savePalette:end', function (uid, colors, drawingId) {
@@ -514,14 +515,14 @@ io.sockets.on('connection', function (socket) {
 	
 	});
 	
-	socket.on('saveCanvas:end', function (uid, ressources) {
+	socket.on('saveCanvas:end', function (uid, ressources, id) {
 		
 	    var fs = require('fs');
 
-	    fs.writeFile(canvasFile, ressources, function(err) {
+	    fs.writeFile(canvasFile + id + ".png", ressources, function(err) {
 	    if(err) {
-	    	fs.createWriteStream(canvasFile);
-	        fs.writeFile(canvasFile, ressources, function(err) {
+	    	fs.createWriteStream(canvasFile + id + ".png");
+	        fs.writeFile(canvasFile + id + ".png", ressources, function(err) {
 		  if(err) 
 			Console.log("Write Error");
 			});

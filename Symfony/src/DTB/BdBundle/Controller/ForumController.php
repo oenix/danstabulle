@@ -97,6 +97,7 @@ class ForumController extends Controller
 
         return $this->render('DTBBdBundle:Forum:createTopic.html.twig', array(
             'forum' => $forum,
+            'edit' => false,
             'form' => $form->createView()));
     }
     
@@ -135,6 +136,7 @@ class ForumController extends Controller
         return $this->render('DTBBdBundle:Forum:createPost.html.twig', array(
             'forum' => $forum,
             'topic' => $topic,
+            'edit' => false,
             'form' => $form->createView()));
     }
     

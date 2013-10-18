@@ -17,6 +17,7 @@ window.onload = function () {
     var raster;
     var count = 0;
     
+    
     path_to_send = {
         activeLayer: 0,
         newLayer: false,
@@ -68,7 +69,8 @@ window.onload = function () {
        raster.position = view.center;
 	   path_to_send.raster = image.src;
 	   addToPathList(raster);
-	   socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+		//TODO Replace the 1 by Draw ID
+	   socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
 	   path_to_send.raster = null;
       // Transform the raster, so it fills the view:
 	//  if (raster.bounds > view.bounds)
@@ -160,7 +162,8 @@ window.onload = function () {
 		shifted = false;
 		path_to_send.thisLayer = activeLayer;
 		path_to_send.positionLayer = positionLayer;
-		socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+			//TODO Replace the 1 by Draw ID
+		socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
 		selectLayerBounds.remove();
 		hasDoubleClickedLayer = false;
 		thisLayer = null;
@@ -222,7 +225,7 @@ window.onload = function () {
         pathList.push(shape);
         currentElement += 1;
         path_to_send.rgba = color;
-        socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+        socket.emit('draw:end', uid, JSON.stringify(path_to_send), 1);
         path_to_send.doShape = null;
     }
 
@@ -251,7 +254,8 @@ window.onload = function () {
         });
         if (!timer_is_active) {
             send_paths_timer = setInterval(function () {
-                socket.emit('drawForMe:progress', uid, JSON.stringify(path_to_send));
+				//TODO Replace the 1 by Draw ID
+                socket.emit('drawForMe:progress', uid, JSON.stringify(path_to_send), id);
                 path_to_send.path = new Array();
 
             }, rafraichissement);
@@ -271,11 +275,13 @@ window.onload = function () {
             drawForMe.push(path);
             drawForMe.push(textDrawForMe);
             path_to_send.texte = textDrawForMe.content;
-            socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send));
+	//TODO Replace the 1 by Draw ID
+            socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send), id);
 
         } else {
             path.remove();
-            socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send));
+	//TODO Replace the 1 by Draw ID
+            socket.emit('drawForMe:end', uid, JSON.stringify(path_to_send), id);
         }
     }
 
@@ -363,7 +369,8 @@ if (selected == pathList[i])
 }*/
         path_to_send.update = get_indice(selected);
         path_to_send.updatePath = new Point(pathList[get_indice(selected)].position.x, pathList[get_indice(selected)].position.y);
-        socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+		//TODO Replace the 1 by Draw ID        
+		socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
         selected = null;
         segment = null;
         hitResult = null;
@@ -437,8 +444,8 @@ if (selected == pathList[i])
         if (!timer_is_active) {
 
             send_paths_timer = setInterval(function () {
-
-                socket.emit('draw:progress', uid, JSON.stringify(path_to_send2));
+		//TODO Replace the 1 by Draw ID
+                socket.emit('draw:progress', uid, JSON.stringify(path_to_send2), id);
                 path_to_send2.path = new Array();
 
             }, rafraichissement);
@@ -506,8 +513,8 @@ if (selected == pathList[i])
         currentElement++;
         if (currentElement != pathList.length - 1)
             currentElement = pathList.length - 1;
-
-        socket.emit('draw:end', uid, JSON.stringify(path_to_send));
+	    //TODO Replace the 1 by Draw ID 
+        socket.emit('draw:end', uid, JSON.stringify(path_to_send), id);
         clearInterval(send_paths_timer);
         path_to_send.path = new Array();
         path_to_send.hasRaster = false;
@@ -519,7 +526,7 @@ if (selected == pathList[i])
 
 
 
-    socket.on('draw:progress', function (artist, data) {
+    socket.on('draw:progress', function (artist, data, drawingId) {
 
         if (artist !== uid && data) {
 
@@ -529,7 +536,7 @@ if (selected == pathList[i])
 
     });
 
-    socket.on('draw:end', function (artist, data) {
+    socket.on('draw:end', function (artist, data, drawingId) {
 
         if (artist !== uid && data) {
             end_external_path(JSON.parse(data), artist);
@@ -538,14 +545,14 @@ if (selected == pathList[i])
 
     });
 
-    socket.on('drawForMe:progress', function (artist, data) {
+    socket.on('drawForMe:progress', function (artist, data, drawingId) {
         if (artist !== uid && data) {
             draw_for_me_real_time(JSON.parse(data), artist);
 
         }
 
     });
-    socket.on('drawForMe:end', function (artist, data) {
+    socket.on('drawForMe:end', function (artist, data, drawingId) {
 
         if (artist !== uid && data) {
             draw_for_me_end(JSON.parse(data), artist);
@@ -553,7 +560,7 @@ if (selected == pathList[i])
         }
 
     });
-    socket.on('harmonisation:end', function (artist, data) {
+    socket.on('harmonisation:end', function (artist, data, drawingId) {
 
         if (artist !== uid && data) {
             syncHarmonisation(JSON.parse(data), artist);
@@ -652,7 +659,6 @@ if (selected == pathList[i])
     var end_external_path = function (points, artist) {
 
         var path = external_paths[artist];
-
         if (points.hasRaster) {
             var img = new Image();
             img.src = points.image
@@ -673,7 +679,8 @@ if (selected == pathList[i])
                     text = new PointText(path.position);
                     text.content = points.texte
                     text.fillColor = 'black';
-                    text.font = "Script";
+					//TODO change police by BD
+                    text.font = "myfont";
                     text.fontSize = 15;
 
                     text.point.x = text.point.x - text.point.length / 12;
