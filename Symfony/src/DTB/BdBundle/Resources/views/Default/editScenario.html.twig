@@ -32,7 +32,7 @@ var urlScenario = "{{path('dtb_bd_save_scenario', {'id': scenario.id})}}";
                 <br/>
 
                 <small class="muted">Version du {{scenario.lastedition|date('d/m/Y H:i:s')}}</small>
-                <select class="pull-right"><option selected="" disabled>Versionning</option><option>{{scenario.lastedition|date('d/m/Y H:i:s')}}</option></select>
+                <select class="pull-right" id="historySelector"><option selected="" disabled>Versionning</option><option>{{scenario.lastedition|date('d/m/Y H:i:s')}}</option><option>Preview</option></select>
 
                 <div id="writingHelper" class="tabbable tabs-left">
                     <ul id="writingHelperCategories" class="nav nav-tabs">
