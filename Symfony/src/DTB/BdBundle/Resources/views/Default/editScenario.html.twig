@@ -28,28 +28,28 @@ var urlScenario = "{{path('dtb_bd_save_scenario', {'id': scenario.id})}}";
             <section id="Contenu" class="span12">
                 <h1>Scénario</h1> 
                 <a id="scenarioStructure" href="#writingHelper" title="Structure du scénario">Rappels sur le scénario</a>
-                
-				<a id="historyPreviewButton" href="#historyPreview" title="Preview de l'historique"></a>
+
+                <a id="historyPreviewButton" href="#historyPreview" title="Preview de l'historique"></a>
 
                 <br/>
 
                 <small class="muted">Version du {{scenario.lastedition|date('d/m/Y H:i:s')}}</small>
-                
-				<select id="historySelector" class="pull-right">
-					
-					<option value="-1" selected="" disabled>Versionning</option>
-					<option value="1">{{scenario.lastedition|date('d/m/Y H:i:s')}}</option>
-					<option value="2">Pour tester</option>
-					
-				</select>
-				
-				<div id="historyPreview">
-					<h3 id="historyPreviewTitle"></h3>
-					<p id="historyPreviewText"></p>
-					
-					<button id="historyPreviewAccept" class="btn btn-success">Remplacer</button>
-					<button id="historyPreviewCancel" class="btn btn-danger">Annuler</button>
-				</div>
+
+                <select id="historySelector" class="pull-right">
+
+                    <option value="-1" selected="" disabled>Versionning</option>
+                    <option value="1">{{scenario.lastedition|date('d/m/Y H:i:s')}}</option>
+                    <option value="2">Pour tester</option>
+
+                </select>
+
+                <div id="historyPreview">
+                    <h3 id="historyPreviewTitle"></h3>
+                    <p id="historyPreviewText"></p>
+
+                    <button id="historyPreviewAccept" class="btn btn-success">Remplacer</button>
+                    <button id="historyPreviewCancel" class="btn btn-danger">Annuler</button>
+                </div>
 
                 <div id="writingHelper" class="tabbable tabs-left">
                     <ul id="writingHelperCategories" class="nav nav-tabs">
