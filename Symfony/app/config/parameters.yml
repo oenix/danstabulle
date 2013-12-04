@@ -1,0 +1,14 @@
+parameters:
+    database_driver: pdo_pgsql
+    database_host: 127.0.0.1
+    database_port: 5432
+    database_name: symfony
+    database_user: postgres
+    database_password: root
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    locale: fr
+    secret: 3902bb77e7cf44a519bba94994040d9a8536f0ea
+    database_path: null
