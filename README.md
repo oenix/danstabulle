@@ -1,7 +1,10 @@
 danstabulle
 ===========
-
+<blockquote>
+	<p>
 DansTaBulle est un site communautaire intéractif de création de bande dessinée.
+</p>
+</blockquote>
 
 Grâce à DTB, vous pouvez créer vos projets, les modifier, seul ou à plusieurs.
 
