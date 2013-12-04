@@ -22,7 +22,7 @@
         {% endif %}
         </h2>
         <hr>
-        <h2><a href="{{path('dtb_bd_show_scenario', {'id': 1})}}">Consulter le scénario</a>    
+        <h2><a href="{{path('dtb_bd_show_scenario', {'id': bd.id})}}">Consulter le scénario</a>    
         {% if role.admin or role.scenarist%}
                 <a href="{{path('dtb_bd_edit_scenario', {'id': bd.id})}}" class="btn btn-success pull-right">Editer le scénario</a>
         {% endif %}
