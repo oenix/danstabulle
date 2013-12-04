@@ -40,7 +40,7 @@ var req; // global variable to hold request object
 function saveURL(id, params) {
 	console.log({content:params});
 	 $.ajax({
-		url: "http://localhost:80/danstabulle/Symfony/web/app_dev.php/saveImage/" + id,
+		url: "http://localhost:8888/web/app.php/saveImage/" + id,
 		type: "POST",
 		data: {content:params},
 		success: function(html) {console.log("Reponse :" + html)},

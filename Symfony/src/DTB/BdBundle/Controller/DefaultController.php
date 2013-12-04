@@ -217,8 +217,14 @@ class DefaultController extends Controller
         $repository = $this->getDoctrine()->getRepository('DTBBdBundle:BandeDessinee');
         $bandeDessinee = $repository->find($id);
         
-        $maxPagePlanche = $this->getDoctrine()->getRepository('DTBBdBundle:Planche')
-                               ->findBy(array('bandeDessinee' => $bandeDessinee), array('page' => "desc"))[0];
+        $maxPagePlancheArray = $this->getDoctrine()->getRepository('DTBBdBundle:Planche')
+                               ->findBy(array('bandeDessinee' => $bandeDessinee), array('page' => "desc"));
+        
+        
+        if (array_key_exists(0, $maxPagePlancheArray))
+            $maxPagePlanche = $maxPagePlancheArray[0]->getPage() + 1;
+        else
+            $maxPagePlanche = 1;
         
         $role = array("admin" => ($bandeDessinee->getCreator() == $this->getUser()),
                       "drawer" => $bandeDessinee->getDrawers()->contains($this->getUser()),
@@ -231,7 +237,7 @@ class DefaultController extends Controller
  
         $planche = new Planche();
         $planche->setBandeDessinee($bandeDessinee);
-        $planche->setPage($maxPagePlanche->getPage() + 1);
+        $planche->setPage($maxPagePlanche);
         
         $em = $this->getDoctrine()->getManager();
         $em->persist($planche);
